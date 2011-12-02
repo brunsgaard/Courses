@@ -1,0 +1,91 @@
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+%\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{setspace}
+\setstretch{1.15}
+\usepackage{babel}
+\usepackage{amsmath}
+
+\begin{document}
+\section*{Assignment 2.1}
+\subsection*{Subassignment 2.1.a}
+
+Both partial derivatives are found using maple\footnote{Is it sufficient information or is maple code required?}.
+
+\begin{equation}
+\frac{\partial Q}{\partial p}(p,q)=\sum\limits_{i=1}^n 2(pt+q-y)t
+\end{equation}
+
+\begin{equation}
+\frac{\partial Q}{\partial q}(p,q)=\sum\limits_{i=1}^n (2pt+2q-2y)
+\end{equation}
+\subsection*{Subassignment 2.1.b}
+Here i just rewrite the equations:
+
+\begin{eqnarray}
+	\frac{\partial Q}{\partial p}(p,q) & = & 0\\
+	\sum\limits_{i=1}^n 2(t_i p +q-y_i)t_i & = & 0 \\
+	\sum\limits_{i=1}^n 2(t_i p  +q-y)t_i & = & 0 \\
+	\sum\limits_{i=1}^n 2t_i^2 p +\sum\limits_{i=1}^n 2t_i q \sum\limits_{i=1}^n 2y_i t_i & = & 0 \\
+	\sum\limits_{i=1}^n 2t_i ^2 p +\sum\limits_{i=1}^n 2t_i q & = & \sum\limits_{i=1}^n 2y_i t_i\\
+	\sum\limits_{i=1}^n t_i^2 p +\sum\limits_{i=1}^n t_i q & = & \sum\limits_{i=1}^n y_i t_i 
+\end{eqnarray}
+And the second one:
+\begin{eqnarray}
+	\frac{\partial Q}{\partial q}(p,q) & = & 0 \\
+	\sum\limits_{i=1}^n (2pt_i+2q-2y_i) & = & 0 \\
+	\sum\limits_{i=1}^n 2pt_i+ \sum\limits_{i=1}^n 2q- \sum\limits_{i=1}^n 2y_i & = & 0 \\
+	\sum\limits_{i=1}^n 2pt_i+ 2qn & = & \sum\limits_{i=1}^n 2y_i \\
+	\sum\limits_{i=1}^n t_i p + nq & = & \sum\limits_{i=1}^n y_i
+\end{eqnarray}
+Note the step equation 11 to 12. Because $\sum\limits_{i=1}^n 2q$ is not affected by the specific $(y_i,t_i)$, it is possible to rewrite  $\sum\limits_{i=1}^n 2q =2qn$. For each dataentry we just want to add a $q$, Thus $nq$.
+\subsection*{Sub assignment 2.1.c}
+The equation system
+\begin{equation}
+\begin{array}{ccc}
+	\sum\limits_{i=1}^n t_i^2 p +\sum\limits_{i=1}^n t_i q & = & \sum\limits_{i=1}^n y_i t_i \\
+	\sum\limits_{i=1}^n t_i p + nq & = & \sum\limits_{i=1}^n y_i
+\end{array}
+\end{equation}
+in matrixform
+
+\begin{equation}
+ \begin{pmatrix}
+  \sum\limits_{i=1}^n t_i^2 & \sum\limits_{i=1}^n t_i \\
+  \sum\limits_{i=1}^n t_i & n
+ \end{pmatrix}
+  \begin{pmatrix}
+p \\ q
+ \end{pmatrix}
+ =
+\begin{pmatrix}
+ \sum\limits_{i=1}^n y_i t_i  \\ \sum\limits_{i=1}^n y_i
+ \end{pmatrix}
+\end{equation}
+
+\subsection*{Subassignment 2.1.d}
+Both double partial derivatives are found using maple
+\begin{equation}
+	\frac{\partial^2 Q}{\partial p^2}(p,q) = \sum \limits_{i=1}^n 2t_i^2
+\end{equation}
+
+\begin{equation}
+	\frac{\partial^2 Q}{\partial q^2}(p,q)= 2n
+\end{equation}
+
+\begin{equation}
+	\frac{\partial^2 Q}{\partial p \partial p}(p,q)= \frac{\partial^2 Q}{\partial q \partial p}(p,q)= \sum \limits_{i=1}^n 2t_i
+\end{equation}
+We see that  $\frac{\partial^2 Q}{\partial p^2}(p,q)  = \sum \limits_{i=1}^n 2t_i^2$ always is greater en $0$, that is because $t_i$ is raised to the second power and thus the whole expression will always be positive (because also a negative number raised to the second power is positive.) unless $t=0$. \\ The only thing we need to prove now is that  $D$ given by $ac-b^2$ is greater than $0$, then $Q(p,q)$ has a local minimum.
+\begin{eqnarray}
+D &=& \frac{\partial^2 Q}{\partial p^2}(p,q) \frac{\partial^2 Q}{\partial q^2}(p,q) - (\frac{\partial^2 Q}{\partial p \partial p}(p,q))^2 \\
+ \end{eqnarray}
+ Thus we have to prove that for $n$ greater than $2$
+ \begin{eqnarray}
+ (\sum \limits_{i=1}^n 2t_i)^2 &<&  (\sum \limits_{i=1}^n 2t_i^2) \cdot 2n
+ \end{eqnarray}
+ I don`t know how to prove that
+ \subsection*{Subassignment 2.1.e}
+\end{document}
