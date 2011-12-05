@@ -12,7 +12,7 @@
 \section*{Assignment 2.1}
 \subsection*{Subassignment 2.1.a}
 
-Both partial derivatives are found using maple\footnote{Is it sufficient information or is maple code required?}.
+Both partial derivatives are found using maple. The maple input/output can be found at the end of the document.
 
 \begin{equation}
 \frac{\partial Q}{\partial p}(p,q)=\sum\limits_{i=1}^n 2(pt+q-y)t
@@ -22,7 +22,7 @@ Both partial derivatives are found using maple\footnote{Is it sufficient informa
 \frac{\partial Q}{\partial q}(p,q)=\sum\limits_{i=1}^n (2pt+2q-2y)
 \end{equation}
 \subsection*{Subassignment 2.1.b}
-Here i just rewrite the equations:
+In this subassignment i solve the partial derivatives, such that $\sum\limits_{i=1}^n t_i y_i$ and $\sum\limits_{i=1}^n y_i$ are separated on the right side of the equation.  
 
 \begin{eqnarray}
 	\frac{\partial Q}{\partial p}(p,q) & = & 0\\
@@ -32,7 +32,7 @@ Here i just rewrite the equations:
 	\sum\limits_{i=1}^n 2t_i ^2 p +\sum\limits_{i=1}^n 2t_i q & = & \sum\limits_{i=1}^n 2y_i t_i\\
 	\sum\limits_{i=1}^n t_i^2 p +\sum\limits_{i=1}^n t_i q & = & \sum\limits_{i=1}^n y_i t_i 
 \end{eqnarray}
-And the second one:
+And the second equation:
 \begin{eqnarray}
 	\frac{\partial Q}{\partial q}(p,q) & = & 0 \\
 	\sum\limits_{i=1}^n (2pt_i+2q-2y_i) & = & 0 \\
@@ -41,16 +41,17 @@ And the second one:
 	\sum\limits_{i=1}^n t_i p + nq & = & \sum\limits_{i=1}^n y_i
 \end{eqnarray}
 Note the step equation 11 to 12. Because $\sum\limits_{i=1}^n 2q$ is not affected by the specific $(y_i,t_i)$, it is possible to rewrite  $\sum\limits_{i=1}^n 2q =2qn$. For each dataentry we just want to add a $q$, Thus $nq$.
+
+
 \subsection*{Sub assignment 2.1.c}
-The equation system
+The equationsystem as found in subassignment 2.1.c
 \begin{equation}
 \begin{array}{ccc}
 	\sum\limits_{i=1}^n t_i^2 p +\sum\limits_{i=1}^n t_i q & = & \sum\limits_{i=1}^n y_i t_i \\
 	\sum\limits_{i=1}^n t_i p + nq & = & \sum\limits_{i=1}^n y_i
 \end{array}
 \end{equation}
-in matrixform
-
+can also be represented by a matrix. The matrix is shown below.
 \begin{equation}
  \begin{pmatrix}
   \sum\limits_{i=1}^n t_i^2 & \sum\limits_{i=1}^n t_i \\
@@ -66,7 +67,7 @@ p \\ q
 \end{equation}
 
 \subsection*{Subassignment 2.1.d}
-Both double partial derivatives are found using maple
+Both double partial derivatives are found using maple. The maple input/output can be found at the end of the document.
 \begin{equation}
 	\frac{\partial^2 Q}{\partial p^2}(p,q) = \sum \limits_{i=1}^n 2t_i^2
 \end{equation}
@@ -78,14 +79,62 @@ Both double partial derivatives are found using maple
 \begin{equation}
 	\frac{\partial^2 Q}{\partial p \partial p}(p,q)= \frac{\partial^2 Q}{\partial q \partial p}(p,q)= \sum \limits_{i=1}^n 2t_i
 \end{equation}
-We see that  $\frac{\partial^2 Q}{\partial p^2}(p,q)  = \sum \limits_{i=1}^n 2t_i^2$ always is greater en $0$, that is because $t_i$ is raised to the second power and thus the whole expression will always be positive (because also a negative number raised to the second power is positive.) unless $t=0$. \\ The only thing we need to prove now is that  $D$ given by $ac-b^2$ is greater than $0$, then $Q(p,q)$ has a local minimum.
+$\frac{\partial^2 Q}{\partial p^2}(p,q)  = \sum \limits_{i=1}^n 2t_i^2$ will always be greater than 0, as long as $t \neq 0$. This is because $t_i$ is raised to the second power and thus the whole expression will always be positive.
+The last thing I will prove, is that whenever $ab-c^2 > 0$ then it follows that also $D>0$. Lets have a look at $D$ and $ac-b^2$ from theorem 1 in the assignment text.\\\\
+From the MinMax.pdf note we know that
 \begin{eqnarray}
 D &=& \frac{\partial^2 Q}{\partial p^2}(p,q) \frac{\partial^2 Q}{\partial q^2}(p,q) - (\frac{\partial^2 Q}{\partial p \partial p}(p,q))^2 \\
- \end{eqnarray}
- Thus we have to prove that for $n$ greater than $2$
- \begin{eqnarray}
- (\sum \limits_{i=1}^n 2t_i)^2 &<&  (\sum \limits_{i=1}^n 2t_i^2) \cdot 2n
- \end{eqnarray}
- I don`t know how to prove that
- \subsection*{Subassignment 2.1.e}
+D &=& (\sum \limits_{i=1}^n 2t_i^2) 2n-(\sum \limits_{i=1}^n 2t_i)^2\\
+\end{eqnarray}
+From theorem 1, we know
+\begin{eqnarray}
+	ac-b^2 &=&  (\sum \limits_{i=1}^n t_i^2) n-(\sum \limits_{i=1}^n t_i)^2
+\end{eqnarray}
+If we take a closer look at equation 21 and equation 22 we will see that the two equations look much alike. Actually we can write $D$ as
+\begin{eqnarray}
+D &=& 2a2c-(2b)^2 \\
+D &=& 4ac-(2b)^2  \\
+D &=& 4ac-4b^2 \\
+D &=& 4(ac-b^2)
+\end{eqnarray}
+Thus, if $ac-b^2 > 0 $ then $D > 0$.
+\subsection*{Subassignment 2.1.e}
+All results in this subassignment has been solved using Maple. The maple input/output can be found at the end of this document.
+\begin{equation}
+a=56260, \quad b=730, \quad c=10, \quad d=13761.6, \quad e=192.9 
+\end{equation}
+\subsection*{Subassignment 2.1.f}
+All results in this subassignment has been solved using Maple. The maple input/output can be found at the end of this document.\\\\
+I had Maple calculate $M^{-1}$, and could then calculate
+\begin{equation}
+ \underline{\underline{M}}^{-1} \underline{v} = \begin{pmatrix} -0.1078 \\ 27.15 \end{pmatrix}
+\end{equation}
+This implies that the straight is defined as
+\begin{equation}
+y=-0.1078x+27.1578
+\end{equation}
+The plot of the straight line and the data points can be found in the maple output, at the end of this document.\\ I don't have any comments about the plot, other then it looks right.
+\newpage
+\section*{Assignment 2.2a}
+\subsection*{Subassignment 2.2a.a}
+I used Maple for the Gaussian Elimination. After elimination the matrix looked like this
+\begin{equation} \underset{=}{A} =
+	\begin{pmatrix}
+		1 & 0 & -1 \\
+		0 & 1 & 3 \\
+		0 & 0 & 0
+	\end{pmatrix}
+\end{equation}
+$f$ is bijective when then equation $\underset{=}{M} \underset{=}{X} = \underset{=}{B}$ has one and only one solution for every $\underset{=}{B}$.The book page 51 section 2.4.\\
+Theorem 2.3.12(c) says that is $m=n=d$, then the equation system $\underset{=}{M} \underset{=}{X} = \underset{=}{B}$, has only and only one solution for every $\underset{=}{B}$.This does not hold for our equation system where $n>d$ and thus $f$ is not bijective.
+\subsection*{Subassignment 2.2a.b}
+I added $b_1$, $b_2$ and $b_3$ to the original equation system and used maple to do a Gaussian Elimination.  After elimination the matrix looked like this
+\begin{equation} \underset{=}{C}=
+	\begin{pmatrix}
+		1 & 0 & -1 &  b_1 \\
+		0 & 1 & 3 &   b_2-b_1\\
+		0 & 0 & 0 &  b_3-b_2+b_1
+	\end{pmatrix}
+\end{equation}
+If the equation system has to be solvable - and thus have at least one solution -  it is easy to see that $b_2-b_3$ has to equal $b_1$.
 \end{document}
