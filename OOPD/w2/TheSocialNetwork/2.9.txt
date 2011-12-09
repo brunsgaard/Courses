@@ -1,0 +1,14 @@
+Assignment 2.9
+
+1.	I would create a method getProfileAsString in the Person class, which return a 
+	string containing the relevant information. 
+
+2.	I would create a method showProfiles in DikuPlus which took the HashMap network
+	and used a for loop to go through every profile
+	
+	e.g:
+		    public void showProfiles() {
+				for (Person person : network.values())
+	   				 System.out.println(person.getProfileAsString());
+   			} 
+	
