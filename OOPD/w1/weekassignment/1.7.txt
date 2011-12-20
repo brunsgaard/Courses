@@ -1,1 +1,0 @@
-Jeg har implementeret get-set metoder i min Cow klasse, og kan derfor tilgå de ellers private variable for Cow fra Race. Ønskede jeg ikke at implementere get-set metoder, kunne Cow med fordel selv annoncere vinderen da den ville være den eneste med adgang til dens variable.
