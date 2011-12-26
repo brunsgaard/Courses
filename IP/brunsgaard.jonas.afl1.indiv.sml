@@ -13,12 +13,14 @@ val test_1i1 = prob(1.0/6.0, 12, 3) = 1953125.0/2176782336.0;
 
 val why_false_test_1i1 = prob(1.0/6.0, 12, 3) - (1953125.0/2176782336.0);
 
-(* Floating-point representation of real numbers implies that the approach to testing given by 
-"Vejledning i afprøvning" do not suffice. (At least it's my guess) Is that right? And if yes, 
-how do we test functions which output values of the type real.
-
-The value "why_false_test_1i1" is so tiny (near zero), that I will deduce that the function 
-is working correct*)
+(* 
+ * Floating-point representation of real numbers implies that the approach to testing given by 
+ * "Vejledning i afprøvning" do not suffice. (At least it's my guess) Is that right? And if yes, 
+ * how do we test functions which output values of the type real.
+ *
+ * The value "why_false_test_1i1" is so tiny (near zero), that I will deduce that the function 
+ * is working correct
+ *)
 
 
 (* -- 1i2 -- *)
