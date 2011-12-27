@@ -1,17 +1,22 @@
 public class Board {
 
+    // Class variables
     private Piece[][] board;
     private boolean gameOver;
 
+    // Constructor
     public Board() {
 	this.board = new Piece[8][8];
 	this.initialize();
     }
 
+    // Returns the piece of a position
     public Piece getPiece(Position position) {
 	return board[position.getY()][position.getX()];
     }
 
+    // Checks if all positions in the Position Array are null.
+    // Used with the path method of the Positions Class
     public boolean allPositionsAreEmpty(Position[] positions) {
 	for (Position p : positions) {
 	    if (p == null)
@@ -20,6 +25,7 @@ public class Board {
 	return true;
     }
 
+    // Initialize the pieces at the board
     private void initialize() {
 	this.gameOver = false;
 
@@ -51,6 +57,7 @@ public class Board {
 	board[7][4] = new King(Piece.Color.BLACK);
     }
 
+    // Prints out the board to the console
     public String humanReadableState() {
 	StringBuilder builder = new StringBuilder(192);
 	for (int y = 7; y >= 0; y--) {
@@ -65,10 +72,13 @@ public class Board {
 	return builder.toString();
     }
 
+    // Getter for the class variable gameOver.
     public boolean gameOver() {
 	return this.gameOver;
     }
 
+    // Tests there are done when a player tries to move a piece.
+    // if the tests pass the piece will be moved.
     public boolean tryMovePiece(Piece.Color playerColor, Position start,
 	    Position end) {
 	Piece p = getPiece(start);
@@ -84,7 +94,7 @@ public class Board {
 	    this.gameOver = true;
 	this.board[end.getY()][end.getX()] = p;
 	this.board[start.getY()][start.getX()] = null;
-	
+
 	return true;
     }
 }

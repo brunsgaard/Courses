@@ -2,13 +2,18 @@ import java.util.Scanner;
 
 public class Main {
 
+    // input scanner
     private static Scanner in;
+
+    // The game variable.
     private static Game game;
 
+    // The Main method handles the user interaction.
     public static void main(String[] args) {
 	game = new Game();
 	System.out.println(game.getBoardAsString());
 	in = new Scanner(System.in);
+
 	while (true) {
 	    System.out.println("Player " + game.getCurrentPlayer() + ":");
 	    String token = in.next();
@@ -24,7 +29,8 @@ public class Main {
 		if (start == null || end == null) {
 		    System.out.println("ILLEGAL!");
 		} else {
-		    if (!game.tryMovePiece(start, end)) System.out.println("ILLEGAL!");
+		    if (!game.tryMovePiece(start, end))
+			System.out.println("ILLEGAL!");
 		    if (game.gameOver()) {
 			System.out.println("GAME OVER !!!");
 			break;
