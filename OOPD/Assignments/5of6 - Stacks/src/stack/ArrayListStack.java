@@ -1,3 +1,4 @@
+package stack;
 import java.util.EmptyStackException;
 import java.util.ArrayList;
 
@@ -34,5 +35,4 @@ public class ArrayListStack<TypeOfValue> implements IStack<TypeOfValue> {
 	TypeOfValue value = this.stack.get(0);
 	return value;
     }
-
 }
