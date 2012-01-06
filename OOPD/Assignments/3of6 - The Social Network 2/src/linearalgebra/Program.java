@@ -35,7 +35,7 @@ public class Program {
 	return this.state;
     }
 
-    public void readToken() {
+    public void readToken() throws IllegalArgumentException, InputMismatchException {
 	if (this.state == State.START)
 	    System.out.println("What would you like to do?");
 	String token = in.next();
