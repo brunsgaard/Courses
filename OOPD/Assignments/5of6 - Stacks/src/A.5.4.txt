@@ -1,0 +1,29 @@
+The information below is all found in the java docs.
+_______________________________
+**Java.util.Stack **
+
+Pros:	* Based on vectors and therefore offer synchronized access(thread safe)
+
+Cons:	* Because it is based on vectors any element in the stack can be accessed, 
+		  not just the top one.
+		  
+		* Its a Class and not an interface. (locked to one implementation)
+
+
+**  The use of an ArrayList **
+
+Pros:	* Easy to implement (compared to LinkedLists)
+		* Maginal faster that vectors (Java.util.Stack)
+
+Cons:	* Push operation is amortized constant time.
+
+
+**  The use of an LinkedList **
+
+Pros:	* Does not use dynamic arrays, so there are no need to reallocate memory.
+		* All operations on the stack is constant time.
+
+Cons:	* Is not synchronized and therefore there for it is not thread safe, thus
+		  it can't be used conveniently in multi thread programming.
+
+

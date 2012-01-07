@@ -24,7 +24,11 @@ class LinkedList<TypeOfValue> {
     public void deleteItem() {
 	firstLink = firstLink.getNextLink();
     }
-
+    
+    /**
+     * The Link Class is private for LinkList
+     * No other Classes to create Link objects.
+     */
     private class Link<TypeOfData> {
 	private TypeOfData value;
 	private Link<TypeOfData> nextLink;
