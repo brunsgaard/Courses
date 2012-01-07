@@ -1,15 +1,15 @@
 package calculator;
-
 import java.util.EmptyStackException;
-
 import stack.IStack;
+import stack.LinkedListStack;
 
-public class Calculator implements Token {
+public class Calculator {
 
-    @Override
-    public void evaluate(IStack<Integer> stack) throws EmptyStackException {
-	// TODO Auto-generated method stub
-	
+    public int evaluate(IStack<Token> tokens) throws EmptyStackException {
+	LinkedListStack<Integer> rpnStack = new LinkedListStack<Integer>();
+	while (!tokens.empty()) {
+	    tokens.pop().evaluate(rpnStack);
+	}
+	return rpnStack.peek();
     }
-
 }
