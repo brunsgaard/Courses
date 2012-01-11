@@ -1,0 +1,13 @@
+diku.oopd
+puzzle
+puzzle.controller
+puzzle.controller.menu.board
+puzzle.controller.menu.game
+puzzle.model
+puzzle.model.direction
+puzzle.model.notification
+puzzle.model.position
+puzzle.view
+puzzle.view.menu
+puzzle.view.menu.board
+puzzle.view.menu.game
