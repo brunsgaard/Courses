@@ -13,6 +13,6 @@ public class NewItem extends JMenuItem
 
 	public NewItem()
 	{
-		// TODO: by student
+		super(Language.MENU_GAME_NEW);
 	}
 }

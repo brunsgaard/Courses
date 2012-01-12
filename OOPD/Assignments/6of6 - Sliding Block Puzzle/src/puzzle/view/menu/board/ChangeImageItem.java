@@ -13,6 +13,6 @@ public class ChangeImageItem extends JMenuItem
 
 	public ChangeImageItem()
 	{
-		// TODO: by student
+		super(Language.MENU_BOARD_CHANGE_IMAGE);
 	}
 }

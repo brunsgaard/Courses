@@ -1,5 +1,7 @@
 package puzzle.view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -21,13 +23,16 @@ public class MainFrame extends JFrame {
 	this.setMinimumSize(minSize);
 	
 	puzzle.view.menu.MenuBar menu = new puzzle.view.menu.MenuBar();
-	this.add(menu);
-	System.out.println(menu.isDisplayable());
-
+	this.add(menu,BorderLayout.PAGE_START);
+	
+	//puzzle.view.Board.initialize();
 	puzzle.view.Board board = puzzle.view.Board.getCurrent();
 
 	if (board != null) {
+	    //board.setBackground(new Color(0xFFFFFF));
 	    this.add(board);
+	    board.redraw();
+	    
 	}
 
 	this.pack();

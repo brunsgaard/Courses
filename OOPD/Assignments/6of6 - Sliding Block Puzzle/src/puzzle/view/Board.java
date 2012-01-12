@@ -12,75 +12,70 @@ import puzzle.model.notification.Restarted;
 
 import diku.oopd.Observer;
 
+public class Board extends JPanel implements Observer<INotification> {
+    private static final long serialVersionUID = 5689846694617785525L;
 
+    private static Board instance;
 
-public class Board extends JPanel implements Observer<INotification>
-{
-	private static final long serialVersionUID = 5689846694617785525L;
-	
-	private static Board instance;
-	
-	private Block activeBlock;
+    private Block activeBlock;
 
-	private Board()
-	{
-		super();
-		this.redraw();
-	}
-	
-	public static Board getCurrent()
-	{
-		return Board.instance;
-	}
-	
-	public static Board initialize()
-	{
-		if (Board.instance == null)
-			Board.instance = new Board();
-		return Board.instance;
-	}
+    private Board() {
+	super();
+	this.activeBlock = new Block(BoardModel.EMPTY_SLOT);
+	this.redraw();
+    }
 
-	public void redraw()
-	{
-		this.removeAll();
+    public static Board getCurrent() {
+	return Board.instance;
+    }
 
-		int rootOfSize = BoardModel.getCurrent().getNumberOfSlotsInARow();
-		this.setLayout(new GridLayout(rootOfSize, rootOfSize));
-		this.addAllBlocks();
-	}
+    public static Board initialize() {
+	if (Board.instance == null)
+	    Board.instance = new Board();
+	return Board.instance;
+    }
 
-	private void addAllBlocks()
-	{
-		// TODO: by student
-	}
+    public void redraw() {
+	this.removeAll();
 
-	private void addInactiveBlocks()
-	{
-		// TODO: by student
-	}
-	
-	public void update(MovedEmptySlot movement)
-	{
-		Component inactiveBlock = this.getComponent(movement.getEnd());
+	int rootOfSize = BoardModel.getCurrent().getNumberOfSlotsInARow();
+	this.setLayout(new GridLayout(rootOfSize, rootOfSize));
+	this.addAllBlocks();
+    }
 
-		this.add(this.activeBlock, movement.getEnd());
-		this.add(inactiveBlock, movement.getStart());
-		
-		this.doLayout();
-	}
-	
-	public void update(Restarted restart)
-	{
-		this.redraw();
-		this.doLayout();
-	}
+    private void addAllBlocks() {
+	this.addInactiveBlocks();
+	this.add(this.activeBlock, BoardModel.getCurrent());
+    }
 
-	
-	public void update(INotification change)
-	{
-		if (change instanceof MovedEmptySlot)
-			this.update((MovedEmptySlot)change);
-		if (change instanceof Restarted)
-			this.update((Restarted)change);
+    private void addInactiveBlocks() {
+	for (int i = 0; i < BoardModel.getCurrent().getNumberOfSlots(); i++) {
+	    int slot = BoardModel.getCurrent().getSlot(i);
+	    if (slot != BoardModel.EMPTY_SLOT) {
+		Block b = new Block();
+		this.add(b);
+	    }
 	}
+    }
+
+    public void update(MovedEmptySlot movement) {
+	Component inactiveBlock = this.getComponent(movement.getEnd());
+
+	this.add(this.activeBlock, movement.getEnd());
+	this.add(inactiveBlock, movement.getStart());
+
+	this.doLayout();
+    }
+
+    public void update(Restarted restart) {
+	this.redraw();
+	this.doLayout();
+    }
+
+    public void update(INotification change) {
+	if (change instanceof MovedEmptySlot)
+	    this.update((MovedEmptySlot) change);
+	if (change instanceof Restarted)
+	    this.update((Restarted) change);
+    }
 }

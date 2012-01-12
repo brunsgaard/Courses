@@ -13,6 +13,6 @@ public class ResizeItem extends JMenuItem
 
 	public ResizeItem()
 	{
-		// TODO: by student
+		super(Language.MENU_BOARD_RESIZE);
 	}
 }

@@ -22,7 +22,7 @@ public class BoardModel extends
 	Observable<INotification, Observer<INotification>> {
     private static final int DEFAULT_NUMBER_OF_SLOTS_IN_A_ROW = 4;
     private static final String DEFAULT_PATH_TO_BACKGROUND_IMAGE = "./wrong.jpg";
-    private static final int EMPTY_SLOT = 0;
+    public static final int EMPTY_SLOT = -1;
 
     private static BoardModel instance;
 
@@ -127,7 +127,8 @@ public class BoardModel extends
     public void restart() {
 	this.initializeSlots();
 	this.notifyObservers(new Restarted());
-	// this.performASequenceOfRandomMoves(); comment this in when you are
+	this.performASequenceOfRandomMoves();
+	// comment this in when you are
 	// don whit the view part
     }
 
@@ -199,5 +200,9 @@ public class BoardModel extends
 		return false;
 	}
 	return true;
+    }
+
+    public int getSlot(int i) {
+	return this.stateOfSlots[i];
     }
 }

@@ -13,6 +13,6 @@ public class SolveItem extends JMenuItem
 
 	public SolveItem()
 	{
-		// TODO: by student
+		super(Language.MENU_GAME_SOLVE);
 	}
 }
