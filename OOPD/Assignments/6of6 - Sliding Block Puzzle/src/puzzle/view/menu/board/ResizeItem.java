@@ -14,5 +14,6 @@ public class ResizeItem extends JMenuItem
 	public ResizeItem()
 	{
 		super(Language.MENU_BOARD_RESIZE);
+		this.addActionListener(new puzzle.controller.menu.board.Resize());
 	}
 }

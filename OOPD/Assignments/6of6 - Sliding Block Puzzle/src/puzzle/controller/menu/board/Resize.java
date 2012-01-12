@@ -3,6 +3,8 @@ package puzzle.controller.menu.board;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import puzzle.model.BoardModel;
@@ -19,6 +21,8 @@ public class Resize implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
 	{
-		// TODO: by student
+	JOptionPane jop = new JOptionPane();
+	jop.showInputDialog(new JLabel("tafa"));
+	
 	}
 }

@@ -14,5 +14,6 @@ public class NewItem extends JMenuItem
 	public NewItem()
 	{
 		super(Language.MENU_GAME_NEW);
+		this.addActionListener(new puzzle.controller.menu.game.New());
 	}
 }

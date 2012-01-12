@@ -44,15 +44,22 @@ public class Board extends JPanel implements Observer<INotification> {
     }
 
     private void addAllBlocks() {
-	this.addInactiveBlocks();
-	this.add(this.activeBlock, BoardModel.getCurrent());
+	for (int i = 0; i < BoardModel.getCurrent().getNumberOfSlots(); i++) {
+	    int slot = BoardModel.getCurrent().getSlot(i);
+	    if (slot != BoardModel.EMPTY_SLOT) {
+		Block b = new Block(slot);
+		this.add(b);
+	    } else {
+		this.add(this.activeBlock);
+	    }
+	}
     }
 
     private void addInactiveBlocks() {
 	for (int i = 0; i < BoardModel.getCurrent().getNumberOfSlots(); i++) {
 	    int slot = BoardModel.getCurrent().getSlot(i);
 	    if (slot != BoardModel.EMPTY_SLOT) {
-		Block b = new Block();
+		Block b = new Block(i);
 		this.add(b);
 	    }
 	}
@@ -65,6 +72,7 @@ public class Board extends JPanel implements Observer<INotification> {
 	this.add(inactiveBlock, movement.getStart());
 
 	this.doLayout();
+
     }
 
     public void update(Restarted restart) {

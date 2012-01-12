@@ -14,7 +14,7 @@ class Block extends JPanel {
     private int value;
 
     public Block() {
-	this(-1);
+	this(BoardModel.EMPTY_SLOT);
     }
 
     public Block(int value) {

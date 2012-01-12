@@ -10,17 +10,18 @@ import puzzle.model.BoardModel;
 import puzzle.model.direction.Up;
 import puzzle.view.MainFrame;
 
+public class ChangeImage implements ActionListener {
+    public ChangeImage() {
+	super();
+    }
 
-public class ChangeImage implements ActionListener
-{
-	public ChangeImage()
-	{
-		super();
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+	JFileChooser chooser = new JFileChooser();
+	// chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+	if (chooser.showOpenDialog(MainFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
+	    File f = chooser.getSelectedFile();
+	    BoardModel.getCurrent().changeBackgroundImage(f.getPath());
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		// TODO: by student
-	}
+    }
 }

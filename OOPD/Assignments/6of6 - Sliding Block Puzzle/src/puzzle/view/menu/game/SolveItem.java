@@ -14,5 +14,6 @@ public class SolveItem extends JMenuItem
 	public SolveItem()
 	{
 		super(Language.MENU_GAME_SOLVE);
+		this.addActionListener(new puzzle.controller.menu.game.Solve());
 	}
 }

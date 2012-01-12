@@ -14,5 +14,6 @@ public class ChangeImageItem extends JMenuItem
 	public ChangeImageItem()
 	{
 		super(Language.MENU_BOARD_CHANGE_IMAGE);
+		this.addActionListener(new puzzle.controller.menu.board.ChangeImage());
 	}
 }
