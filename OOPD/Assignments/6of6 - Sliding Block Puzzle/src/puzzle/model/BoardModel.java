@@ -127,7 +127,9 @@ public class BoardModel extends
     public void restart() {
 	this.initializeSlots();
 	this.notifyObservers(new Restarted());
+	this.moveHistory.clear();
 	this.performASequenceOfRandomMoves();
+	
 	// comment this in when you are
 	// don whit the view part
     }

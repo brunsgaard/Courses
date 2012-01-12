@@ -21,8 +21,9 @@ public class Resize implements ActionListener {
 		.showInputDialog(MainFrame.getInstance(), "What size?",
 			"Resize dialogue", JOptionPane.PLAIN_MESSAGE, null,
 			possibilities, new Integer(15));
-	
-    BoardModel.getCurrent().resizeBoard(a.intValue());
+
+	if (a != null)
+	    BoardModel.getCurrent().resizeBoard(a.intValue());
     }
-    
+
 }
