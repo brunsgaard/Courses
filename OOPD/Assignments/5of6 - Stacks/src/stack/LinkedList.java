@@ -1,4 +1,5 @@
 package stack;
+
 class LinkedList<TypeOfValue> {
 
     private Link<TypeOfValue> firstLink;

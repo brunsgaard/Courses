@@ -1,5 +1,6 @@
 package puzzle.model;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import puzzle.model.notification.Restarted;
 import puzzle.model.notification.Winning;
 import puzzle.model.position.Position;
 import puzzle.model.position.PositionFactory;
-
 import diku.oopd.Observable;
 import diku.oopd.Observer;
 
@@ -23,8 +23,7 @@ public class BoardModel extends
     private static final int DEFAULT_NUMBER_OF_SLOTS_IN_A_ROW = 4;
     private static final String DEFAULT_PATH_TO_BACKGROUND_IMAGE = "./wrong.jpg";
     private static final int EMPTY_SLOT = 0;
-    
-    
+
     private static BoardModel instance;
 
     private int numberOfSlotsOnTheBoard;
@@ -32,8 +31,6 @@ public class BoardModel extends
     private int numberOfSlotsInARow;
 
     private ArrayList<Direction> moveHistory;
-    
-    
 
     /**
      * The board slots are numbers right to left, top to bottom. The integer 0
@@ -136,8 +133,17 @@ public class BoardModel extends
 
     public void scaleBackgroundImage(int newWidth, int newHeight) {
 	try {
-	    // TODO: by student
-	    this.backgroundImage = null;
+	    BufferedImage originalImage = ImageIO.read(new File(
+		    this.pathToBackgroundImage));
+
+	    BufferedImage resizedImage = new BufferedImage(newWidth, newHeight,
+		    BufferedImage.TYPE_INT_RGB);
+
+	    Graphics2D graphics2d = resizedImage.createGraphics();
+	    graphics2d
+		    .drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+	    this.backgroundImage = resizedImage;
+	    graphics2d.dispose();
 	} catch (Exception e) {
 	    this.backgroundImage = null;
 	}
@@ -181,8 +187,8 @@ public class BoardModel extends
     }
 
     public void undoAllMoves() {
-	for (int i = this.numberOfSlotsOnTheBoard; i > 0; i-- ){
-	    this.move(this.moveHistory.get(i-1).opposite());
+	for (int i = this.numberOfSlotsOnTheBoard; i > 0; i--) {
+	    this.move(this.moveHistory.get(i - 1).opposite());
 	    this.moveHistory.clear();
 	}
     }
