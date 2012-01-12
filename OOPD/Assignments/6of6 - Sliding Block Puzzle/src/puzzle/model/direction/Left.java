@@ -25,14 +25,10 @@ public class Left extends Direction
     @Override
     public int getNextPosition(BoardModel board)
     {
-        /*
         int newPosition = board.getPositionOfEmptySlot();
         if (newPosition % board.getNumberOfSlotsInARow() == 0)
             return -1;
         return --newPosition;
-        */
-        // TODO: by student
-        return -1;
     }
 
     @Override

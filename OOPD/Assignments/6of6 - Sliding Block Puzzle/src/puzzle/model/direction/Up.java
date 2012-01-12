@@ -25,15 +25,13 @@ public class Up extends Direction
     @Override
     public int getNextPosition(BoardModel boardModel)
     {
-        /*
+        
         int newPosition = boardModel.getPositionOfEmptySlot()
                 - boardModel.getNumberOfSlotsInARow();
         if (newPosition < 0)
             return -1;
         return newPosition;
-        */
-        // TODO: by student
-        return -1;
+        
     }
 
     @Override
