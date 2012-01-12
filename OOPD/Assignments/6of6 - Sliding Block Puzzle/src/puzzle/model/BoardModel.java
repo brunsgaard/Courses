@@ -74,7 +74,7 @@ public class BoardModel extends
 
     private void initializeSlots() {
 	for (int i = 0; i < (this.numberOfSlotsOnTheBoard - 1); i++) {
-	    this.stateOfSlots[i] = i + 1;
+	    this.stateOfSlots[i] = i;
 	}
 
 	this.locationOfEmptySlot = this.numberOfSlotsOnTheBoard - 1;
@@ -188,10 +188,10 @@ public class BoardModel extends
     }
 
     public void undoAllMoves() {
-	for (int i = this.numberOfSlotsOnTheBoard; i > 0; i--) {
+	for (int i = this.moveHistory.size(); i > 0; i--) {
 	    this.move(this.moveHistory.get(i - 1).opposite());
-	    this.moveHistory.clear();
 	}
+	this.moveHistory.clear();
     }
 
     public boolean isInAWinningState() {

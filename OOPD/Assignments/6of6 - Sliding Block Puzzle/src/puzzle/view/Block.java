@@ -42,9 +42,10 @@ class Block extends JPanel {
 	    return;
 	}
 	BufferedImage image = BoardModel.getCurrent().getBackgroundImage();
-	graphics.drawImage(image, 0, 0, this.getWidth(), this.getHeight(),
-		this.getImageX(), this.getImageY(),
-		this.getImageX() + this.getWidth(),
-		this.getImageY() + this.getHeight(), null);
+	int w = this.getWidth();
+	int h = this.getHeight();
+	int x = this.getImageX();
+	int y = this.getImageY();
+	graphics.drawImage(image, 0, 0, w, h, x, y, x+w, y+h, null);
     }
 }
