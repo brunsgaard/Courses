@@ -55,16 +55,6 @@ public class Board extends JPanel implements Observer<INotification> {
 	}
     }
 
-    private void addInactiveBlocks() {
-	for (int i = 0; i < BoardModel.getCurrent().getNumberOfSlots(); i++) {
-	    int slot = BoardModel.getCurrent().getSlot(i);
-	    if (slot != BoardModel.EMPTY_SLOT) {
-		Block b = new Block(slot);
-		this.add(b);
-	    }
-	}
-    }
-
     public void update(MovedEmptySlot movement) {
 	Component inactiveBlock = this.getComponent(movement.getEnd());
 

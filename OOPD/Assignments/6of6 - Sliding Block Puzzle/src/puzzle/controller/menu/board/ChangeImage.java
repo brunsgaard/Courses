@@ -7,7 +7,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import puzzle.model.BoardModel;
-import puzzle.model.direction.Up;
 import puzzle.view.MainFrame;
 
 public class ChangeImage implements ActionListener {

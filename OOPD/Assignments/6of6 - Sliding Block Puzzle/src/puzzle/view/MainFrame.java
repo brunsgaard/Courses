@@ -1,13 +1,11 @@
 package puzzle.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
 import puzzle.controller.ArrowKeyListener;
-import puzzle.view.menu.MenuBar;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = -8808883923263763897L;

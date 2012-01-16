@@ -2,7 +2,6 @@ package puzzle.view.menu.game;
 
 import javax.swing.JMenuItem;
 
-import puzzle.controller.menu.game.Solve;
 import puzzle.view.Language;
 
 

@@ -2,7 +2,6 @@ package puzzle.view.menu.board;
 
 import javax.swing.JMenuItem;
 
-import puzzle.controller.menu.board.Resize;
 import puzzle.view.Language;
 
 
