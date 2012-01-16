@@ -11,16 +11,15 @@ public class Dungeon
 
     private String description;
     private Hero hero;
-    private ArrayList<Monster> monsters;
+
     private ArrayList<Room> rooms;
     private int pointScaleFactor;
 
     public Dungeon()
     {
-        
-        this.monsters = new ArrayList();
+
         this.rooms = new ArrayList();
-        
+
     }
 
     public String getDescription()
@@ -43,16 +42,6 @@ public class Dungeon
         this.hero = hero;
     }
 
-    public ArrayList<Monster> getMonsters()
-    {
-        return monsters;
-    }
-
-    public void setMonsters(ArrayList<Monster> monsters)
-    {
-        this.monsters = monsters;
-    }
-
     public ArrayList<Room> getRooms()
     {
         return rooms;
@@ -68,13 +57,15 @@ public class Dungeon
         return pointScaleFactor;
     }
 
-    public void setPointScaleFactor(int pointScaleFactor) throws InputMismatchException
+    public void setPointScaleFactor(int pointScaleFactor)
+            throws InputMismatchException
     {
         if (pointScaleFactor <= 0)
         {
             throw new InputMismatchException();
         } else
-        {this.pointScaleFactor = pointScaleFactor;
+        {
+            this.pointScaleFactor = pointScaleFactor;
         }
     }
 

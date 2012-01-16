@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import model.items.Armor;
+import model.items.Item;
+import model.items.Weapon;
 import model.players.Monster;
 import model.players.monsters.Goblin;
 import model.players.monsters.Orc;
 
 public class DungeonParser
 {
-
     private Scanner in;
     private Dungeon dungeon;
 
@@ -81,17 +83,38 @@ public class DungeonParser
     public void addMonstor(int x, int y, Character monsterType)
     {
         Point monsterPosition = new Point(x, y);
+        Room roomToFind = null;
+        for (Room r : this.dungeon.getRooms())
+        {
+            if (r.isInside(monsterPosition))
+                roomToFind = r;
+        }
         Monster monster = null;
         if (monsterType.equals('G'))
             monster = new Goblin(monsterPosition);
         if (monsterType.equals('O'))
             monster = new Orc(monsterPosition);
-        if (monster != null) this.dungeon.getMonsters().add(monster);
+        if (monster != null && roomToFind != null)
+            roomToFind.getMonsters().add(monster);
 
     }
 
-    public void additem(int pointScaleFactor)
+    public void additem(int x, int y, Character itemType, int damageAttribute)
     {
+        Point itemPosition = new Point(x, y);
+        Room roomToFind = null;
+        for (Room r : this.dungeon.getRooms())
+        {
+            if (r.isInside(itemPosition))
+                roomToFind = r;
+        }
+        Item item = null;
+        if (itemType.equals('W'))
+            item = new Weapon(itemPosition, damageAttribute);
+        if (itemType.equals('A'))
+            item = new Armor(itemPosition, damageAttribute);
+        if (item != null && roomToFind != null)
+            roomToFind.getItems().add(item);
 
     }
 
