@@ -1,0 +1,19 @@
+20
+room: 0 0 4 5
+room: 0 5 4 13
+room: 4 1 7 8
+room: 7 4 13 8
+room: 4 8 13 13
+door: 3 2 4 2
+door: 3 6 4 6
+door: 3 10 4 10
+door: 11 7 11 8
+monster: 10 5 O
+monster: 10 8 G
+monster: 5 9 G
+item: 5 4 A 50
+item: 5 5 W 10
+item: 5 9 A 50
+item: 6 11 W 20
+item: 11 8 W 30
+item: 11 5 A 50
