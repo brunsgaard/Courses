@@ -6,7 +6,7 @@ public class Armor extends Item
 
 {
     private int resistence;
-    
+
     public Armor(int damage)
     {
         this.resistence = damage;

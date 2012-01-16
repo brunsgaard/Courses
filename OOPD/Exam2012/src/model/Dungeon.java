@@ -1,22 +1,26 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import model.players.Hero;
 import model.players.Monster;
 
 public class Dungeon
 {
+
     private String description;
     private Hero hero;
     private ArrayList<Monster> monsters;
     private ArrayList<Room> rooms;
+    private int pointScaleFactor;
 
-    public Dungeon(String description)
+    public Dungeon()
     {
-        this.description = description;
+        
         this.monsters = new ArrayList();
         this.rooms = new ArrayList();
+        
     }
 
     public String getDescription()
@@ -57,6 +61,21 @@ public class Dungeon
     public void setRooms(ArrayList<Room> rooms)
     {
         this.rooms = rooms;
+    }
+
+    public int getPointScaleFactor()
+    {
+        return pointScaleFactor;
+    }
+
+    public void setPointScaleFactor(int pointScaleFactor) throws InputMismatchException
+    {
+        if (pointScaleFactor <= 0)
+        {
+            throw new InputMismatchException();
+        } else
+        {this.pointScaleFactor = pointScaleFactor;
+        }
     }
 
 }

@@ -31,6 +31,7 @@ public abstract class Hero extends Player
     @Override
     public void takeDamage(int amount)
     {
-        this.health -= amount - this.armor.getResistence();
+        this.health -= Math.max(amount - this.armor.getResistence(),0);
+        
     }
 }
