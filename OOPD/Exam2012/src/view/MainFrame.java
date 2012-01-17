@@ -2,13 +2,14 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
+
 import parser.DungeonParser;
 
 import model.Dungeon;
-import model.Point;
-import model.players.heroes.Mage;
 
 import view.Language;
 import view.dungeon.DungeonPanel;
@@ -34,44 +35,25 @@ public class MainFrame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // set up dungeon
-        Dungeon.getInstance().setHero(new Mage("Eli", new Point(1, 1)));
+//        Dungeon.getInstance().setHero(new Mage("Eli", new Point(1, 1)));
         // this.setExtendedState(MAXIMIZED_BOTH); // maximize window
-
-        this.dungeonPanel = new DungeonPanel();
-        
 
         this.welcomePanel = new WelcomePanel();
         this.setContentPane(this.welcomePanel);
-
-        this.welcomePanel.getStartButton().addActionListener(
-                new ActionListener()
-                {
-
-                    @Override
-                    public void actionPerformed(ActionEvent arg0)
-                    {
-                        MainFrame.this.shiftToDungenPanel();
-
-                    }
-                });
-
+        
         this.pack();
         this.setVisible(true);
-
     }
 
-    public void shiftToDungenPanel()
+    public void shiftToDungeonPanel()
     {
-        System.out.println("hallo");
-
         this.welcomePanel.SendSelectedHeroToDungeon();
         this.welcomePanel.removeAll();
+        this.dungeonPanel = new DungeonPanel();
         this.setContentPane(this.dungeonPanel);
        
         //this.pack();
         this.setVisible(true);
-        
-
     }
 
     public static MainFrame getInstance()

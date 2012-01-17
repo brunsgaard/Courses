@@ -1,8 +1,9 @@
 package view.dungeon;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class RoomPanel extends JPanel
@@ -12,6 +13,12 @@ public class RoomPanel extends JPanel
     public RoomPanel()
     {
         super(new BorderLayout());
-        this.add(new JLabel("hello"));
+    }
+    
+    @Override
+    public void paintComponent(Graphics graphics)
+    {
+        Dimension s = this.getSize();
+        graphics.fillRect(0, 0, (int) s.getWidth(), (int) s.getHeight());
     }
 }

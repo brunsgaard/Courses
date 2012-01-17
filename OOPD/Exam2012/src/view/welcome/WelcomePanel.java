@@ -1,9 +1,12 @@
 package view.welcome;
 
 import view.Language;
+import view.MainFrame;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -58,17 +61,18 @@ public class WelcomePanel extends JPanel
         // Start Button
         this.startButton = new JButton(Language.WELCOME_PANEL_BUTTON);
         this.startButton.setAlignmentX(CENTER_ALIGNMENT);
+        this.startButton.addActionListener(new ActionListener()
+        {
+            
+            @Override
+            public void actionPerformed(ActionEvent arg0)
+            {
+                MainFrame.getInstance().shiftToDungeonPanel();
+            }
+        });
 
         // Put it all together
         this.draw();
-
-    }
-
-    // we have to be able to give the button to Mainframe, so
-    // Mainframe can listen :)
-    public JButton getStartButton()
-    {
-        return startButton;
 
     }
 

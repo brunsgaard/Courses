@@ -3,6 +3,7 @@ package view.dungeon;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -30,10 +31,11 @@ public class MapPanel extends JPanel
         super(new BorderLayout());
         Bounds dungeonBounds = Dungeon.getInstance().getBounds();
         int scaleFactor = Dungeon.getInstance().getPointScaleFactor();
-        int width = dungeonBounds.getBottomRight().getX()*scaleFactor;
-        int height = dungeonBounds.getBottomRight().getY()*scaleFactor;
+        int width = dungeonBounds.getBottomRight().getX()*scaleFactor+1;
+        int height = dungeonBounds.getBottomRight().getY()*scaleFactor+1;
         
         this.map = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        this.setPreferredSize(new Dimension(width,height));
         this.gfx = this.map.createGraphics();
         this.scaler = new AffineTransform();
         this.scaler.scale(scaleFactor, scaleFactor);
@@ -68,6 +70,10 @@ public class MapPanel extends JPanel
     @Override
     public void paintComponent(Graphics graphics)
     {
-        graphics.drawImage(this.map, 0, 0, null);
+        Dimension s = this.getSize();
+        int xOffset = Math.max(0,(int) Math.ceil((s.getWidth()-this.map.getWidth())/2));
+        int yOffset = Math.max(0,(int) Math.ceil((s.getHeight()-this.map.getHeight())/2));
+        graphics.fillRect(0, 0, (int) s.getWidth(), (int) s.getHeight());
+        graphics.drawImage(this.map, xOffset, yOffset, null);
     }
 }

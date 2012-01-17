@@ -2,10 +2,12 @@ package view.welcome;
 
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
 import javax.swing.text.View;
 
 public class Description extends JPanel
@@ -29,9 +31,12 @@ public class Description extends JPanel
         jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         jsp.setPreferredSize(new Dimension(420, 200));
-        
+        jsp.setOpaque(false);
+        jsp.getViewport().setOpaque(false);
+        Border border = BorderFactory.createEmptyBorder( 0, 0, 0, 0 );
+        jsp.setBorder( border );
+        jsp.setViewportBorder(border);
         add(this.jsp);
-
     }
 
 }
