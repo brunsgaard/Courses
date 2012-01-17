@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import parser.DungeonParser;
 
@@ -35,13 +38,39 @@ public class MainFrame extends JFrame
         // this.setExtendedState(MAXIMIZED_BOTH); // maximize window
 
         this.dungeonPanel = new DungeonPanel();
-        this.setContentPane(this.dungeonPanel);
+        
 
-        // this.welcomePanel = new WelcomePanel();
-        // this.setContentPane(this.welcomePanel);
+        this.welcomePanel = new WelcomePanel();
+        this.setContentPane(this.welcomePanel);
+
+        this.welcomePanel.getStartButton().addActionListener(
+                new ActionListener()
+                {
+
+                    @Override
+                    public void actionPerformed(ActionEvent arg0)
+                    {
+                        MainFrame.this.shiftToDungenPanel();
+
+                    }
+                });
 
         this.pack();
         this.setVisible(true);
+
+    }
+
+    public void shiftToDungenPanel()
+    {
+        System.out.println("hallo");
+
+        this.welcomePanel.SendSelectedHeroToDungeon();
+        this.welcomePanel.removeAll();
+        this.setContentPane(this.dungeonPanel);
+       
+        //this.pack();
+        this.setVisible(true);
+        
 
     }
 

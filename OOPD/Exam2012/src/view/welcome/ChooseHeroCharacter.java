@@ -5,39 +5,42 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ChooseHeroCharacter extends JPanel
 {
+    private static final long serialVersionUID = -8531590967524511578L;
+
     private JPanel buttonPane;
-    
-    
+
     private JRadioButton warriorButton;
     private JRadioButton clericButton;
     private JRadioButton mageButton;
-    
-    private ButtonGroup  groupOfHeroButtons;
-    private String selectedHero;  
+
+    private ButtonGroup groupOfHeroButtons;
+    private String selectedHero;
     private JLabel HeroDescription;
 
-    
+    public ChooseHeroCharacter()
+    {
 
-    public ChooseHeroCharacter(){
-        
         setLayout(new GridLayout(1, 2));
-        
+
         this.buttonPane = new JPanel();
         this.buttonPane.setLayout(new GridLayout(3, 1));
         this.HeroDescription = new JLabel();
-        
+        this.HeroDescription.setFont(new Font("Dialog", Font.BOLD, 15));
+
         this.warriorButton = new JRadioButton("Warrior");
-        
-        
+
         this.clericButton = new JRadioButton("Cleric");
         this.mageButton = new JRadioButton("Mage");
-        
+
         this.groupOfHeroButtons = new ButtonGroup();
-        
+
         this.groupOfHeroButtons.add(this.warriorButton);
         this.groupOfHeroButtons.add(this.clericButton);
         this.groupOfHeroButtons.add(this.mageButton);
@@ -46,16 +49,72 @@ public class ChooseHeroCharacter extends JPanel
         this.buttonPane.add(this.clericButton);
         this.buttonPane.add(this.mageButton);
 
-        //Set default
+        // Set default
         this.warriorButton.setSelected(true);
-        this.selectedHero = "Warrior";
-        this.HeroDescription.setText("<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>");
-        
+        this.setSelectedHero("Warrior");
+        this.HeroDescription
+                .setText("<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>");
+
         // add
         add(this.buttonPane);
         add(this.HeroDescription);
-        
-        
+
+        // add actions
+        buttonListener();
+
+    }
+
+    public String getSelectedHero()
+    {
+        return selectedHero;
+    }
+
+    public void setSelectedHero(String selectedHero)
+    {
+        this.selectedHero = selectedHero;
+    }
+
+    private void buttonListener()
+    {
+
+        this.warriorButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                HeroDescription
+                        .setText("<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>");
+                setSelectedHero("Warrior");
+
+            }
+        });
+
+        this.clericButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                HeroDescription
+                        .setText("<html> Health Regeneration Rate: 20 <br /> Damage magnifier: 1 <html>");
+                setSelectedHero("Cleric");
+
+            }
+        });
+        this.mageButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                HeroDescription
+                        .setText("<html> Health Regeneration Rate: 10 <br /> Damage magnifier: 2 <html>");
+                setSelectedHero("Mage");
+
+            }
+        });
+
     }
 
 }
