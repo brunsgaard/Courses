@@ -6,15 +6,13 @@ public abstract class Player
 {
     protected Point position;
     protected int health;
-    protected int damage;
-    protected int healthRegenerationRate;
+    protected static int unarmedDamage;
+    protected static int healthRegenerationRate;
 
-    public Player(Point position, int damage, int healthRegenerationRate)
+    public Player(Point position)
     {
         this.position = position;
         this.health = 100;
-        this.damage = damage;
-        this.healthRegenerationRate = healthRegenerationRate;
     }
 
     public boolean isDead()
@@ -24,7 +22,7 @@ public abstract class Player
 
     public void regenerate()
     {
-        this.health = Math.min(100, this.health + this.healthRegenerationRate);
+        this.health = Math.min(100, this.health + healthRegenerationRate);
     }
     
     public abstract int getDamageLevel();

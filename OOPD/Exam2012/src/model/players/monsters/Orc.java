@@ -5,13 +5,15 @@ import model.players.Monster;
 
 public class Orc extends Monster
 {
+ 
+    protected static int unarmedDamage = 20;
+    protected static int healthRegenerationRate = 10;
 
     public Orc(Point position)
     {
-        // parameters for superclass are
-        // position, damage, healthRegenerationRate
-        super(position, 20, 10);
-
+        super(position);
     }
+    
 
+   
 }

@@ -7,9 +7,9 @@ public class Armor extends Item
 {
     private int resistence;
 
-    public Armor(int damage)
+    public Armor(int armorLevel)
     {
-        this.resistence = damage;
+        this.resistence = armorLevel;
     }
 
     public Armor(Point position, int damage)

@@ -20,30 +20,41 @@ public class Room
     {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
-        this.doors = new HashMap();
-        this.items = new ArrayList();
-        this.monsters = new ArrayList();
-        
+        this.doors = new HashMap<Point, Room>();
+        this.items = new ArrayList<Item>();
+        this.monsters = new ArrayList<Monster>();
+
     }
-   
+
     public HashMap<Point, Room> getDoors()
     {
         return doors;
     }
-    
+
+    public void addDoor(Point point, Room room)
+    {
+        this.doors.put(point, room);
+
+    }
+
     public ArrayList<Monster> getMonsters()
     {
         return monsters;
     }
 
-    public void setMonsters(ArrayList<Monster> monsters)
+    public void addMonster(Monster monster)
     {
-        this.monsters = monsters;
+        this.monsters.add(monster);
     }
 
-    public void setDoors(HashMap<Point, Room> doors)
+    public boolean removeMonster(Monster monster)
     {
-        this.doors = doors;
+        int index = this.monsters.indexOf(monster);
+        if (index == -1)
+            return false;
+        this.monsters.remove(index);
+        return true;
+
     }
 
     public ArrayList<Item> getItems()
@@ -51,15 +62,28 @@ public class Room
         return items;
     }
 
-    public void setItems(ArrayList<Item> items)
+    public void addItem(Item item)
     {
-        this.items = items;
+        this.items.add(item);
     }
+
+    public boolean removeItem(Item item)
+    {
+        int index = this.items.indexOf(item);
+        if (index == -1)
+            return false;
+        this.items.remove(index);
+        return true;
+
+    }
+
     // TODO: Not sure removePlayer is implemented right.
-    public void removePlayer(Player player){
+    public void removePlayer(Player player)
+    {
         this.player = null;
     }
 
+    // TODO: is inside? the wall implementation?
     public boolean isInside(Point inputPoint)
     {
         boolean insideX = this.topLeft.getX() <= inputPoint.getX()

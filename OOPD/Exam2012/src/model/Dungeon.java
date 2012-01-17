@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import model.players.Hero;
-import model.players.Monster;
 
 public class Dungeon
 {
@@ -18,7 +17,7 @@ public class Dungeon
     public Dungeon()
     {
 
-        this.rooms = new ArrayList();
+        this.rooms = new ArrayList<Room>();
 
     }
 
@@ -47,9 +46,8 @@ public class Dungeon
         return rooms;
     }
 
-    public void setRooms(ArrayList<Room> rooms)
-    {
-        this.rooms = rooms;
+    public void addRoom(Room room){
+        this.rooms.add(room);
     }
 
     public int getPointScaleFactor()

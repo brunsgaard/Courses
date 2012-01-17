@@ -5,15 +5,15 @@ import model.Point;
 public abstract class Monster extends Player
 
 {
-    public Monster(Point position, int damage, int healthRegenerationRate)
+    public Monster(Point position)
     {
-        super(position, damage, healthRegenerationRate);
+        super(position);
     }
 
     @Override
     public int getDamageLevel()
     {
-        return damage;
+        return unarmedDamage;
     }
 
     @Override
