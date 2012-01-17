@@ -19,17 +19,12 @@ import parser.Params;
 public class DungeonParser
 {
     private Scanner in;
-    private Dungeon dungeon;
 
-    public DungeonParser(Dungeon dungeon)
-
+    public DungeonParser()
     {
-
-        this.dungeon = dungeon;
-        
     }
 
-    public Dungeon parseMapFile()
+    public void parseMapFile()
 
     {
         try
@@ -39,7 +34,7 @@ public class DungeonParser
 
 
             // first line in .map must be pointScaleFactor due to no identifier String
-            this.dungeon.setPointScaleFactor(in.nextInt());
+            Dungeon.getInstance().setPointScaleFactor(in.nextInt());
 
             while (in.hasNext())
             {
@@ -68,20 +63,18 @@ public class DungeonParser
                 }
 
             }
-            return this.dungeon;
         } catch (FileNotFoundException e1)
         {
             System.out.println("Woops.. something went wrong while"
                     + " loading dungeon.map, please place a "
                     + "valid dungeon.map file in your homedir ");
-            return null;
 
         }
     }
 
     public void addRoom(int x1, int y1, int x2, int y2)
     {
-        this.dungeon.addRoom(new Room(new Point(x1, y1), new Point(x2, y2)));
+        Dungeon.getInstance().addRoom(new Room(new Point(x1, y1), new Point(x2, y2)));
     }
 
     // TODO rewrite function do to lack of readability and smartness
@@ -94,7 +87,7 @@ public class DungeonParser
                                                     // your are unhappy
         Room point2Room = new Room(point2, point1);
 
-        for (Room r : this.dungeon.getRooms())
+        for (Room r : Dungeon.getInstance().getRooms())
         {
             if (r.isInside(point1))
                 point1Room = r;
@@ -111,7 +104,7 @@ public class DungeonParser
         // System.out.println(x+y+monsterType);
         Point monsterPosition = new Point(x, y);
         Room monsterRoom = null;
-        for (Room r : this.dungeon.getRooms())
+        for (Room r : Dungeon.getInstance().getRooms())
         {
             if (r.isInside(monsterPosition))
                 monsterRoom = r;
@@ -137,7 +130,7 @@ public class DungeonParser
         // System.out.println(x+y+itemType+damageAttribute);
         Point itemPosition = new Point(x, y);
         Room itemRoom = null;
-        for (Room r : this.dungeon.getRooms())
+        for (Room r : Dungeon.getInstance().getRooms())
         {
             if (r.isInside(itemPosition))
                 itemRoom = r;

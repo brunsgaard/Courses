@@ -29,5 +29,10 @@ public abstract class Player
     
     public abstract void takeDamage(int amount);
     
+    public Point getPosition()
+    {
+        return this.position;
+    }
+    
     
 }

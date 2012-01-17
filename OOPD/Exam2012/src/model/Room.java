@@ -88,8 +88,8 @@ public class Room
     {
         boolean insideX = this.topLeft.getX() <= inputPoint.getX()
                 && inputPoint.getX() <= this.bottomRight.getX();
-        boolean insideY = bottomRight.getY() <= inputPoint.getY()
-                && inputPoint.getY() <= topLeft.getY();
+        boolean insideY = topLeft.getY() <= inputPoint.getY()
+                && inputPoint.getY() <= bottomRight.getY();
         return insideX && insideY;
     }
 
@@ -102,5 +102,9 @@ public class Room
     {
         this.player = player;
     }
-
+    
+    public Bounds getBounds()
+    {
+        return new Bounds(this.topLeft, this.bottomRight);
+    }
 }

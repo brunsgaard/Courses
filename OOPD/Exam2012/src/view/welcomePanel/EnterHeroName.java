@@ -20,9 +20,6 @@ public class EnterHeroName extends JPanel
         
         add(this.infoText);
         add(this.inputHeroName);
-        
-        setSize(500, 200);
-        setAlignmentY(CENTER_ALIGNMENT);
     }
 
 }
