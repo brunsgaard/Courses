@@ -8,7 +8,7 @@ public final class Language
     }
 
     public static final String MAIN_FRAME_TITLE = "The Dungeon game";
-    public static final String WELCOME_PANEL_BUTTON = "Wehhaaaa... let's go!!";
-    public static final String WELCOME_PANEL_TITLE = "This is indeed the DungeonGame";
+    public static final String WELCOME_PANEL_BUTTON = "Weee.. let's go!!";
+    public static final String WELCOME_PANEL_TITLE = "The DungeonGame";
     
 }
