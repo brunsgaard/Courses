@@ -6,7 +6,9 @@ import game.controller.dungeon.Direction;
 import game.model.Point;
 import game.model.Room;
 import game.model.items.Item;
+import game.model.notification.ChangeRoom;
 import game.model.notification.INotification;
+import game.model.notification.PlayerDied;
 import game.model.notification.PlayerHealthChanged;
 import game.model.notification.PlayerMoved;
 
@@ -48,7 +50,7 @@ public abstract class Player extends
 
     public boolean tryMove(Direction direction)
     {
-
+        
         // the end position of the move
         Point newPosition = position.oneStep(direction);
 
@@ -58,16 +60,13 @@ public abstract class Player extends
             this.currentRoom.removePlayer(this);
             this.currentRoom = currentRoom.getDoors().get(newPosition);
             this.currentRoom.setPlayer(this);
-
-            // TODO NOTIFY changeRoom
+            this.notifyObservers(new ChangeRoom(this.currentRoom));
         } else if (!this.currentRoom.isInside(newPosition))
         {
             return false;
         }
-        
 
         // check for monster at end position
-        // i
         Monster monster = this.currentRoom.getMonsterIfPresent(newPosition);
 
         if (monster != null)
@@ -79,12 +78,16 @@ public abstract class Player extends
             if (monster.isDead())
             {
                 currentRoom.removeMonster(monster);
-                // DOes it have to be there
-                // this.notifyObservers(new PlayerDied());
+                this.notifyObservers(new PlayerDied());
             }
+
+            for (Monster m : currentRoom.getMonsters())
+            {
+                m.makeAutonomousMove();
+            }
+            this.notifyObservers(new PlayerMoved(this.position));
             return true;
         }
-        
 
         // check for items
         // TODO Do something with item
@@ -101,8 +104,15 @@ public abstract class Player extends
         // set position and notify observers..
         this.position = newPosition;
         this.notifyObservers(new PlayerMoved(this.position));
+
+        for (Monster m : currentRoom.getMonsters())
+        {
+            m.makeAutonomousMove();
+        }
+
         return true;
     }
+    
 
     public int getHealth()
     {

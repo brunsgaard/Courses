@@ -5,6 +5,7 @@ import game.model.Dungeon;
 import game.model.Point;
 import game.model.notification.PlayerDied;
 import game.model.notification.PlayerHealthChanged;
+import game.model.notification.PlayerMoved;
 
 public abstract class Monster extends Player
 
@@ -31,8 +32,26 @@ public abstract class Monster extends Player
 
     public void makeAutonomousMove()
     {
+        Hero hero =  Dungeon.getInstance().getHero();
         Point newPosition = this.position.oneStep(this.towardsHero());
         if (!this.currentRoom.isInside(newPosition)) return;
+        
+        if (newPosition.equals(hero.getPosition())){
+            
+            hero.takeDamage(this.getDamageLevel());
+            System.out.println(hero.getHealth());
+            
+            if (hero.isDead()){
+                // Action on dead Hero
+                System.out.println("Hero Killed");
+                this.notifyObservers(new PlayerDied());
+            }
+            
+            return;
+        }
+        
+        this.position = newPosition;
+        this.notifyObservers(new PlayerMoved(this.position));
 
     }
     

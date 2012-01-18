@@ -120,8 +120,9 @@ public class DungeonParser
             monster = new Goblin(monsterPosition);
             break;
         }
-        if (monster != null && monsterRoom != null)
-            monsterRoom.addMonster(monster);
+        if (monster != null && monsterRoom != null){
+            monster.setCurrentRoom(monsterRoom);
+            monsterRoom.addMonster(monster);}
 
     }
 
