@@ -1,18 +1,16 @@
 package view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 
 import javax.swing.JFrame;
 
 import parser.DungeonParser;
-
+import controller.ArrowKeyListener;
 import model.Dungeon;
 
 import view.Language;
 import view.dungeon.DungeonPanel;
+
 import view.welcome.WelcomePanel;
 
 public class MainFrame extends JFrame
@@ -41,6 +39,7 @@ public class MainFrame extends JFrame
         this.welcomePanel = new WelcomePanel();
         this.setContentPane(this.welcomePanel);
         
+        
         this.pack();
         this.setVisible(true);
     }
@@ -53,7 +52,13 @@ public class MainFrame extends JFrame
         this.setContentPane(this.dungeonPanel);
        
         //this.pack();
+        
+        
+        
         this.setVisible(true);
+        this.dungeonPanel.grabFocus();
+        this.dungeonPanel.addKeyListener(new ArrowKeyListener());
+        
     }
 
     public static MainFrame getInstance()
@@ -62,4 +67,7 @@ public class MainFrame extends JFrame
             MainFrame.instance = new MainFrame();
         return MainFrame.instance;
     }
+    
+    
+    
 }

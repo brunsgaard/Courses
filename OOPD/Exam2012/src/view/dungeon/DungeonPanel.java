@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+
+
 public class DungeonPanel extends JPanel
 {
     private static final long serialVersionUID = 6591358346723891464L;
@@ -34,6 +36,7 @@ public class DungeonPanel extends JPanel
         
         this.setPreferredSize(new Dimension(500,400));
         this.add(pane);
-    }
+        
 
+    }
 }

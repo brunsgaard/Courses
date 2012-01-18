@@ -1,5 +1,6 @@
 package model.players;
 
+import controller.Direction;
 import diku.oopd.Observable;
 import diku.oopd.Observer;
 import model.Point;
@@ -37,6 +38,23 @@ public abstract class Player extends Observable<INotification, Observer<INotific
     public Point getPosition()
     {
         return this.position;
+    }
+    // TODO: directions
+    public void tryMove(Direction direction){
+       switch (direction){
+       case UP:
+           this.position = new Point(this.position.getX(), this.position.getY()+1);
+           break;
+       case DOWN:
+           this.position = new Point(this.position.getX(), this.position.getY()-1);
+           break;
+       case LEFT:
+           this.position = new Point(this.position.getX()-1, this.position.getY());
+           break;
+       case RIGHT:
+           this.position = new Point(this.position.getX()+1, this.position.getY());
+           break;
+       }
     }
     
     
