@@ -34,11 +34,10 @@ public class MainFrame extends JFrame
 
         // set up dungeon
 //        Dungeon.getInstance().setHero(new Mage("Eli", new Point(1, 1)));
-        // this.setExtendedState(MAXIMIZED_BOTH); // maximize window
+//         this.setExtendedState(MAXIMIZED_BOTH); // maximize window
 
         this.welcomePanel = new WelcomePanel();
         this.setContentPane(this.welcomePanel);
-        
         
         this.pack();
         this.setVisible(true);
@@ -53,12 +52,9 @@ public class MainFrame extends JFrame
        
         //this.pack();
         
-        
-        
         this.setVisible(true);
         this.dungeonPanel.grabFocus();
         this.dungeonPanel.addKeyListener(new ArrowKeyListener());
-        
     }
 
     public static MainFrame getInstance()

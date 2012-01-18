@@ -6,6 +6,7 @@ import diku.oopd.Observer;
 import model.Point;
 import model.notification.INotification;
 import model.notification.PlayerHealthChanged;
+import model.notification.PlayerMoved;
 
 public abstract class Player extends Observable<INotification, Observer<INotification>>
 {
@@ -43,10 +44,10 @@ public abstract class Player extends Observable<INotification, Observer<INotific
     public void tryMove(Direction direction){
        switch (direction){
        case UP:
-           this.position = new Point(this.position.getX(), this.position.getY()+1);
+           this.position = new Point(this.position.getX(), this.position.getY()-1);
            break;
        case DOWN:
-           this.position = new Point(this.position.getX(), this.position.getY()-1);
+           this.position = new Point(this.position.getX(), this.position.getY()+1);
            break;
        case LEFT:
            this.position = new Point(this.position.getX()-1, this.position.getY());
@@ -55,6 +56,7 @@ public abstract class Player extends Observable<INotification, Observer<INotific
            this.position = new Point(this.position.getX()+1, this.position.getY());
            break;
        }
+       this.notifyObservers(new PlayerMoved(this.position));
     }
     
     

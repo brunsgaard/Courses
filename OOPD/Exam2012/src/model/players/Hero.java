@@ -6,6 +6,7 @@ import model.items.Weapon;
 import model.notification.PlayerArmorChanged;
 import model.notification.PlayerDied;
 import model.notification.PlayerHealthChanged;
+import model.notification.PlayerMoved;
 
 public abstract class Hero extends Player
 
@@ -63,7 +64,7 @@ public abstract class Hero extends Player
         if (weapon.getDamage() > damage)
             this.weapon = weapon;
     }
-
+    
     public void pickupItem(Armor armor)
     {
         if (this.armor == null)
