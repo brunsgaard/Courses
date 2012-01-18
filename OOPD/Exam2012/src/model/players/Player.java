@@ -1,8 +1,12 @@
 package model.players;
 
+import diku.oopd.Observable;
+import diku.oopd.Observer;
 import model.Point;
+import model.notification.INotification;
+import model.notification.PlayerHealthChanged;
 
-public abstract class Player
+public abstract class Player extends Observable<INotification, Observer<INotification>>
 {
     protected Point position;
     protected int health;
@@ -23,6 +27,7 @@ public abstract class Player
     public void regenerate()
     {
         this.health = Math.min(100, this.health + healthRegenerationRate);
+        this.notifyObservers(new PlayerHealthChanged(this.health));
     }
     
     public abstract int getDamageLevel();

@@ -3,6 +3,9 @@ package model.players;
 import model.Point;
 import model.items.Armor;
 import model.items.Weapon;
+import model.notification.PlayerArmorChanged;
+import model.notification.PlayerDied;
+import model.notification.PlayerHealthChanged;
 
 public abstract class Hero extends Player
 
@@ -34,16 +37,22 @@ public abstract class Hero extends Player
         if (this.armor == null)
         {
             this.health -= amount;
+            if (this.isDead()) this.notifyObservers(new PlayerDied());
+            this.notifyObservers(new PlayerHealthChanged(this.health));
             return;
         }
         int newArmorLevel = this.armor.getResistence() - amount;
         if (newArmorLevel < 0)
         {
             this.health += newArmorLevel;
+            this.notifyObservers(new PlayerHealthChanged(this.health));
+            if (this.isDead()) this.notifyObservers(new PlayerDied());
             this.armor = null;
+            this.notifyObservers(new PlayerArmorChanged(0));
         } else
         {
             this.armor.setResistence(newArmorLevel);
+            this.notifyObservers(new PlayerArmorChanged(newArmorLevel));
         }
     }
 
