@@ -72,7 +72,7 @@ public abstract class Player extends
 
         if (monster != null)
         {
-            monster.takeDamage(10);
+            monster.takeDamage(this.getDamageLevel());
             // TODO Debug info
             System.out.println("Monsters Health: " + monster.getHealth());
 

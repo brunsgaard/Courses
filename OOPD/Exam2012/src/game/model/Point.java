@@ -35,27 +35,19 @@ public class Point
 
     public Point oneStep(Direction direction)
     {
-        Point endPosition = new Point(-1, -1);
-
         switch (direction)
         {
         case NORTH:
-            endPosition = new Point(this.x, this.y - 1);
-            break;
+            return new Point(this.x, this.y - 1);
         case SOUTH:
-            endPosition = new Point(this.x,
-                    this.y + 1);
-            break;
+            return new Point(this.x, this.y + 1);
         case WEST:
-            endPosition = new Point(this.x - 1,
-                    this.y);
-            break;
+            return new Point(this.x - 1, this.y);
         case EAST:
-            endPosition = new Point(this.x + 1,
-                    this.y);
-            break;
+            return new Point(this.x + 1, this.y);
+        default:
+            return null;
         }
-        return endPosition;
     }
 
     @Override

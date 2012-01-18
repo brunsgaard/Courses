@@ -31,53 +31,38 @@ public abstract class Monster extends Player
 
     public void makeAutonomousMove()
     {
-        Point newPosition = this.towardsHero();
-        
+        Point newPosition = this.position.oneStep(this.towardsHero());
         if (!this.currentRoom.isInside(newPosition)) return;
 
     }
-
-    public Point towardsHero()
+    
+    private int manhattenDistance(Point from, Point to)
     {
+        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+    }
 
+    public Direction towardsHero()
+    {
         Point heroPos = Dungeon.getInstance().getHero().getPosition();
-
-        Point north = this.position.oneStep(Direction.NORTH);
-        Point south = this.position.oneStep(Direction.SOUTH);
-        Point east = this.position.oneStep(Direction.EAST);
-        Point west = this.position.oneStep(Direction.WEST);
-
-        int northDis = Math.abs(north.getX() - heroPos.getX())
-                + Math.abs(Math.abs(north.getY() - heroPos.getY()));
-
-        int southDis = Math.abs(south.getX() - heroPos.getX())
-                + Math.abs(Math.abs(south.getY() - heroPos.getY()));
-
-        int eastDis = Math.abs(east.getX() - heroPos.getX())
-                + Math.abs(Math.abs(east.getY() - heroPos.getY()));
-
-        int westDis = Math.abs(west.getX() - heroPos.getX())
-                + Math.abs(Math.abs(west.getY() - heroPos.getY()));
-
-        int minDis = northDis;
-        Point towardsHero = north;
-
-        if (minDis > southDis)
-        {
-            minDis = southDis;
-            towardsHero = south;
+        int nd = this.manhattenDistance(heroPos,this.position.oneStep(Direction.NORTH));
+        int sd = this.manhattenDistance(heroPos,this.position.oneStep(Direction.SOUTH));
+        int ed = this.manhattenDistance(heroPos,this.position.oneStep(Direction.EAST));
+        int wd = this.manhattenDistance(heroPos,this.position.oneStep(Direction.WEST));
+        
+        Direction shortestDirection = Direction.NORTH;
+        int shortestDistance = nd;
+        if (sd < shortestDistance) {
+            shortestDistance = sd;
+            shortestDirection = Direction.SOUTH;
         }
-        if (minDis > eastDis)
-        {
-            minDis = eastDis;
-            towardsHero = east;
+        if (ed < shortestDistance) {
+            shortestDistance = ed;
+            shortestDirection = Direction.EAST;
         }
-        if (minDis > westDis)
-        {
-            towardsHero = south;
+        if (wd < shortestDistance) {
+            shortestDistance = wd;
+            shortestDirection = Direction.WEST;
         }
-
-        return towardsHero;
-
+        return shortestDirection;
     }
 }
