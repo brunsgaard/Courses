@@ -33,10 +33,10 @@ public class MapPanel extends JPanel implements Observer<INotification>
 {
     private static final long serialVersionUID = -539579546590467691L;
 
-    BufferedImage map;
-    Graphics2D gfx;
-    AffineTransform scaler;
-    Raster dungeonOnly;
+    private BufferedImage map;
+    private Graphics2D gfx;
+    private AffineTransform scaler;
+    private Raster dungeonOnly;
 
     public MapPanel()
     {
