@@ -3,6 +3,7 @@ package game.model.players;
 import game.controller.Observable;
 import game.controller.Observer;
 import game.controller.dungeon.Direction;
+import game.controller.dungeon.TurnController;
 import game.model.Point;
 import game.model.Room;
 import game.model.items.Item;
@@ -11,9 +12,12 @@ import game.model.notification.INotification;
 import game.model.notification.PlayerDied;
 import game.model.notification.PlayerHealthChanged;
 import game.model.notification.PlayerMoved;
+import game.model.notification.TurnEnd;
+import game.model.notification.TurnStart;
 
 public abstract class Player extends
-        Observable<INotification, Observer<INotification>>
+        Observable<INotification, Observer<INotification>> implements
+        Observer<INotification>
 {
     protected Point position;
     protected int health;
@@ -25,7 +29,31 @@ public abstract class Player extends
     {
         this.position = position;
         this.health = 100;
+        TurnController.getInstance().addObserver(this);
+    }
 
+    public void update(INotification change)
+    {
+        if (change instanceof TurnStart)
+            this.update((TurnStart) change);
+        if (change instanceof TurnEnd)
+            this.update((TurnEnd) change);
+
+    }
+
+    public void update(TurnStart change)
+    {
+
+    }
+
+    public void update(TurnEnd change)
+    {
+        if (this.isDead())
+        {
+            this.currentRoom.removePlayer(this);
+            this.notifyObservers(new PlayerDied());
+        }
+        this.regenerate();
     }
 
     public boolean isDead()
@@ -50,16 +78,15 @@ public abstract class Player extends
 
     public boolean tryMove(Direction direction)
     {
-        
+
         // the end position of the move
         Point newPosition = position.oneStep(direction);
 
         // check for door else wall
-        if (this.currentRoom.getDoors().containsKey(newPosition))
+        if (this.currentRoom.checkForDoor(newPosition))
         {
             this.currentRoom.removePlayer(this);
             this.currentRoom = currentRoom.getDoors().get(newPosition);
-            this.currentRoom.setPlayer(this);
             this.notifyObservers(new ChangeRoom(this.currentRoom));
         } else if (!this.currentRoom.isInside(newPosition))
         {
@@ -67,7 +94,8 @@ public abstract class Player extends
         }
 
         // check for monster at end position
-        Monster monster = this.currentRoom.getMonsterIfPresent(newPosition);
+        Monster monster = this.currentRoom
+                .getMonsterFromNewPosition(newPosition);
 
         if (monster != null)
         {
@@ -75,17 +103,6 @@ public abstract class Player extends
             // TODO Debug info
             System.out.println("Monsters Health: " + monster.getHealth());
 
-            if (monster.isDead())
-            {
-                currentRoom.removeMonster(monster);
-                this.notifyObservers(new PlayerDied());
-            }
-
-            for (Monster m : currentRoom.getMonsters())
-            {
-                m.makeAutonomousMove();
-            }
-            this.notifyObservers(new PlayerMoved(this.position));
             return true;
         }
 
@@ -97,22 +114,14 @@ public abstract class Player extends
         {
             System.out.println("uhhh.. it looks like an item");
             currentRoom.removeItem(item);
-
         }
-        ;
 
         // set position and notify observers..
         this.position = newPosition;
         this.notifyObservers(new PlayerMoved(this.position));
 
-        for (Monster m : currentRoom.getMonsters())
-        {
-            m.makeAutonomousMove();
-        }
-
         return true;
     }
-    
 
     public int getHealth()
     {

@@ -15,10 +15,12 @@ public class Dungeon
     private ArrayList<Room> rooms;
     private int pointScaleFactor;
     private static Dungeon instance = null;
+    private ArrayList<Point> allDoors;
 
     private Dungeon()
     {
         this.rooms = new ArrayList<Room>();
+        this.allDoors = new ArrayList<Point>();
     }
     
     public static Dungeon getInstance()
@@ -48,8 +50,6 @@ public class Dungeon
         // TODO: Maybe - Write dynamic function searching for room
         // depending on where the players position.
         hero.setCurrentRoom(Dungeon.getInstance().getRoom(new Point(0, 0)));
-        hero.getCurrentRoom().setPlayer(hero);
-         
     }
 
     public ArrayList<Room> getRooms()
@@ -104,6 +104,15 @@ public class Dungeon
         {
             this.pointScaleFactor = pointScaleFactor;
         }
+    }
+    
+    public void addToAllDoors(Point point){
+        this.allDoors.add(point);
+    }
+    
+    public boolean isDoor(Point point){
+        return this.allDoors.contains(point);
+        
     }
     
     

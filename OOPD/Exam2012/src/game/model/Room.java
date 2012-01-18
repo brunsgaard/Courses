@@ -12,9 +12,10 @@ public class Room
     private Point topLeft;
     private Point bottomRight;
     private HashMap<Point, Room> doors;
+
     private ArrayList<Item> items;
     private ArrayList<Monster> monsters;
-    private Player player;
+ 
 
     public Room(Point topLeft, Point bottomRight)
     {
@@ -37,6 +38,7 @@ public class Room
 
     }
 
+
     public ArrayList<Monster> getMonsters()
     {
         return monsters;
@@ -45,16 +47,6 @@ public class Room
     public void addMonster(Monster monster)
     {
         this.monsters.add(monster);
-    }
-
-    public boolean removeMonster(Monster monster)
-    {
-        int index = this.monsters.indexOf(monster);
-        if (index == -1)
-            return false;
-        this.monsters.remove(index);
-        return true;
-
     }
 
     public ArrayList<Item> getItems()
@@ -80,7 +72,14 @@ public class Room
     // TODO: Not sure removePlayer is implemented correct.
     public void removePlayer(Player player)
     {
-        this.player = null;
+        if (player instanceof Monster)
+        {
+            int index = this.monsters.indexOf(player);
+            if (index == -1)
+                return;
+            this.monsters.remove(index);
+        }
+
     }
 
     public boolean isInside(Point inputPoint)
@@ -92,36 +91,42 @@ public class Room
         return insideX && insideY;
     }
 
-    public Player getPlayer()
-    {
-        return player;
-    }
 
-    public void setPlayer(Player player)
-    {
-        this.player = player;
-    }
-    
+
     public Bounds getBounds()
     {
         return new Bounds(this.topLeft, this.bottomRight);
     }
-    
-    public Monster getMonsterIfPresent(Point position){
-        
-        for (Monster m : this.monsters ){
-            if (m.getPosition().equals(position)) return m;
+
+    public Monster getMonsterFromNewPosition(Point position)
+    {
+
+        for (Monster m : this.monsters)
+        {
+            if (m.getPosition().equals(position))
+                return m;
         }
         return null;
-        
+
     }
-    
-    public Item loot(Point position){
-        
-        for (Item i : this.items ){
-            if (i.getPosition().equals(position)) return i;
+
+    public Item loot(Point position)
+    {
+
+        for (Item i : this.items)
+        {
+            if (i.getPosition().equals(position))
+                return i;
         }
         return null;
-        
+
     }
+
+    public boolean checkForDoor(Point position)
+    {
+
+        return this.doors.containsKey(position);
+
+    }
+
 }
