@@ -39,18 +39,18 @@ public class Point
 
         switch (direction)
         {
-        case UP:
+        case NORTH:
             endPosition = new Point(this.x, this.y - 1);
             break;
-        case DOWN:
+        case SOUTH:
             endPosition = new Point(this.x,
                     this.y + 1);
             break;
-        case LEFT:
+        case WEST:
             endPosition = new Point(this.x - 1,
                     this.y);
             break;
-        case RIGHT:
+        case EAST:
             endPosition = new Point(this.x + 1,
                     this.y);
             break;

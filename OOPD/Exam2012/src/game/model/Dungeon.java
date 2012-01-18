@@ -45,6 +45,11 @@ public class Dungeon
     public void setHero(Hero hero)
     {
         this.hero = hero;
+        // TODO: Maybe - Write dynamic function searching for room
+        // depending on where the players position.
+        hero.setCurrentRoom(Dungeon.getInstance().getRoom(new Point(0, 0)));
+        hero.getCurrentRoom().setPlayer(hero);
+         
     }
 
     public ArrayList<Room> getRooms()
@@ -100,5 +105,7 @@ public class Dungeon
             this.pointScaleFactor = pointScaleFactor;
         }
     }
+    
+    
 
 }

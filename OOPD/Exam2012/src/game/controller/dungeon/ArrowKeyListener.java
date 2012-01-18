@@ -23,22 +23,22 @@ public class ArrowKeyListener implements KeyListener
     {
         if (keyEvent.getKeyCode() == KeyEvent.VK_UP)
         {
-            Dungeon.getInstance().getHero().tryMove(Direction.UP);
+            Dungeon.getInstance().getHero().tryMove(Direction.NORTH);
 
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN)
         {
-            Dungeon.getInstance().getHero().tryMove(Direction.DOWN);
+            Dungeon.getInstance().getHero().tryMove(Direction.SOUTH);
 
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT)
         {
-            Dungeon.getInstance().getHero().tryMove(Direction.LEFT);
+            Dungeon.getInstance().getHero().tryMove(Direction.WEST);
 
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT)
         {
-            Dungeon.getInstance().getHero().tryMove(Direction.RIGHT);
+            Dungeon.getInstance().getHero().tryMove(Direction.EAST);
             
         }
 

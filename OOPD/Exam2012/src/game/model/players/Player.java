@@ -5,6 +5,7 @@ import game.controller.Observer;
 import game.controller.dungeon.Direction;
 import game.model.Point;
 import game.model.Room;
+import game.model.items.Item;
 import game.model.notification.INotification;
 import game.model.notification.PlayerHealthChanged;
 import game.model.notification.PlayerMoved;
@@ -22,8 +23,7 @@ public abstract class Player extends
     {
         this.position = position;
         this.health = 100;
-        // TODO: remove hard coded room
-        this.currentRoom = new Room(new Point(0, 0), new Point(4, 5));
+
     }
 
     public boolean isDead()
@@ -49,25 +49,69 @@ public abstract class Player extends
     public boolean tryMove(Direction direction)
     {
 
+        // the end position of the move
         Point newPosition = position.oneStep(direction);
 
-        // TODO DEBUG: Stuff
-        System.out.println("start:" + this.position.getX() + " "
-                + position.getY());
-        System.out.println("end:" + newPosition.getX() + " "
-                + newPosition.getY());
-
-        if (!currentRoom.isInside(newPosition))
+        // check for door else wall
+        if (this.currentRoom.getDoors().containsKey(newPosition))
         {
-            // TODO DEBUG: Stuff
-            System.out.println("end is outside");
+            this.currentRoom.removePlayer(this);
+            this.currentRoom = currentRoom.getDoors().get(newPosition);
+            this.currentRoom.setPlayer(this);
+
+            // TODO NOTIFY changeRoom
+        } else if (!this.currentRoom.isInside(newPosition))
+        {
             return false;
         }
+        
 
+        // check for monster at end position
+        // i
+        Monster monster = this.currentRoom.getMonsterIfPresent(newPosition);
+
+        if (monster != null)
+        {
+            monster.takeDamage(10);
+            // TODO Debug info
+            System.out.println("Monsters Health: " + monster.getHealth());
+
+            if (monster.isDead())
+            {
+                currentRoom.removeMonster(monster);
+                // DOes it have to be there
+                // this.notifyObservers(new PlayerDied());
+            }
+            return true;
+        }
+        
+
+        // check for items
+        // TODO Do something with item
+        Item item = this.currentRoom.loot(newPosition);
+
+        if (item != null)
+        {
+            System.out.println("uhhh.. it looks like an item");
+            currentRoom.removeItem(item);
+
+        }
+        ;
+
+        // set position and notify observers..
         this.position = newPosition;
-
         this.notifyObservers(new PlayerMoved(this.position));
         return true;
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
+    public void setHealth(int health)
+    {
+        this.health = health;
     }
 
     public Room getCurrentRoom()

@@ -7,7 +7,6 @@ import game.model.players.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class Room
 {
     private Point topLeft;
@@ -87,9 +86,9 @@ public class Room
     public boolean isInside(Point inputPoint)
     {
         boolean insideX = this.topLeft.getX() <= inputPoint.getX()
-                && inputPoint.getX() <= this.bottomRight.getX();
+                && inputPoint.getX() < this.bottomRight.getX();
         boolean insideY = topLeft.getY() <= inputPoint.getY()
-                && inputPoint.getY() <= bottomRight.getY();
+                && inputPoint.getY() < bottomRight.getY();
         return insideX && insideY;
     }
 
@@ -106,5 +105,23 @@ public class Room
     public Bounds getBounds()
     {
         return new Bounds(this.topLeft, this.bottomRight);
+    }
+    
+    public Monster getMonsterIfPresent(Point position){
+        
+        for (Monster m : this.monsters ){
+            if (m.getPosition().equals(position)) return m;
+        }
+        return null;
+        
+    }
+    
+    public Item loot(Point position){
+        
+        for (Item i : this.items ){
+            if (i.getPosition().equals(position)) return i;
+        }
+        return null;
+        
     }
 }

@@ -7,7 +7,6 @@ import game.model.notification.PlayerArmorChanged;
 import game.model.notification.PlayerDied;
 import game.model.notification.PlayerHealthChanged;
 
-
 public abstract class Hero extends Player
 
 {
@@ -16,12 +15,16 @@ public abstract class Hero extends Player
     protected Armor armor;
     protected static int damageMagnifier = 0;
     
+
     public Hero(String name, Point position)
     {
         super(position);
         this.weapon = null;
         this.armor = null;
         this.name = name;
+        //this.unarmedDamage = -100;
+        
+
     }
 
     @Override
@@ -30,6 +33,7 @@ public abstract class Hero extends Player
         int damage = this.weapon == null ? unarmedDamage : this.weapon
                 .getDamage();
         return damage * damageMagnifier;
+
     }
 
     @Override
@@ -38,7 +42,8 @@ public abstract class Hero extends Player
         if (this.armor == null)
         {
             this.health -= amount;
-            if (this.isDead()) this.notifyObservers(new PlayerDied());
+            if (this.isDead())
+                this.notifyObservers(new PlayerDied());
             this.notifyObservers(new PlayerHealthChanged(this.health));
             return;
         }
@@ -47,7 +52,8 @@ public abstract class Hero extends Player
         {
             this.health += newArmorLevel;
             this.notifyObservers(new PlayerHealthChanged(this.health));
-            if (this.isDead()) this.notifyObservers(new PlayerDied());
+            if (this.isDead())
+                this.notifyObservers(new PlayerDied());
             this.armor = null;
             this.notifyObservers(new PlayerArmorChanged(0));
         } else
@@ -64,7 +70,7 @@ public abstract class Hero extends Player
         if (weapon.getDamage() > damage)
             this.weapon = weapon;
     }
-    
+
     public void pickupItem(Armor armor)
     {
         if (this.armor == null)
