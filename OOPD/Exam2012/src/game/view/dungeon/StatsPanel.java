@@ -5,6 +5,7 @@ import game.controller.dungeon.TurnController;
 import game.model.Dungeon;
 import game.model.notification.INotification;
 import game.model.notification.PlayerArmorChanged;
+import game.model.notification.PlayerChangeWeapon;
 import game.model.notification.PlayerHealthChanged;
 import game.model.notification.TurnEnd;
 
@@ -29,7 +30,7 @@ public class StatsPanel extends JPanel implements Observer<INotification>
         this.add(this.health);
         this.armor = new JLabel("Armor: 0",JLabel.CENTER);
         this.add(this.armor);
-        this.weapon = new JLabel("Weapon: TODO",JLabel.CENTER);
+        this.weapon = new JLabel("Weapon: "+Dungeon.getInstance().getHero().getDamageLevel(),JLabel.CENTER);
         this.add(this.weapon);
         this.numTurns = 0;
         this.turns = new JLabel("Turns: "+numTurns,JLabel.CENTER);
@@ -48,6 +49,11 @@ public class StatsPanel extends JPanel implements Observer<INotification>
         this.armor.setText("Armor: "+change.getArmor());
     }
     
+    public void update(PlayerChangeWeapon change)
+    {
+        this.weapon.setText("Weapon: "+Dungeon.getInstance().getHero().getDamageLevel());
+    }
+    
     public void update(TurnEnd change)
     {
         this.turns.setText("Turns: "+numTurns++);
@@ -57,6 +63,7 @@ public class StatsPanel extends JPanel implements Observer<INotification>
     {
         if (change instanceof PlayerHealthChanged) this.update((PlayerHealthChanged) change);
         if (change instanceof PlayerArmorChanged) this.update((PlayerArmorChanged) change);
+        if (change instanceof PlayerChangeWeapon) this.update((PlayerChangeWeapon) change);
         if (change instanceof TurnEnd) this.update((TurnEnd) change);
     }
 }

@@ -6,9 +6,13 @@ import game.controller.dungeon.Direction;
 import game.controller.dungeon.TurnController;
 import game.model.Point;
 import game.model.Room;
+import game.model.items.Armor;
 import game.model.items.Item;
+import game.model.items.Weapon;
 import game.model.notification.ChangeRoom;
 import game.model.notification.INotification;
+import game.model.notification.LootItem;
+import game.model.notification.PlayerChangeWeapon;
 import game.model.notification.PlayerDied;
 import game.model.notification.PlayerHealthChanged;
 import game.model.notification.PlayerMoved;
@@ -53,7 +57,7 @@ public abstract class Player extends
         {
             this.currentRoom.removePlayer(this);
         } else {
-            this.regenerate();            
+            this.regenerate();
         }
     }
 
@@ -115,6 +119,10 @@ public abstract class Player extends
         {
             System.out.println("uhhh.. it looks like an item");
             currentRoom.removeItem(item);
+            this.notifyObservers(new LootItem(item));
+            if (item instanceof Weapon) { // TODO Jonasi
+                this.notifyObservers(new PlayerChangeWeapon((Weapon) item));
+            }
         }
 
         // set position and notify observers..
