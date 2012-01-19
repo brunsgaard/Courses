@@ -13,12 +13,13 @@ public abstract class Hero extends Player
     protected String name;
     protected Weapon weapon;
     protected Armor armor;
-    protected static int damageMagnifier = 0;
+    protected int damageMagnifier;
     
 
-    public Hero(String name, Point position)
+    public Hero(String name, Point position, int unarmedDamage, int healthRegenerationRate, int damageMagnifier)
     {
-        super(position);
+        super(position, unarmedDamage, healthRegenerationRate);
+        this.damageMagnifier = damageMagnifier;
         this.weapon = null;
         this.armor = null;
         this.name = name;
@@ -39,6 +40,7 @@ public abstract class Hero extends Player
     @Override
     public void takeDamage(int amount)
     {
+        System.out.println("Hero take: "+amount);
         if (this.armor == null)
         {
             this.health -= amount;

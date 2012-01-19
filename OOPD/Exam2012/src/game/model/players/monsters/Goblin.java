@@ -5,15 +5,10 @@ import game.model.players.Monster;
 
 public class Goblin extends Monster
 {
-    static
-    {
-        unarmedDamage = 5;
-        healthRegenerationRate = 2;
-    }
 
     public Goblin(Point position)
     {
-        super(position);
+        super(position, 5, 2);
 
     }
 

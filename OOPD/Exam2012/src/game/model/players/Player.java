@@ -21,29 +21,30 @@ public abstract class Player extends
 {
     protected Point position;
     protected int health;
-    protected static int unarmedDamage;
-    protected static int healthRegenerationRate;
+    protected int unarmedDamage;
+    protected int healthRegenerationRate;
     protected Room currentRoom;
 
-    public Player(Point position)
+    public Player(Point position, int unarmedDamage, int healthRegenerationRate)
     {
         this.position = position;
         this.health = 100;
+        this.unarmedDamage = unarmedDamage;
+        this.healthRegenerationRate = healthRegenerationRate;
         TurnController.getInstance().addObserver(this);
     }
 
-    public void update(INotification change)
+    public final void update(INotification change)
     {
-        if (change instanceof TurnStart)
+        if (change instanceof TurnStart && !this.isDead())
             this.update((TurnStart) change);
         if (change instanceof TurnEnd)
             this.update((TurnEnd) change);
-
     }
 
     public void update(TurnStart change)
     {
-
+        
     }
 
     public void update(TurnEnd change)
@@ -51,9 +52,9 @@ public abstract class Player extends
         if (this.isDead())
         {
             this.currentRoom.removePlayer(this);
-            this.notifyObservers(new PlayerDied());
+        } else {
+            this.regenerate();            
         }
-        this.regenerate();
     }
 
     public boolean isDead()

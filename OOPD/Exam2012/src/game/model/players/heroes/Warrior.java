@@ -6,16 +6,10 @@ import game.model.players.Hero;
 public class Warrior extends Hero
 
 {
-    static
-    {
-        damageMagnifier = 3;
-        unarmedDamage = 5;
-        healthRegenerationRate = 5;
-    }
 
     public Warrior(String name, Point position)
     {
-        super(name, position);
+        super(name, position, 5, 5, 3);
 
     }
 

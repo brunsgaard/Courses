@@ -11,9 +11,9 @@ import game.model.notification.TurnStart;
 public abstract class Monster extends Player
 
 {
-    public Monster(Point position)
+    public Monster(Point position, int unarmedDamage, int healthRegenerationRate)
     {
-        super(position);
+        super(position, unarmedDamage, healthRegenerationRate);
     }
 
     public void update(TurnStart change)
@@ -31,7 +31,7 @@ public abstract class Monster extends Player
     @Override
     public void takeDamage(int amount)
     {
-        health -= amount;
+        this.health -= amount;
         this.notifyObservers(new PlayerHealthChanged(this.health));
         if (this.isDead())
             this.notifyObservers(new PlayerDied());
@@ -40,13 +40,13 @@ public abstract class Monster extends Player
     public void makeAutonomousMove()
     {
         Hero hero = Dungeon.getInstance().getHero();
-        Point newPosition = this.position.oneStep(this.towardsHero());
-        if (!this.currentRoom.isInside(newPosition))
+        Direction direction = this.towardsHero();
+        if (direction == null)
             return;
+        Point newPosition = this.position.oneStep(direction);
 
         if (newPosition.equals(hero.getPosition()))
         {
-
             hero.takeDamage(this.getDamageLevel());
             System.out.println(hero.getHealth());
 
@@ -60,14 +60,20 @@ public abstract class Monster extends Player
             return;
         }
 
-        if (!Dungeon.getInstance().isDoor(newPosition)
-                && !this.currentRoom.isMonsterOnPosition(newPosition))
+        if (this.manhattenDistance(hero.getPosition(), newPosition) < this
+                .manhattenDistance(hero.getPosition(), this.getPosition()))
         {
             this.position = newPosition;
-            this.notifyObservers(new PlayerMoved(this.position));
+            this.manhattenDistance(hero.getPosition(), newPosition);
         }
-        
+    }
 
+    private boolean isValidPosition(Point newPosition)
+    {
+
+        return this.currentRoom.isInside(newPosition)
+                && (!Dungeon.getInstance().isDoor(newPosition) || newPosition.equals(Dungeon.getInstance().getHero().getPosition()))
+                && !this.currentRoom.isMonsterOnPosition(newPosition);
     }
 
     private int manhattenDistance(Point from, Point to)
@@ -79,28 +85,33 @@ public abstract class Monster extends Player
     public Direction towardsHero()
     {
         Point heroPos = Dungeon.getInstance().getHero().getPosition();
-        int nd = this.manhattenDistance(heroPos,
-                this.position.oneStep(Direction.NORTH));
-        int sd = this.manhattenDistance(heroPos,
-                this.position.oneStep(Direction.SOUTH));
-        int ed = this.manhattenDistance(heroPos,
-                this.position.oneStep(Direction.EAST));
-        int wd = this.manhattenDistance(heroPos,
-                this.position.oneStep(Direction.WEST));
+        Point pn = this.position.oneStep(Direction.NORTH);
+        Point ps = this.position.oneStep(Direction.SOUTH);
+        Point pe = this.position.oneStep(Direction.EAST);
+        Point pw = this.position.oneStep(Direction.WEST);
+        int nd = this.manhattenDistance(heroPos, pn);
+        int sd = this.manhattenDistance(heroPos, ps);
+        int ed = this.manhattenDistance(heroPos, pe);
+        int wd = this.manhattenDistance(heroPos, pw);
 
-        Direction shortestDirection = Direction.NORTH;
-        int shortestDistance = nd;
-        if (sd < shortestDistance)
+        Direction shortestDirection = null;
+        int shortestDistance = 301;
+        if (nd < shortestDistance && this.isValidPosition(pn))
+        {
+            shortestDirection = Direction.NORTH;
+            shortestDistance = nd;
+        }
+        if (sd < shortestDistance && this.isValidPosition(ps))
         {
             shortestDistance = sd;
             shortestDirection = Direction.SOUTH;
         }
-        if (ed < shortestDistance)
+        if (ed < shortestDistance && this.isValidPosition(pe))
         {
             shortestDistance = ed;
             shortestDirection = Direction.EAST;
         }
-        if (wd < shortestDistance)
+        if (wd < shortestDistance && this.isValidPosition(pw))
         {
             shortestDistance = wd;
             shortestDirection = Direction.WEST;

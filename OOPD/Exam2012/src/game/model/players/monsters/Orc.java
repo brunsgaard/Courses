@@ -6,15 +6,9 @@ import game.model.players.Monster;
 public class Orc extends Monster
 {
 
-    static
-    {
-        unarmedDamage = 20;
-        healthRegenerationRate = 10;
-    }
-
     public Orc(Point position)
     {
-        super(position);
+        super(position, 20, 10);
     }
 
 }
