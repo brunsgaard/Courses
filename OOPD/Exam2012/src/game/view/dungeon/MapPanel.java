@@ -1,14 +1,14 @@
 package game.view.dungeon;
 
 import game.controller.Observer;
+import game.controller.notification.INotification;
+import game.controller.notification.PlayerDied;
+import game.controller.notification.PlayerMoved;
 import game.model.Bounds;
 import game.model.Dungeon;
 import game.model.Point;
 import game.model.Room;
 import game.model.items.Item;
-import game.model.notification.INotification;
-import game.model.notification.PlayerDied;
-import game.model.notification.PlayerMoved;
 import game.model.players.Monster;
 
 import java.awt.BasicStroke;

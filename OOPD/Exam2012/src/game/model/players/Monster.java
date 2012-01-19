@@ -1,12 +1,11 @@
 package game.model.players;
 
 import game.controller.dungeon.Direction;
+import game.controller.notification.PlayerDied;
+import game.controller.notification.PlayerHealthChanged;
+import game.controller.notification.TurnStart;
 import game.model.Dungeon;
 import game.model.Point;
-import game.model.notification.PlayerDied;
-import game.model.notification.PlayerHealthChanged;
-import game.model.notification.PlayerMoved;
-import game.model.notification.TurnStart;
 
 public abstract class Monster extends Player
 
@@ -48,7 +47,6 @@ public abstract class Monster extends Player
         if (newPosition.equals(hero.getPosition()))
         {
             hero.takeDamage(this.getDamageLevel());
-            System.out.println(hero.getHealth());
 
             if (hero.isDead())
             {
@@ -71,8 +69,16 @@ public abstract class Monster extends Player
     private boolean isValidPosition(Point newPosition)
     {
 
+        // Has to be in the room
         return this.currentRoom.isInside(newPosition)
-                && (!Dungeon.getInstance().isDoor(newPosition) || newPosition.equals(Dungeon.getInstance().getHero().getPosition()))
+                // Cannot move to a door unless hero is present on the door or
+                // in the room.
+                && (!Dungeon.getInstance().isDoor(newPosition)
+                        || newPosition.equals(Dungeon.getInstance().getHero()
+                                .getPosition()) || this.currentRoom
+                            .isInside(Dungeon.getInstance().getHero()
+                                    .getPosition()))
+                // Can not move to a position with a monster
                 && !this.currentRoom.isMonsterOnPosition(newPosition);
     }
 

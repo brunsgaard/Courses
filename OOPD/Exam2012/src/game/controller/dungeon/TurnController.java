@@ -2,9 +2,9 @@ package game.controller.dungeon;
 
 import game.controller.Observable;
 import game.controller.Observer;
-import game.model.notification.INotification;
-import game.model.notification.TurnEnd;
-import game.model.notification.TurnStart;
+import game.controller.notification.INotification;
+import game.controller.notification.TurnEnd;
+import game.controller.notification.TurnStart;
 
 public class TurnController extends
         Observable<INotification, Observer<INotification>>

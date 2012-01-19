@@ -4,20 +4,12 @@ import game.controller.Observable;
 import game.controller.Observer;
 import game.controller.dungeon.Direction;
 import game.controller.dungeon.TurnController;
+import game.controller.notification.INotification;
+import game.controller.notification.PlayerHealthChanged;
+import game.controller.notification.TurnEnd;
+import game.controller.notification.TurnStart;
 import game.model.Point;
 import game.model.Room;
-import game.model.items.Armor;
-import game.model.items.Item;
-import game.model.items.Weapon;
-import game.model.notification.ChangeRoom;
-import game.model.notification.INotification;
-import game.model.notification.LootItem;
-import game.model.notification.PlayerChangeWeapon;
-import game.model.notification.PlayerDied;
-import game.model.notification.PlayerHealthChanged;
-import game.model.notification.PlayerMoved;
-import game.model.notification.TurnEnd;
-import game.model.notification.TurnStart;
 
 public abstract class Player extends
         Observable<INotification, Observer<INotification>> implements
@@ -81,55 +73,10 @@ public abstract class Player extends
         return this.position;
     }
 
-    public boolean tryMove(Direction direction)
-    {
-
-        // the end position of the move
-        Point newPosition = position.oneStep(direction);
-
-        // check for door else wall
-        if (this.currentRoom.checkForDoor(newPosition))
-        {
-            this.currentRoom.removePlayer(this);
-            this.currentRoom = currentRoom.getDoors().get(newPosition);
-            this.notifyObservers(new ChangeRoom(this.currentRoom));
-        } else if (!this.currentRoom.isInside(newPosition))
-        {
-            return false;
-        }
-
-        // check for monster at end position
-        Monster monster = this.currentRoom
-                .getMonsterFromNewPosition(newPosition);
-
-        if (monster != null)
-        {
-            monster.takeDamage(this.getDamageLevel());
-            // TODO Debug info
-            System.out.println("Monsters Health: " + monster.getHealth());
-
-            return true;
-        }
-
-        // check for items
-        // TODO Do something with item
-        Item item = this.currentRoom.loot(newPosition);
-
-        if (item != null)
-        {
-            System.out.println("uhhh.. it looks like an item");
-            currentRoom.removeItem(item);
-            this.notifyObservers(new LootItem(item));
-            if (item instanceof Weapon) { // TODO Jonasi
-                this.notifyObservers(new PlayerChangeWeapon((Weapon) item));
-            }
-        }
-
-        // set position and notify observers..
-        this.position = newPosition;
-        this.notifyObservers(new PlayerMoved(this.position));
-
-        return true;
+    public boolean tryMove(Direction direction){
+        // Try move is a "Hero only" and , hence it
+        // is moved to the hero class.
+    return false;
     }
 
     public int getHealth()

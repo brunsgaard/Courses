@@ -1,5 +1,6 @@
 package game.model;
 
+import game.model.items.Item;
 import game.model.players.Hero;
 
 import java.util.ArrayList;
@@ -115,6 +116,19 @@ public class Dungeon
         
     }
     
-    
+    public Item loot(Point position)
+    {
+        // method moved to Room Class. If placed on dungeon
+        // the game have for each move search all roomes in the
+        // dungeon for items.
+        // (because Dungeon is a singelton we could call 
+        // Dungeon.getInstance.getHero.getCurrentRoom
+        // and use this and at the seams more 
+        // correct to place it the function in the
+        // room class)
+        // this way the game only have to check one room.
+        return null;
+        
+    }
 
 }
