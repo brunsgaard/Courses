@@ -118,9 +118,6 @@ public class MapPanel extends JPanel implements Observer<INotification>
     private void drawMap()
     {
         this.map.setData(this.dungeonOnly);
-        Point heroPos = Dungeon.getInstance().getHero().getPosition();
-        this.gfx.setColor(Color.BLUE);
-        this.gfx.fill(new Rectangle(heroPos.getX(), heroPos.getY(), 1, 1));
 
         for (Room r : Dungeon.getInstance().getRooms())
         {
@@ -141,6 +138,10 @@ public class MapPanel extends JPanel implements Observer<INotification>
                 }
             }
         }
+        
+        Point heroPos = Dungeon.getInstance().getHero().getPosition();
+        this.gfx.setColor(Color.BLUE);
+        this.gfx.fill(new Rectangle(heroPos.getX(), heroPos.getY(), 1, 1));
     }
 
     public void update(PlayerMoved change)
