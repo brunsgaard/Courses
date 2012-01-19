@@ -109,6 +109,15 @@ public class Room
         return null;
 
     }
+    
+    public boolean isMonsterOnPosition(Point position)
+    {
+        if (this.getMonsterFromNewPosition(position) != null) return true;
+                
+        return false;
+
+
+    }
 
     public Item loot(Point position)
     {

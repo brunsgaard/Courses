@@ -60,8 +60,13 @@ public abstract class Monster extends Player
             return;
         }
 
-        if (!Dungeon.getInstance().isDoor(newPosition))this.position = newPosition;
-        this.notifyObservers(new PlayerMoved(this.position));
+        if (!Dungeon.getInstance().isDoor(newPosition)
+                && !this.currentRoom.isMonsterOnPosition(newPosition))
+        {
+            this.position = newPosition;
+            this.notifyObservers(new PlayerMoved(this.position));
+        }
+        
 
     }
 
