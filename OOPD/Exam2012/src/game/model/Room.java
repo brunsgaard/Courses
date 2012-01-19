@@ -15,7 +15,6 @@ public class Room
 
     private ArrayList<Item> items;
     private ArrayList<Monster> monsters;
- 
 
     public Room(Point topLeft, Point bottomRight)
     {
@@ -37,7 +36,6 @@ public class Room
         this.doors.put(point, room);
 
     }
-
 
     public ArrayList<Monster> getMonsters()
     {
@@ -91,33 +89,37 @@ public class Room
         return insideX && insideY;
     }
 
-
-
     public Bounds getBounds()
     {
         return new Bounds(this.topLeft, this.bottomRight);
     }
 
-    public Monster getMonsterFromNewPosition(Point position)
+
+    public boolean isInNeighborRoom(Point position)
     {
 
-        for (Monster m : this.monsters)
+        if (this.getNeighborRoomFromPoint(position) != null)
         {
-            if (m.getPosition().equals(position))
-                return m;
+            return true;
+        } else
+        {
+            return false;
+        }
+
+    }
+
+    public Room getNeighborRoomFromPoint(Point position)
+    {
+        for (Room r : this.doors.values())
+        {
+            if (r.isInside(position))
+                return r;
+
         }
         return null;
 
     }
     
-    public boolean isMonsterOnPosition(Point position)
-    {
-        if (this.getMonsterFromNewPosition(position) != null) return true;
-                
-        return false;
-
-
-    }
 
     public Item loot(Point position)
     {

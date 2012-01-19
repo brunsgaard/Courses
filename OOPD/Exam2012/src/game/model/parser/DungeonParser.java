@@ -33,8 +33,8 @@ public class DungeonParser
             this.in = new Scanner(new File(System.getProperty("user.home")
                     + "/dungeon.map"));
 
-
-            // first line in .map must be pointScaleFactor due to no identifier String
+            // first line in .map must be pointScaleFactor due to no identifier
+            // String
             Dungeon.getInstance().setPointScaleFactor(in.nextInt());
 
             while (in.hasNext())
@@ -75,7 +75,8 @@ public class DungeonParser
 
     public void addRoom(int x1, int y1, int x2, int y2)
     {
-        Dungeon.getInstance().addRoom(new Room(new Point(x1, y1), new Point(x2, y2)));
+        Dungeon.getInstance().addRoom(
+                new Room(new Point(x1, y1), new Point(x2, y2)));
     }
 
     public void addDoor(int x1, int y1, int x2, int y2)
@@ -83,8 +84,8 @@ public class DungeonParser
 
         Point point1 = new Point(x1, y1);
         Point point2 = new Point(x2, y2);
-        Room point1Room = new Room(point1, point2); 
-                                                    
+        Room point1Room = new Room(point1, point2);
+
         Room point2Room = new Room(point2, point1);
 
         for (Room r : Dungeon.getInstance().getRooms())
@@ -102,12 +103,11 @@ public class DungeonParser
 
     public void addMonster(int x, int y, String monsterType)
     {
-        // System.out.println(x+y+monsterType);
-        Point monsterPosition = new Point(x, y);
         Room monsterRoom = null;
+        
         for (Room r : Dungeon.getInstance().getRooms())
         {
-            if (r.isInside(monsterPosition))
+            if (r.isInside(new Point(x, y)))
                 monsterRoom = r;
         }
         Monster monster = null;
@@ -115,15 +115,18 @@ public class DungeonParser
         switch (MonsterSymbols.valueOf(monsterType))
         {
         case O:
-            monster = new Orc(monsterPosition);
+            monster = new Orc(new Point(x, y));
             break;
         case G:
-            monster = new Goblin(monsterPosition);
+            monster = new Goblin(new Point(x, y));
             break;
         }
-        if (monster != null && monsterRoom != null){
+        if (monster != null && monsterRoom != null)
+        {
             monster.setCurrentRoom(monsterRoom);
-            monsterRoom.addMonster(monster);}
+            monsterRoom.addMonster(monster);
+            monster.setDoorOnRandomMove();
+        }
 
     }
 

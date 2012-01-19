@@ -2,6 +2,7 @@ package game.model;
 
 import game.model.items.Item;
 import game.model.players.Hero;
+import game.model.players.Monster;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -16,7 +17,7 @@ public class Dungeon
     private ArrayList<Room> rooms;
     private int pointScaleFactor;
     private static Dungeon instance = null;
-    private ArrayList<Point> allDoors;
+    public ArrayList<Point> allDoors;
 
     private Dungeon()
     {
@@ -129,6 +130,36 @@ public class Dungeon
         // this way the game only have to check one room.
         return null;
         
+    }
+    
+    public Monster getMonsterFromNewPosition(Point position)
+    {
+
+        for (Room r: this.rooms){
+            
+            for (Monster m : r.getMonsters())
+            {
+                if (m.getPosition().equals(position))
+                    return m;
+            }
+        }
+            
+        
+        return null;
+
+    }
+
+    public boolean isMonsterOnPosition(Point position)
+    {
+        if (this.getMonsterFromNewPosition(position) != null)
+        {
+            return true;
+        } else
+        {
+
+            return false;
+        }
+
     }
 
 }

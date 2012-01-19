@@ -8,6 +8,7 @@ import game.controller.notification.PlayerDied;
 import game.controller.notification.PlayerHealthChanged;
 import game.controller.notification.PlayerMoved;
 import game.controller.notification.PlayerWeaponChanged;
+import game.model.Dungeon;
 import game.model.Point;
 import game.model.items.Armor;
 import game.model.items.Item;
@@ -85,11 +86,11 @@ public abstract class Hero extends Player
         if (this.armor == null)
         {
             this.armor = armor;
-            
-        } 
+
+        }
         this.armor.setResistence(this.armor.getResistence()
                 + armor.getResistence());
-        notifyObservers(new PlayerArmorChanged(this.armor.getResistence()));        
+        notifyObservers(new PlayerArmorChanged(this.armor.getResistence()));
     }
 
     public boolean tryMove(Direction direction)
@@ -99,19 +100,21 @@ public abstract class Hero extends Player
         Point newPosition = position.oneStep(direction);
 
         // check for door else wall
-        if (this.currentRoom.checkForDoor(newPosition))
+        if (this.currentRoom.checkForDoor(newPosition)
+                && !Dungeon.getInstance().isMonsterOnPosition(newPosition))
         {
             this.currentRoom.removePlayer(this);
             this.currentRoom = currentRoom.getDoors().get(newPosition);
             this.notifyObservers(new ChangeRoom(this.currentRoom));
+
         } else if (!this.currentRoom.isInside(newPosition))
         {
             return false;
         }
 
         // check for monster at end position
-        Monster monster = this.currentRoom
-                .getMonsterFromNewPosition(newPosition);
+        Monster monster = Dungeon.getInstance().getMonsterFromNewPosition(
+                newPosition);
 
         if (monster != null)
         {
