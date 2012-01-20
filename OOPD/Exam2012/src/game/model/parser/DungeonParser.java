@@ -7,6 +7,7 @@ import game.model.items.Armor;
 import game.model.items.Item;
 import game.model.items.Weapon;
 import game.model.players.Monster;
+import game.model.players.monsters.Bat;
 import game.model.players.monsters.Goblin;
 import game.model.players.monsters.Orc;
 
@@ -116,6 +117,9 @@ public class DungeonParser
             break;
         case G:
             monster = new Goblin(new Point(x, y));
+            break;
+        case B:
+            monster = new Bat(new Point(x, y));
             break;
         }
         if (monster != null && monsterRoom != null)

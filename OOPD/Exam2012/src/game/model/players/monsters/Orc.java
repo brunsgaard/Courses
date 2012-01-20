@@ -8,7 +8,7 @@ public class Orc extends Monster
 
     public Orc(Point position)
     {
-        super(position, 20, 10);
+        super(position, 20, 10, 100);
     }
 
 }

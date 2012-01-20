@@ -2,5 +2,5 @@ package game.model.parser;
 
 public enum MonsterSymbols
 {
-    G, O
+    G, O, B
 }

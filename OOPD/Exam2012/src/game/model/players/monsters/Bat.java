@@ -3,13 +3,12 @@ package game.model.players.monsters;
 import game.model.Point;
 import game.model.players.Monster;
 
-public class Goblin extends Monster
+public class Bat extends Monster
 {
 
-    public Goblin(Point position)
+    public Bat(Point position)
     {
-        super(position, 5, 2, 100);
-
+        super(position, 10, 1, 50);
     }
 
 }

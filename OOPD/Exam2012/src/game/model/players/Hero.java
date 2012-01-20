@@ -28,7 +28,7 @@ public abstract class Hero extends Player
     public Hero(String name, Point position, int unarmedDamage,
             int healthRegenerationRate, int damageMagnifier)
     {
-        super(position, unarmedDamage, healthRegenerationRate);
+        super(position, unarmedDamage, healthRegenerationRate, 100);
         this.damageMagnifier = damageMagnifier;
         this.weapon = null;
         this.armor = null;

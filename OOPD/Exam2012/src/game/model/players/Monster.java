@@ -18,9 +18,9 @@ public abstract class Monster extends Player
 {
     private Point doorOnRandomMove;
 
-    public Monster(Point position, int unarmedDamage, int healthRegenerationRate)
+    public Monster(Point position, int unarmedDamage, int healthRegenerationRate, int hitpoints)
     {
-        super(position, unarmedDamage, healthRegenerationRate);
+        super(position, unarmedDamage, healthRegenerationRate, hitpoints);
         this.doorOnRandomMove = null;
     }
 

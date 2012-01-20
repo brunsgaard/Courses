@@ -21,10 +21,10 @@ public abstract class Player extends
     protected int healthRegenerationRate;
     protected Room room;
 
-    public Player(Point position, int unarmedDamage, int healthRegenerationRate)
+    public Player(Point position, int unarmedDamage, int healthRegenerationRate, int hitpoints)
     {
         this.position = position;
-        this.health = 100;
+        this.health = hitpoints;
         this.unarmedDamage = unarmedDamage;
         this.healthRegenerationRate = healthRegenerationRate;
         TurnController.getInstance().addObserver(this);
