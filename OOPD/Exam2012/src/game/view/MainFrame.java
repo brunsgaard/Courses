@@ -24,21 +24,8 @@ public class MainFrame extends JFrame
         dungeonParser.parseMapFile();
         // :TODO: Dungeon Description see OODP forum discussion in regard to
         // move description to map file and implement in parser
-        Dungeon.getInstance()
-                .setDescription(
-                        "Fusce ultricies suscipit ipsum, quis euismod purus iaculis non."
-                                + "Curabitur lectus mauris, aliquet vitae vestibulum eu, auctor eget purus."
-                                + "Etiam facilisis massa et lacus pulvinar faucibus. Curabitur justo neque,"
-                                + "imperdiet id tincidunt ac, iaculis eu leo. Ut arcu lacus, venenatis id"
-                                + "mattis at, rutrum vitae massa. Integer nulla nulla, pretium non laoreet ut,"
-                                + "consectetur a lectus. Nullam lobortis blandit mi ut suscipit."
-                                + "Donec tempor rhoncus posuere. Suspendisse feugiat aliquam nunc eget placerat."
-                                + " Integer ut odio in lorem placerat lobortis vitae ullamcorper arcu. "
-                                + "Donec et pharetra magna +"
-                                + "consectetur a lectus. Nullam lobortis blandit mi ut suscipit."
-                                + "Donec tempor rhoncus posuere. Suspendisse feugiat aliquam nunc eget placerat."
-                                + " Integer ut odio in lorem placerat lobortis vitae ullamcorper arcu. "
-                                + "Donec et pharetra magna.");
+        Dungeon.getInstance().setDescription(Language.WELCOME_PANEL_GAME_DESCRIPTION);
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // set up dungeon

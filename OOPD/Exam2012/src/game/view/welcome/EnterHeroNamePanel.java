@@ -19,13 +19,13 @@ public class EnterHeroNamePanel extends JPanel
     {
         this.infoText = new JLabel("Hero Name");
         this.infoText.setFont(new Font("Dialog", Font.PLAIN, 20));
-        this.heroName = new JTextField("", 20);
+        this.heroName = new JTextField("Hero Name", 20);
         this.heroName.setFont(new Font("Dialog", Font.PLAIN, 20));
         this.heroName.requestFocus();
 
         this.heroName.addKeyListener(new EnterKeyListenerWP());
 
-        add(this.infoText);
+        //add(this.infoText);
         add(this.heroName);
 
     }

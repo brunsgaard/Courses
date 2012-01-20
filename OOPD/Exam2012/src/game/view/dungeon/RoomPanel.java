@@ -150,7 +150,7 @@ public class RoomPanel extends JPanel implements Observer<INotification>
         /*
          * Walls are simply drawn around the room with a random tile Floors are
          * drawn inside the room, likewise a random tile. Simplification: The
-         * room will look different each time the hero enters //TODO
+         * room will look different each time the hero enters
          */
         Random rand = new Random();
         // Draw walls

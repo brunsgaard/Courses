@@ -24,9 +24,6 @@ public abstract class Hero extends Player
     protected Armor armor;
     protected int damageMagnifier;
     protected ArrayList<Item> Inventory;
-    {
-        
-    }
 
     public Hero(String name, Point position, int unarmedDamage,
             int healthRegenerationRate, int damageMagnifier)
@@ -108,7 +105,7 @@ public abstract class Hero extends Player
                 && !Dungeon.getInstance().isMonsterOnPosition(endPosition))
         {
             this.room.removePlayer(this);
-            this.room = room.getNeighborRoomFromPoint(endPosition);
+            this.room = room.getDoors().get(endPosition);
             this.notifyObservers(new ChangeRoom(this.room));
 
         } else if (!this.room.isInside(endPosition))

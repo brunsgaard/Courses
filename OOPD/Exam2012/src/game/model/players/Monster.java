@@ -85,7 +85,7 @@ public abstract class Monster extends Player
             }
 
             break;
-            
+
         case HERO_IN_NEXT_ROOM:
 
             Point doorToHero = null;
@@ -115,27 +115,28 @@ public abstract class Monster extends Player
             break;
 
         case DEFAULT:
-            
-             if (this.doorOnRandomMove == null) this.setRandomDoorAsTarget();
-             
-             moveDirection = this.getDirection(doorOnRandomMove,
-             MovementPattern.DEFAULT);
-            
-             if (moveDirection == null)
-             return;
-             
-             endPosition = this.position.oneStep(moveDirection);
-            
-             if (endPosition.equals(doorOnRandomMove))
-             {
-                 this.autonomousChangeRoom(doorOnRandomMove);
-             }
 
-             this.position = endPosition;
-            
-             this.notifyObservers(new PlayerMoved(endPosition));
-            
-             break;
+            if (this.doorOnRandomMove == null)
+                this.setRandomDoorAsTarget();
+
+            moveDirection = this.getDirection(doorOnRandomMove,
+                    MovementPattern.DEFAULT);
+
+            if (moveDirection == null)
+                return;
+
+            endPosition = this.position.oneStep(moveDirection);
+
+            if (endPosition.equals(doorOnRandomMove))
+            {
+                this.autonomousChangeRoom(doorOnRandomMove);
+            }
+
+            this.position = endPosition;
+
+            this.notifyObservers(new PlayerMoved(endPosition));
+
+            break;
         }
 
     }
@@ -167,9 +168,12 @@ public abstract class Monster extends Player
 
         case DEFAULT:
             returnValue = ((this.room.checkForDoor(desiredEndPosition) || this.room
-                    .isInside(desiredEndPosition)));
-            // TODO: what happens if two monsters meet in randomwalk?
-            // && !Dungeon.getInstance().isMonsterOnPosition();
+                    .isInside(desiredEndPosition)))
+
+            // TODO: what happens if two monsters meet in random walk an each
+            // side of a door.. Testing needed..
+                    && !Dungeon.getInstance().isMonsterOnPosition(
+                            desiredEndPosition);
             break;
         }
         return returnValue;
@@ -222,25 +226,29 @@ public abstract class Monster extends Player
     {
         Room newRoom = this.room.getDoors().get(newPosition);
         ArrayList<Point> validDoors = new ArrayList<Point>();
-        for (Point p : newRoom.getDoors().keySet()) {
+        for (Point p : newRoom.getDoors().keySet())
+        {
             if (newRoom.getDoors().size() == 1 || !p.equals(this.getPosition()))
-            validDoors.add(new Point(p.getX(), p.getY()));
+                validDoors.add(new Point(p.getX(), p.getY()));
         }
-        this.doorOnRandomMove = validDoors.get(new Random().nextInt(validDoors.size()));
+        this.doorOnRandomMove = validDoors.get(new Random().nextInt(validDoors
+                .size()));
         newRoom.addMonster(this);
         this.room.removePlayer(this);
         this.room = newRoom;
     }
-    
+
     private void setRandomDoorAsTarget()
     {
         Set<Point> validDoors = this.room.getDoors().keySet();
         int randomTarget = new Random().nextInt(validDoors.size());
         int i = 0;
-        for (Point p : validDoors) {
-            if (i++ == randomTarget) {
-              this.doorOnRandomMove = p;
-              break;
+        for (Point p : validDoors)
+        {
+            if (i++ == randomTarget)
+            {
+                this.doorOnRandomMove = p;
+                break;
             }
         }
     }
