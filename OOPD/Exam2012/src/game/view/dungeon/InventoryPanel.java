@@ -1,6 +1,7 @@
 package game.view.dungeon;
 
 import game.controller.Observer;
+import game.controller.dungeon.InventoryActionListener;
 import game.controller.notification.INotification;
 import game.controller.notification.LootItem;
 import game.model.Dungeon;

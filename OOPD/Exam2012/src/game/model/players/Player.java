@@ -17,6 +17,8 @@ import game.model.Room;
  * TurnStart notifications. When overriding TurnEnd remember to call super().
  * Since this class extends Obserable other classes that need to observe the
  * players properties (such as health, armor etc) should attach to the notification loop.
+ * 
+ * The method TryMove is hero only, so it's moved to the Hero class.
  */
 public abstract class Player extends
         Observable<INotification, Observer<INotification>> implements
@@ -61,12 +63,6 @@ public abstract class Player extends
     {
         return this.position;
     }
-
-    // Try move is hero only, so it's moved to the Hero class
-    // public boolean tryMove(Direction direction)
-    // {
-    // return false;
-    // }
 
     public int getHealth()
     {

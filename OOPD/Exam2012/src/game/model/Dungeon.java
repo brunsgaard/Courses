@@ -1,10 +1,18 @@
 package game.model;
 
-import game.model.items.Item;
 import game.model.players.Hero;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+
+/**
+ * Base class for the model component of the game. This class is constructed as
+ * a Singleton and has a collection of all the rooms in the Dungeon, the
+ * pointScaleFactor, the hero, and the game description.
+ * 
+ * Because the collection with the items are in the Room class, this function
+ * have been moved there.
+ */
 
 public class Dungeon
 {
@@ -14,12 +22,13 @@ public class Dungeon
     private ArrayList<Room> rooms;
     private int pointScaleFactor;
     private static Dungeon instance = null;
-    private ArrayList<Point> allDoors;
+    private Point heroStartPosition;
 
     private Dungeon()
     {
         this.rooms = new ArrayList<Room>();
-        this.allDoors = new ArrayList<Point>();
+        this.setHeroStartPosition(new Point(1, 1));
+        
     }
 
     public static Dungeon getInstance()
@@ -44,6 +53,9 @@ public class Dungeon
         return hero;
     }
 
+    /**
+     * Sets the hero in the Room present at (0,0).
+     */
     public void setHero(Hero hero)
     {
         this.hero = hero;
@@ -66,6 +78,9 @@ public class Dungeon
         return null;
     }
 
+    /**
+     * @return Bounds holding size of the dungeon.
+     */
     public Bounds getBounds()
     {
         int maxX = -1;
@@ -73,9 +88,9 @@ public class Dungeon
         for (Room r : this.getRooms())
         {
             Bounds b = r.getBounds();
-            if (maxX == -1 || b.getBottomRight().getX() > maxX)
+            if (b.getBottomRight().getX() > maxX)
                 maxX = b.getBottomRight().getX();
-            if (maxY == -1 || b.getBottomRight().getY() > maxY)
+            if (b.getBottomRight().getY() > maxY)
                 maxY = b.getBottomRight().getY();
         }
         return new Bounds(new Point(0, 0), new Point(maxX, maxY));
@@ -103,54 +118,14 @@ public class Dungeon
         }
     }
 
-    public void addToAllDoors(Point point)
+    public Point getHeroStartPosition()
     {
-        this.allDoors.add(point);
+        return heroStartPosition;
     }
 
-    public boolean isDoor(Point point)
+    public void setHeroStartPosition(Point heroStartPosition)
     {
-        return this.allDoors.contains(point);
-
+        this.heroStartPosition = heroStartPosition;
     }
 
-    public Item loot(Point position)
-    {
-        // method moved to Room Class. If placed on dungeon
-        // the game have for each move search all roomes in the
-        // dungeon for items.
-        // (because Dungeon is a singelton we could call
-        // Dungeon.getInstance.getHero.getCurrentRoom
-        // and use this and at the seams more
-        // correct to place it the function in the
-        // room class)
-        // this way the game only have to check one room.
-        return null;
-
-    }
-
-//    public Monster getMonsterFromPoint(Point position)
-//    {
-//        for (Room r : this.rooms)
-//        {
-//
-//            for (Monster m : r.getMonsters().values())
-//            {
-//                if (m.getPosition().equals(position))
-//                    return m;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public boolean isMonsterOnPosition(Point position)
-//    {
-//        if (this.getMonsterFromPoint(position) != null)
-//        {
-//            return true;
-//        } else
-//        {
-//            return false;
-//        }
-//    }
 }

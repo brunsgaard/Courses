@@ -19,12 +19,7 @@ public class DungeonParser
 {
     private Scanner in;
 
-    public DungeonParser()
-    {
-    }
-
     public void parseMapFile(InputStream input)
-
     {
         this.in = new Scanner(input);
 
@@ -83,8 +78,6 @@ public class DungeonParser
         }
         point1Room.getDoors().put(point2, point2Room);
         point2Room.getDoors().put(point1, point1Room);
-        Dungeon.getInstance().addToAllDoors(point1);
-        Dungeon.getInstance().addToAllDoors(point2);
     }
 
     public void addMonster(int x, int y, String monsterType)

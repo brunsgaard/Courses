@@ -79,17 +79,17 @@ public class WelcomePanel extends JPanel
     {
         String heroName = enterHeroName.getHeroName();
         String heroType = chooseHeroCharacter.getSelectedHero();
-        Point startPoint = new Point(1, 1);
+        Point heroStartPosition = Dungeon.getInstance().getHeroStartPosition();
 
-        if (heroType.equals("Warrior"))
+        if (heroType.equals(Language.WELCOME_PANE_WARRIOR))
         {
-            Dungeon.getInstance().setHero(new Warrior(heroName, startPoint));
-        } else if (heroType.equals("Cleric"))
+            Dungeon.getInstance().setHero(new Warrior(heroName, heroStartPosition));
+        } else if (heroType.equals(Language.WELCOME_PANE_CLERIC))
         {
-            Dungeon.getInstance().setHero(new Cleric(heroName, startPoint));
-        } else if (heroType.equals("Mage"))
+            Dungeon.getInstance().setHero(new Cleric(heroName, heroStartPosition));
+        } else if (heroType.equals(Language.WELCOME_PANE_MAGE))
         {
-            Dungeon.getInstance().setHero(new Mage(heroName, startPoint));
+            Dungeon.getInstance().setHero(new Mage(heroName, heroStartPosition));
 
         }
     }
