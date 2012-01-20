@@ -12,6 +12,7 @@ import game.controller.notification.PlayerMoved;
 import game.controller.notification.PlayerWeaponChanged;
 import game.model.Dungeon;
 import game.model.Point;
+import game.model.Room;
 import game.model.items.Armor;
 import game.model.items.Item;
 import game.model.items.Weapon;
@@ -93,7 +94,6 @@ public abstract class Hero extends Player
         this.armor.setResistence(this.armor.getResistence()
                 + armor.getResistence());
         notifyObservers(new PlayerArmorChanged(this.armor.getResistence()));
-        this.Inventory.add(armor); // FIXME armor does not go to the inventory
     }
 
     public boolean tryMove(Direction direction)
@@ -102,7 +102,7 @@ public abstract class Hero extends Player
         Point endPosition = position.oneStep(direction);
 
         if (this.room.checkForDoor(endPosition)
-                && !Dungeon.getInstance().isMonsterOnPosition(endPosition))
+                && !!Room.isMonsterOnPosition(room, endPosition))
         {
             this.room.removePlayer(this);
             this.room = room.getDoors().get(endPosition); // FIXME does not use
@@ -113,23 +113,21 @@ public abstract class Hero extends Player
             return false;
         }
 
-        Monster monster = Dungeon.getInstance()
-                .getMonsterFromPoint(endPosition); // FIXME slow, use room
-                                                   // function instead?
+        Monster monster = room.getMonsters().get(endPosition);
         if (monster != null)
         {
             monster.takeDamage(this.getDamageLevel());
             return true;
         }
 
-        Item item = this.room.loot(endPosition);
+        Item item = Room.loot(room, endPosition);
         if (item != null)
         {
             if (item instanceof Weapon)
                 this.pickupItem((Weapon) item);
             if (item instanceof Armor)
                 this.pickupItem((Armor) item);
-            this.room.removeItem(item);
+            
             this.notifyObservers(new LootItem(item));
         }
 

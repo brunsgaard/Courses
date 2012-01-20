@@ -12,9 +12,9 @@ public class ArrowKeyListener implements KeyListener
     public void keyPressed(KeyEvent keyEvent)
     {
         // Auto-generated method stub
-
     }
 
+    // TODO i for inventory
     @Override
     public void keyReleased(KeyEvent keyEvent)
     {
@@ -22,34 +22,27 @@ public class ArrowKeyListener implements KeyListener
         {
             if (Dungeon.getInstance().getHero().tryMove(Direction.NORTH))
                 TurnController.getInstance().doTurn();
-
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN)
         {
             if (Dungeon.getInstance().getHero().tryMove(Direction.SOUTH))
                 TurnController.getInstance().doTurn();
-
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT)
         {
             if (Dungeon.getInstance().getHero().tryMove(Direction.WEST))
                 TurnController.getInstance().doTurn();
-
         }
         if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT)
         {
             if (Dungeon.getInstance().getHero().tryMove(Direction.EAST))
                 TurnController.getInstance().doTurn();
-
         }
-
     }
 
     @Override
     public void keyTyped(KeyEvent keyEvent)
     {
         // Auto-generated method stub
-
     }
-
 }
