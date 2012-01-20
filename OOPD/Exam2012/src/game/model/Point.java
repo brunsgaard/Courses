@@ -33,6 +33,7 @@ public class Point
         this.y = y;
     }
 
+    //FIXME: convert to static method
     public Point oneStep(Direction direction)
     {
         switch (direction)

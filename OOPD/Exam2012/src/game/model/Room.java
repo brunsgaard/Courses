@@ -54,9 +54,7 @@ public class Room
                 return;
             this.monsters.remove(index);
         }
-
     }
-
 
     public ArrayList<Item> getItems()
     {
@@ -91,7 +89,8 @@ public class Room
         return new Bounds(this.topLeft, this.bottomRight);
     }
 
-    public boolean isInNeighborRoom(Point position)
+    // FIXME remove, or convert to static method
+    public boolean isInNeighborRoom(Point position) 
     {
         if (this.getNeighborRoomFromPoint(position) != null)
         {
@@ -102,7 +101,8 @@ public class Room
         }
     }
 
-    public Room getNeighborRoomFromPoint(Point position)
+    // FIXME remove, or convert to static method
+    public Room getNeighborRoomFromPoint(Point position) 
     {
         for (Room r : this.doors.values())
         {
@@ -114,7 +114,6 @@ public class Room
     
     public Item loot(Point position)
     {
-
         for (Item i : this.items)
         {
             if (i.getPosition().equals(position))
@@ -123,6 +122,7 @@ public class Room
         return null;
     }
 
+    // FIXME remove, or convert to static method
     public boolean checkForDoor(Point position)
     {
         return this.doors.containsKey(position);

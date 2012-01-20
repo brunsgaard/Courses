@@ -69,23 +69,17 @@ public class Dungeon
 
     public Bounds getBounds()
     {
-        int minX = -1;
         int maxX = -1;
-        int minY = -1;
         int maxY = -1;
         for (Room r : this.getRooms())
         {
             Bounds b = r.getBounds();
-            if (minX == -1 || b.getTopLeft().getX() < minX)
-                minX = b.getTopLeft().getX();
             if (maxX == -1 || b.getBottomRight().getX() > maxX)
                 maxX = b.getBottomRight().getX();
-            if (minY == -1 || b.getTopLeft().getY() < minY)
-                minY = b.getTopLeft().getY();
             if (maxY == -1 || b.getBottomRight().getY() > maxY)
                 maxY = b.getBottomRight().getY();
         }
-        return new Bounds(new Point(minX, minY), new Point(maxX, maxY));
+        return new Bounds(new Point(0, 0), new Point(maxX, maxY));
     }
 
     public void addRoom(Room room)

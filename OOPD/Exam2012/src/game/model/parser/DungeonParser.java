@@ -28,6 +28,7 @@ public class DungeonParser
     {
         try
         {
+            // TODO try both users homedir and file bundled in res folder
             this.in = new Scanner(new File(System.getProperty("user.home")
                     + "/dungeon.map"));
 
@@ -79,12 +80,10 @@ public class DungeonParser
 
     public void addDoor(int x1, int y1, int x2, int y2)
     {
-
         Point point1 = new Point(x1, y1);
         Point point2 = new Point(x2, y2);
-        Room point1Room = new Room(point1, point2);
-
-        Room point2Room = new Room(point2, point1);
+        Room point1Room = new Room(point1, point2); // FIXME set to null
+        Room point2Room = new Room(point2, point1); // FIXME set to null
 
         for (Room r : Dungeon.getInstance().getRooms())
         {
@@ -102,9 +101,10 @@ public class DungeonParser
     public void addMonster(int x, int y, String monsterType)
     {
         Room monsterRoom = null;
-        
+
         for (Room r : Dungeon.getInstance().getRooms())
         {
+            // FIXME move point construction outside for loop
             if (r.isInside(new Point(x, y)))
                 monsterRoom = r;
         }
@@ -132,7 +132,6 @@ public class DungeonParser
 
     public void addItem(int x, int y, String itemType, int damageAttribute)
     {
-        // System.out.println(x+y+itemType+damageAttribute);
         Point itemPosition = new Point(x, y);
         Room itemRoom = null;
         for (Room r : Dungeon.getInstance().getRooms())

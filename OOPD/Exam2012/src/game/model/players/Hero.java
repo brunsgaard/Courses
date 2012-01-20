@@ -80,7 +80,7 @@ public abstract class Hero extends Player
             this.weapon = weapon;
             notifyObservers(new PlayerWeaponChanged(weapon));
         }
-        
+
         this.Inventory.add(weapon);
     }
 
@@ -93,7 +93,7 @@ public abstract class Hero extends Player
         this.armor.setResistence(this.armor.getResistence()
                 + armor.getResistence());
         notifyObservers(new PlayerArmorChanged(this.armor.getResistence()));
-        this.Inventory.add(armor);
+        this.Inventory.add(armor); // FIXME armor does not go to the inventory
     }
 
     public boolean tryMove(Direction direction)
@@ -105,16 +105,17 @@ public abstract class Hero extends Player
                 && !Dungeon.getInstance().isMonsterOnPosition(endPosition))
         {
             this.room.removePlayer(this);
-            this.room = room.getDoors().get(endPosition);
+            this.room = room.getDoors().get(endPosition); // FIXME does not use
+                                                          // room function
             this.notifyObservers(new ChangeRoom(this.room));
-
         } else if (!this.room.isInside(endPosition))
         {
             return false;
         }
 
-        Monster monster = Dungeon.getInstance().getMonsterFromPoint(
-                endPosition);
+        Monster monster = Dungeon.getInstance()
+                .getMonsterFromPoint(endPosition); // FIXME slow, use room
+                                                   // function instead?
         if (monster != null)
         {
             monster.takeDamage(this.getDamageLevel());
@@ -131,7 +132,7 @@ public abstract class Hero extends Player
             this.room.removeItem(item);
             this.notifyObservers(new LootItem(item));
         }
-        
+
         this.position = endPosition;
         this.notifyObservers(new PlayerMoved(this.position));
 
