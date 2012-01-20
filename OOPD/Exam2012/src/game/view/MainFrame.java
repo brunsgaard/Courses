@@ -8,6 +8,12 @@ import game.model.parser.DungeonParser;
 import game.view.dungeon.DungeonPanel;
 import game.view.welcome.WelcomePanel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+
 import javax.swing.JFrame;
 
 public class MainFrame extends JFrame
@@ -23,7 +29,6 @@ public class MainFrame extends JFrame
     {
         super(Language.MAIN_FRAME_TITLE);
         this.dungeonParser = new DungeonParser();
-        dungeonParser.parseMapFile();
         Dungeon.getInstance().setDescription(
                 Language.WELCOME_PANEL_GAME_DESCRIPTION);
 
@@ -38,16 +43,36 @@ public class MainFrame extends JFrame
 
     public void shiftToDungeonPanel()
     {
-        this.welcomePanel.SendSelectedHeroToDungeon();
+        try
+        {
+            if (this.welcomePanel.loadFromHomeDir())
+            {
+                dungeonParser.parseMapFile(new FileInputStream(new File(System
+                        .getProperty("user.home") + "/dungeon.map")));
+            } else
+            {
+                dungeonParser.parseMapFile(DungeonParser.class.getResource(
+                        "dungeon.map").openStream());
+            }
+
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("Woops.. something went wrong while"
+                    + " loading dungeon.map, please place a "
+                    + "valid dungeon.map file in your homedir ");
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        this.welcomePanel.sendSelectedHeroToDungeon();
         this.welcomePanel.removeAll();
         this.dungeonPanel = new DungeonPanel();
         this.setContentPane(this.dungeonPanel);
 
-        // this.pack();
-
         this.setVisible(true);
         this.dungeonPanel.grabFocus();
-        this.dungeonPanel.addKeyListener(new ArrowKeyListener(this.dungeonPanel));
+        this.dungeonPanel
+                .addKeyListener(new ArrowKeyListener(this.dungeonPanel));
         this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
     }
     

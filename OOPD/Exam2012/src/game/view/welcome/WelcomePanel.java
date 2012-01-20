@@ -1,7 +1,6 @@
 //msn378
 package game.view.welcome;
 
-
 import game.model.Dungeon;
 import game.model.Point;
 import game.model.players.heroes.Cleric;
@@ -17,9 +16,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 
 public class WelcomePanel extends JPanel
 {
@@ -31,17 +30,16 @@ public class WelcomePanel extends JPanel
     private EnterHeroNamePanel enterHeroName;
     private ChooseHeroCharacterPanel chooseHeroCharacter;
     private JButton startButton;
+    private JCheckBox homeDungeonCheckBox;
 
     public WelcomePanel()
     {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
 
         this.title = new JLabel(Language.WELCOME_PANEL_TITLE);
         title.setFont(new Font("Dialog", Font.ITALIC, 40));
         this.title.setAlignmentX(CENTER_ALIGNMENT);
-
 
         this.description = new DescriptionPanel(Dungeon.getInstance()
                 .getDescription());
@@ -51,16 +49,16 @@ public class WelcomePanel extends JPanel
         this.startButton.setAlignmentX(CENTER_ALIGNMENT);
         this.startButton.addActionListener(new ActionListener()
         {
-            
             @Override
             public void actionPerformed(ActionEvent arg0)
             {
                 MainFrame.getInstance().shiftToDungeonPanel();
             }
         });
-
+        
+        this.homeDungeonCheckBox = new JCheckBox(Language.WELCOME_PANEL_CHECKBOX, false);
+        this.homeDungeonCheckBox.setAlignmentX(CENTER_ALIGNMENT);
         this.draw();
-
     }
 
     private void draw()
@@ -70,9 +68,15 @@ public class WelcomePanel extends JPanel
         add(this.enterHeroName);
         add(this.chooseHeroCharacter);
         add(this.startButton);
+        add(this.homeDungeonCheckBox);
+    }
+    
+    public boolean loadFromHomeDir()
+    {
+        return this.homeDungeonCheckBox.isSelected();
     }
 
-    public void SendSelectedHeroToDungeon()
+    public void sendSelectedHeroToDungeon()
     {
         String heroName = enterHeroName.getHeroName();
         String heroType = chooseHeroCharacter.getSelectedHero();

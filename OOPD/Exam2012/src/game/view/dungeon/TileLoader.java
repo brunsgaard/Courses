@@ -8,8 +8,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -45,8 +45,8 @@ public class TileLoader
         {
             if (TileLoader.cache.containsKey(filename))
                 return TileLoader.cache.get(filename);
-            BufferedImage img = ImageIO.read(new File(
-                    TileLoader.resourceDirectory, filename));
+            URL imageUrl = TileLoader.class.getResource(TileLoader.resourceDirectory+"/"+filename);
+            BufferedImage img = ImageIO.read(imageUrl);
             TileLoader.cache.put(filename, img);
             return img;
         } catch (IOException e)
