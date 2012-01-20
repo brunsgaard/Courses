@@ -21,11 +21,12 @@ public final class Language
 
     public static final String STAT_PANEL_HP = "HP: ";
     public static final String STAT_PANEL_ARMOR = "Armor: ";
-    public static final String STAT_PANEL_WEAPON = "Weapon ";
-    public static final String STAT_PANEL_TURNS = "Turns ";
+    public static final String STAT_PANEL_WEAPON = "Weapon: ";
+    public static final String STAT_PANEL_TURNS = "Turns: ";
 
     public static final String DUNGEON_PANEL_ROOM = "Room";
     public static final String DUNGEON_PANEL_MAP = "Map";
+    public static final String DUNGEON_PANEL_INVENTORY = "Inventory";
 
     public static final String WELCOME_PANEL_GAME_DESCRIPTION = "In the game, the player guides a " +
     		"character who wanders a single-level dungeon accumulating treasure and killing monsters. " +

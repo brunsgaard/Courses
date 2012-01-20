@@ -177,7 +177,7 @@ public abstract class Monster extends Player
 
             // TODO: what happens if two monsters meet in random walk an each
             // side of a door.. Testing needed..
-                    && !!Room.isMonsterOnPosition(room, desiredEndPosition);
+                    && !Room.isMonsterOnPosition(room, desiredEndPosition);
             break;
         }
         return returnValue;
@@ -240,7 +240,7 @@ public abstract class Monster extends Player
                 .size()));
         // newRoom.addMonster(this);
         // is newPosition correct?
-        newRoom.getMonsters().put(newPosition, this);
+        newRoom.getMonsters().add(this);
         this.room.removePlayer(this);
         this.room = newRoom;
     }

@@ -15,6 +15,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -25,8 +26,6 @@ import java.awt.image.Raster;
 
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
-
-
 
 
 public class MapPanel extends JPanel implements Observer<INotification>
@@ -69,6 +68,8 @@ public class MapPanel extends JPanel implements Observer<INotification>
         this.scaler = new AffineTransform();
         this.scaler.scale(scaleFactor, scaleFactor);
         this.gfx.setTransform(this.scaler);
+        
+        this.gfx.setFont(new Font(Font.MONOSPACED,Font.PLAIN,1));
 
         // Generate the raster and finally draw the map
         this.generateRaster();
@@ -123,18 +124,27 @@ public class MapPanel extends JPanel implements Observer<INotification>
         {
             if (r.getItems() != null) {
                 this.gfx.setColor(Color.GREEN);
-                for (Item i : r.getItems())
+                for (Item i : r.getItems().values())
                 {
+                    this.gfx.setColor(new Color(0x333333));
                     this.gfx.fill(new Rectangle(i.getPosition().getX(), i
                             .getPosition().getY(), 1, 1));
+                    this.gfx.setColor(Color.GREEN);
+                    Double letterX = i.getPosition().getX()+0.15;
+                    Double letterY = i.getPosition().getY()+0.8;
+                    this.gfx.drawString(i.getClass().getSimpleName().substring(0, 1),letterX.floatValue(),letterY.floatValue());
                 }
             }
             if (r.getMonsters() != null) {
-                this.gfx.setColor(Color.RED);
                 for (Monster m : r.getMonsters())
                 {
+                    this.gfx.setColor(new Color(0x333333));
                     this.gfx.fill(new Rectangle(m.getPosition().getX(), m
                             .getPosition().getY(), 1, 1));
+                    this.gfx.setColor(Color.RED);
+                    Double letterX = m.getPosition().getX()+0.15;
+                    Double letterY = m.getPosition().getY()+0.8;
+                    this.gfx.drawString(m.getClass().getSimpleName().substring(0, 1),letterX.floatValue(),letterY.floatValue());
                 }
             }
         }

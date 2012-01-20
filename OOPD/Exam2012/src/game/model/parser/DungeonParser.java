@@ -5,6 +5,7 @@ import game.model.Point;
 import game.model.Room;
 import game.model.items.Armor;
 import game.model.items.Item;
+import game.model.items.Potion;
 import game.model.items.Weapon;
 import game.model.players.Monster;
 import game.model.players.monsters.Bat;
@@ -125,7 +126,7 @@ public class DungeonParser
         if (monster != null && monsterRoom != null)
         {
             monster.setCurrentRoom(monsterRoom);
-            monsterRoom.getMonsters().put(new Point(x,y), monster);
+            monsterRoom.getMonsters().add(monster);
         }
 
     }
@@ -148,6 +149,9 @@ public class DungeonParser
             break;
         case A:
             item = new Armor(itemPosition, damageAttribute);
+            break;
+        case P:
+            item = new Potion(itemPosition, damageAttribute);
             break;
         }
         if (item != null && itemRoom != null)

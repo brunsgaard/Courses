@@ -13,6 +13,7 @@ import game.model.Room;
 import game.model.items.Item;
 import game.model.players.Hero;
 import game.model.players.Monster;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -186,7 +187,7 @@ public class RoomPanel extends JPanel implements Observer<INotification>
         // Draw items
         if (this.room.getItems() != null)
         {
-            for (Item i : this.room.getItems())
+            for (Item i : this.room.getItems().values())
             {
                 Point itemPos = this.relativePoint(i.getPosition());
                 this.gfx.drawImage(TileLoader.getTile(i), itemPos.getX()

@@ -4,7 +4,6 @@ import game.view.Language;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +17,7 @@ public class DungeonPanel extends JPanel
     RoomPanel room;
     MapPanel map;
     StatsPanel stats;
+    InventoryPanel inventory;
 
     public DungeonPanel()
     {
@@ -26,14 +26,19 @@ public class DungeonPanel extends JPanel
 
         this.room = new RoomPanel();
         this.map = new MapPanel();
+        this.inventory = new InventoryPanel();
+        this.room.setFocusable(false);
+        this.map.setFocusable(false);
+//        this.inventory.setFocusable(false);
 
         JScrollPane roomScrollPane = new JScrollPane(this.room);
         this.pane.addTab(Language.DUNGEON_PANEL_ROOM, roomScrollPane);
-        this.pane.setMnemonicAt(0, KeyEvent.VK_R); // FIXME replace with custom key codes
 
         JScrollPane mapScrollPane = new JScrollPane(this.map);
         this.pane.addTab(Language.DUNGEON_PANEL_MAP, mapScrollPane);
-        this.pane.setMnemonicAt(1, KeyEvent.VK_M); // FIXME replace with custom key codes
+        
+        JScrollPane inventoryScrollPane = new JScrollPane(this.inventory);
+        this.pane.addTab(Language.DUNGEON_PANEL_INVENTORY, inventoryScrollPane);
         
         this.stats = new StatsPanel();
 

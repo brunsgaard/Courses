@@ -2,7 +2,6 @@ package game.model;
 
 import game.model.items.Item;
 import game.model.players.Hero;
-import game.model.players.Monster;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

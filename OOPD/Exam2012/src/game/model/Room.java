@@ -4,6 +4,7 @@ import game.model.items.Item;
 import game.model.players.Monster;
 import game.model.players.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Room
@@ -13,7 +14,7 @@ public class Room
     private HashMap<Point, Room> doors;
 
     private HashMap<Point, Item> items;
-    private HashMap<Point, Monster> monsters;
+    private ArrayList<Monster> monsters;
 
     public Room(Point topLeft, Point bottomRight)
     {
@@ -21,7 +22,7 @@ public class Room
         this.bottomRight = bottomRight;
         this.doors = new HashMap<Point, Room>();
         this.items = new HashMap<Point, Item>();
-        this.monsters = new HashMap<Point, Monster>();
+        this.monsters = new ArrayList<Monster>();
     }
 
     // method name and input names forced
@@ -30,7 +31,7 @@ public class Room
     {
         if (player instanceof Monster)
         {
-            this.getMonsters().remove(player.getPosition());
+            this.getMonsters().remove(player);
         }
     }
 
@@ -85,10 +86,14 @@ public class Room
 
     public static Monster getMonsterFromPoint(Room room, Point position)
     {
+        for (Monster m : room.getMonsters())
+        {
+            if (m.getPosition().equals(position))
+                return m;
+        }
         for (Room r : room.getDoors().values())
         {
-
-            for (Monster m : r.getMonsters().values())
+            for (Monster m : r.getMonsters())
             {
                 if (m.getPosition().equals(position))
                     return m;
@@ -124,12 +129,12 @@ public class Room
         this.items = items;
     }
 
-    public HashMap<Point, Monster> getMonsters()
+    public ArrayList<Monster> getMonsters()
     {
         return monsters;
     }
 
-    public void setMonsters(HashMap<Point, Monster> monsters)
+    public void setMonsters(ArrayList<Monster> monsters)
     {
         this.monsters = monsters;
     }

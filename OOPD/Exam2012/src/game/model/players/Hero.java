@@ -1,7 +1,5 @@
 package game.model.players;
 
-import java.util.ArrayList;
-
 import game.controller.dungeon.Direction;
 import game.controller.notification.ChangeRoom;
 import game.controller.notification.LootItem;
@@ -10,12 +8,14 @@ import game.controller.notification.PlayerDied;
 import game.controller.notification.PlayerHealthChanged;
 import game.controller.notification.PlayerMoved;
 import game.controller.notification.PlayerWeaponChanged;
-import game.model.Dungeon;
 import game.model.Point;
 import game.model.Room;
 import game.model.items.Armor;
 import game.model.items.Item;
+import game.model.items.Potion;
 import game.model.items.Weapon;
+
+import java.util.ArrayList;
 
 public abstract class Hero extends Player
 
@@ -24,7 +24,7 @@ public abstract class Hero extends Player
     protected Weapon weapon;
     protected Armor armor;
     protected int damageMagnifier;
-    protected ArrayList<Item> Inventory;
+    protected ArrayList<Item> inventory;
 
     public Hero(String name, Point position, int unarmedDamage,
             int healthRegenerationRate, int damageMagnifier)
@@ -34,7 +34,7 @@ public abstract class Hero extends Player
         this.weapon = null;
         this.armor = null;
         this.name = name;
-        this.Inventory = new ArrayList<Item>();
+        this.inventory = new ArrayList<Item>();
     }
 
     @Override
@@ -71,18 +71,29 @@ public abstract class Hero extends Player
             this.notifyObservers(new PlayerArmorChanged(newArmorLevel));
         }
     }
+    
+    public void drinkPotion(Potion potion)
+    {
+        this.health += potion.getPoints();
+        this.notifyObservers(new PlayerHealthChanged(this.health));
+        this.inventory.remove(potion);
+    }
+    
+    public void selectWeapon(Weapon weapon)
+    {
+        this.weapon = weapon;
+        notifyObservers(new PlayerWeaponChanged(weapon));
+    }
 
     public void pickupItem(Weapon weapon)
     {
+        this.inventory.add(weapon);
         int damage = this.weapon == null ? unarmedDamage : this.weapon
                 .getDamage();
         if (weapon.getDamage() > damage)
         {
-            this.weapon = weapon;
-            notifyObservers(new PlayerWeaponChanged(weapon));
+            this.selectWeapon(weapon);
         }
-
-        this.Inventory.add(weapon);
     }
 
     public void pickupItem(Armor armor)
@@ -102,7 +113,7 @@ public abstract class Hero extends Player
         Point endPosition = position.oneStep(direction);
 
         if (this.room.checkForDoor(endPosition)
-                && !!Room.isMonsterOnPosition(room, endPosition))
+                && !Room.isMonsterOnPosition(room, endPosition))
         {
             this.room.removePlayer(this);
             this.room = room.getDoors().get(endPosition); // FIXME does not use
@@ -113,7 +124,7 @@ public abstract class Hero extends Player
             return false;
         }
 
-        Monster monster = room.getMonsters().get(endPosition);
+        Monster monster = Room.getMonsterFromPoint(this.room, endPosition);
         if (monster != null)
         {
             monster.takeDamage(this.getDamageLevel());
@@ -139,6 +150,6 @@ public abstract class Hero extends Player
 
     public ArrayList<Item> getInventory()
     {
-        return Inventory;
+        return inventory;
     }
 }
