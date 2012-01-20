@@ -33,19 +33,18 @@ public class Point
         this.y = y;
     }
 
-    //FIXME: convert to static method
-    public Point oneStep(Direction direction)
+    public static  Point oneStep(Point point, Direction direction)
     {
         switch (direction)
         {
         case NORTH:
-            return new Point(this.x, this.y - 1);
+            return new Point(point.x, point.y - 1);
         case SOUTH:
-            return new Point(this.x, this.y + 1);
+            return new Point(point.x, point.y + 1);
         case WEST:
-            return new Point(this.x - 1, this.y);
+            return new Point(point.x - 1, point.y);
         case EAST:
-            return new Point(this.x + 1, this.y);
+            return new Point(point.x + 1, point.y);
         default:
             return null;
         }

@@ -157,16 +157,16 @@ public class RoomPanel extends JPanel implements Observer<INotification>
             Point doorLocation = this.relativePoint(p);
             if (p.getX() == 1)
             {
-                doorLocation.oneStep(Direction.WEST);
+                Point.oneStep(doorLocation, Direction.WEST);
             } else if (p.getY() == 1)
             {
-                doorLocation.oneStep(Direction.NORTH);
+                Point.oneStep(doorLocation, Direction.NORTH);
             } else if (p.getX() == roomBounds.getWidth() + 1)
             {
-                doorLocation.oneStep(Direction.EAST);
+                Point.oneStep(doorLocation, Direction.EAST);
             } else
             {
-                doorLocation.oneStep(Direction.SOUTH);
+                Point.oneStep(doorLocation, Direction.SOUTH);
             }
             this.gfx.drawImage(this.doorTile, doorLocation.getX()
                     * TileLoader.tilePixelSize, doorLocation.getY()

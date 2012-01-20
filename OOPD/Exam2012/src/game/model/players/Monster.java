@@ -22,7 +22,9 @@ public abstract class Monster extends Player
             int healthRegenerationRate, int hitPoints)
     {
         super(position, unarmedDamage, healthRegenerationRate, hitPoints);
+        this.room = Dungeon.getInstance().getRoom(position);
         this.doorOnRandomMove = null;
+        this.setRandomDoorAsTarget();
     }
 
     @Override
@@ -61,7 +63,7 @@ public abstract class Monster extends Player
             moveDirection = this.getDirection(hero.getPosition(),
                     MovementPattern.HERO_IN_ROOM);
 
-            endPosition = this.position.oneStep(moveDirection);
+            endPosition = Point.oneStep(this.position, moveDirection);
 
             if (moveDirection == null)
                 return;
@@ -100,7 +102,7 @@ public abstract class Monster extends Player
             }
             moveDirection = this.getDirection(doorToHero,
                     MovementPattern.HERO_IN_NEXT_ROOM);
-            endPosition = this.position.oneStep(moveDirection);
+            endPosition = Point.oneStep(this.position, moveDirection);
 
             if (moveDirection == null)
                 return;
@@ -121,16 +123,13 @@ public abstract class Monster extends Player
 
         case DEFAULT:
 
-            if (this.doorOnRandomMove == null)
-                this.setRandomDoorAsTarget(); //FIXME do as part of construct
-
             moveDirection = this.getDirection(doorOnRandomMove,
                     MovementPattern.DEFAULT);
 
             if (moveDirection == null)
                 return;
 
-            endPosition = this.position.oneStep(moveDirection);
+            endPosition = Point.oneStep(this.position, moveDirection);
 
             if (endPosition.equals(doorOnRandomMove))
             {
@@ -186,10 +185,10 @@ public abstract class Monster extends Player
     public Direction getDirection(Point position,
             MovementPattern movementPattern)
     {
-        Point pn = this.position.oneStep(Direction.NORTH);
-        Point ps = this.position.oneStep(Direction.SOUTH);
-        Point pe = this.position.oneStep(Direction.EAST);
-        Point pw = this.position.oneStep(Direction.WEST);
+        Point pn = Point.oneStep(this.position,Direction.NORTH);
+        Point ps = Point.oneStep(this.position,Direction.SOUTH);
+        Point pe = Point.oneStep(this.position,Direction.EAST);
+        Point pw = Point.oneStep(this.position,Direction.WEST);
         int nd = this.manhattenDistance(position, pn);
         int sd = this.manhattenDistance(position, ps);
         int ed = this.manhattenDistance(position, pe);

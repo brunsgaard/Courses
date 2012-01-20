@@ -81,14 +81,14 @@ public abstract class Hero extends Player
             this.notifyObservers(new PlayerArmorChanged(newArmorLevel));
         }
     }
-    
+
     public void drinkPotion(Potion potion)
     {
         this.health += potion.getPoints();
         this.notifyObservers(new PlayerHealthChanged(this.health));
         this.inventory.remove(potion);
     }
-    
+
     public void selectWeapon(Weapon weapon)
     {
         this.weapon = weapon;
@@ -120,14 +120,13 @@ public abstract class Hero extends Player
     public boolean tryMove(Direction direction)
     {
 
-        Point endPosition = position.oneStep(direction);
+        Point endPosition = Point.oneStep(this.position, direction);
 
         if (this.room.checkForDoor(endPosition)
                 && !Room.isMonsterOnPosition(room, endPosition))
         {
             this.room.removePlayer(this);
-            this.room = room.getDoors().get(endPosition); // FIXME does not use
-                                                          // room function
+            this.room = room.getDoors().get(endPosition);
             this.notifyObservers(new ChangeRoom(this.room));
         } else if (!this.room.isInside(endPosition))
         {
@@ -148,7 +147,7 @@ public abstract class Hero extends Player
                 this.pickupItem((Weapon) item);
             if (item instanceof Armor)
                 this.pickupItem((Armor) item);
-            
+
             this.notifyObservers(new LootItem(item));
         }
 
