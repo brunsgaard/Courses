@@ -19,7 +19,7 @@ public abstract class Player extends
     protected int health;
     protected int unarmedDamage;
     protected int healthRegenerationRate;
-    protected Room currentRoom;
+    protected Room room;
 
     public Player(Point position, int unarmedDamage, int healthRegenerationRate)
     {
@@ -28,29 +28,6 @@ public abstract class Player extends
         this.unarmedDamage = unarmedDamage;
         this.healthRegenerationRate = healthRegenerationRate;
         TurnController.getInstance().addObserver(this);
-    }
-
-    public final void update(INotification change)
-    {
-        if (change instanceof TurnStart && !this.isDead())
-            this.update((TurnStart) change);
-        if (change instanceof TurnEnd)
-            this.update((TurnEnd) change);
-    }
-
-    public void update(TurnStart change)
-    {
-        
-    }
-
-    public void update(TurnEnd change)
-    {
-        if (this.isDead())
-        {
-            this.currentRoom.removePlayer(this);
-        } else {
-            this.regenerate();
-        }
     }
 
     public boolean isDead()
@@ -64,19 +41,16 @@ public abstract class Player extends
         this.notifyObservers(new PlayerHealthChanged(this.health));
     }
 
-    public abstract int getDamageLevel();
-
-    public abstract void takeDamage(int amount);
-
     public Point getPosition()
     {
         return this.position;
     }
 
-    public boolean tryMove(Direction direction){
+    public boolean tryMove(Direction direction)
+    {
         // Try move is a "Hero only" and , hence it
         // is moved to the hero class.
-    return false;
+        return false;
     }
 
     public int getHealth()
@@ -91,12 +65,40 @@ public abstract class Player extends
 
     public Room getCurrentRoom()
     {
-        return currentRoom;
+        return room;
     }
 
     public void setCurrentRoom(Room currentRoom)
     {
-        this.currentRoom = currentRoom;
+        this.room = currentRoom;
+    }
+
+    public abstract int getDamageLevel();
+
+    public abstract void takeDamage(int amount);
+
+    public final void update(INotification change)
+    {
+        if (change instanceof TurnStart && !this.isDead())
+            this.update((TurnStart) change);
+        if (change instanceof TurnEnd)
+            this.update((TurnEnd) change);
+    }
+    
+    public void update(TurnStart change)
+    {
+        
+    }
+
+    public void update(TurnEnd change)
+    {
+        if (this.isDead())
+        {
+            this.room.removePlayer(this);
+        } else
+        {
+            this.regenerate();
+        }
     }
 
 }

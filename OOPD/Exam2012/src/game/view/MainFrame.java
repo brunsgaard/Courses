@@ -3,7 +3,6 @@ package game.view;
 import game.controller.dungeon.ArrowKeyListener;
 import game.model.Dungeon;
 import game.model.parser.DungeonParser;
-import game.view.Language;
 import game.view.dungeon.DungeonPanel;
 import game.view.welcome.WelcomePanel;
 

@@ -4,8 +4,8 @@ import game.controller.Observer;
 import game.controller.dungeon.TurnController;
 import game.controller.notification.INotification;
 import game.controller.notification.PlayerArmorChanged;
-import game.controller.notification.PlayerWeaponChanged;
 import game.controller.notification.PlayerHealthChanged;
+import game.controller.notification.PlayerWeaponChanged;
 import game.controller.notification.TurnEnd;
 import game.model.Dungeon;
 

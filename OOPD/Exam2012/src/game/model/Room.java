@@ -23,7 +23,6 @@ public class Room
         this.doors = new HashMap<Point, Room>();
         this.items = new ArrayList<Item>();
         this.monsters = new ArrayList<Monster>();
-
     }
 
     public HashMap<Point, Room> getDoors()
@@ -34,7 +33,6 @@ public class Room
     public void addDoor(Point point, Room room)
     {
         this.doors.put(point, room);
-
     }
 
     public ArrayList<Monster> getMonsters()
@@ -46,6 +44,19 @@ public class Room
     {
         this.monsters.add(monster);
     }
+
+    public void removePlayer(Player player)
+    {
+        if (player instanceof Monster)
+        {
+            int index = this.monsters.indexOf(player);
+            if (index == -1)
+                return;
+            this.monsters.remove(index);
+        }
+
+    }
+
 
     public ArrayList<Item> getItems()
     {
@@ -64,21 +75,8 @@ public class Room
             return false;
         this.items.remove(index);
         return true;
-
     }
 
-    // TODO: Not sure removePlayer is implemented correct.
-    public void removePlayer(Player player)
-    {
-        if (player instanceof Monster)
-        {
-            int index = this.monsters.indexOf(player);
-            if (index == -1)
-                return;
-            this.monsters.remove(index);
-        }
-
-    }
 
     public boolean isInside(Point inputPoint)
     {
@@ -94,10 +92,8 @@ public class Room
         return new Bounds(this.topLeft, this.bottomRight);
     }
 
-
     public boolean isInNeighborRoom(Point position)
     {
-
         if (this.getNeighborRoomFromPoint(position) != null)
         {
             return true;
@@ -105,7 +101,6 @@ public class Room
         {
             return false;
         }
-
     }
 
     public Room getNeighborRoomFromPoint(Point position)
@@ -114,13 +109,10 @@ public class Room
         {
             if (r.isInside(position))
                 return r;
-
         }
         return null;
-
     }
     
-
     public Item loot(Point position)
     {
 
@@ -130,14 +122,10 @@ public class Room
                 return i;
         }
         return null;
-
     }
 
     public boolean checkForDoor(Point position)
     {
-
         return this.doors.containsKey(position);
-
     }
-
 }

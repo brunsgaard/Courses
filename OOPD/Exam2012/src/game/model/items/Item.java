@@ -1,6 +1,6 @@
 package game.model.items;
 
-import game.model.*;
+import game.model.Point;
 
 public abstract class Item
 {

@@ -17,7 +17,7 @@ public class Dungeon
     private ArrayList<Room> rooms;
     private int pointScaleFactor;
     private static Dungeon instance = null;
-    public ArrayList<Point> allDoors;
+    private ArrayList<Point> allDoors;
 
     private Dungeon()
     {
@@ -132,7 +132,7 @@ public class Dungeon
         
     }
     
-    public Monster getMonsterFromNewPosition(Point position)
+    public Monster getMonsterFromPoint(Point position)
     {
 
         for (Room r: this.rooms){
@@ -151,7 +151,7 @@ public class Dungeon
 
     public boolean isMonsterOnPosition(Point position)
     {
-        if (this.getMonsterFromNewPosition(position) != null)
+        if (this.getMonsterFromPoint(position) != null)
         {
             return true;
         } else

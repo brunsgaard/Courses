@@ -1,11 +1,12 @@
 package game.view.welcome;
 
+import game.controller.welcome.EnterKeyListenerWP;
+
 import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import game.controller.welcome.EnterKeyListenerWP;
 
 public class EnterHeroNamePanel extends JPanel 
 {

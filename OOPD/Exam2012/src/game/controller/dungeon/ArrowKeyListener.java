@@ -1,6 +1,5 @@
 package game.controller.dungeon;
 
-import game.controller.dungeon.Direction;
 import game.model.Dungeon;
 
 import java.awt.event.KeyEvent;

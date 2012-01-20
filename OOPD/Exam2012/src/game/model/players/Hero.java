@@ -30,7 +30,6 @@ public abstract class Hero extends Player
         this.weapon = null;
         this.armor = null;
         this.name = name;
-
     }
 
     @Override
@@ -39,7 +38,6 @@ public abstract class Hero extends Player
         int damage = this.weapon == null ? unarmedDamage : this.weapon
                 .getDamage();
         return damage * damageMagnifier;
-
     }
 
     @Override
@@ -78,7 +76,6 @@ public abstract class Hero extends Player
             this.weapon = weapon;
             notifyObservers(new PlayerWeaponChanged(weapon));
         }
-
     }
 
     public void pickupItem(Armor armor)
@@ -86,7 +83,6 @@ public abstract class Hero extends Player
         if (this.armor == null)
         {
             this.armor = armor;
-
         }
         this.armor.setResistence(this.armor.getResistence()
                 + armor.getResistence());
@@ -96,52 +92,40 @@ public abstract class Hero extends Player
     public boolean tryMove(Direction direction)
     {
 
-        // the end position of the move
-        Point newPosition = position.oneStep(direction);
+        Point endPosition = position.oneStep(direction);
 
-        // check for door else wall
-        if (this.currentRoom.checkForDoor(newPosition)
-                && !Dungeon.getInstance().isMonsterOnPosition(newPosition))
+        if (this.room.checkForDoor(endPosition)
+                && !Dungeon.getInstance().isMonsterOnPosition(endPosition))
         {
-            this.currentRoom.removePlayer(this);
-            this.currentRoom = currentRoom.getDoors().get(newPosition);
-            this.notifyObservers(new ChangeRoom(this.currentRoom));
+            this.room.removePlayer(this);
+            this.room = room.getNeighborRoomFromPoint(endPosition);
+            this.notifyObservers(new ChangeRoom(this.room));
 
-        } else if (!this.currentRoom.isInside(newPosition))
+        } else if (!this.room.isInside(endPosition))
         {
             return false;
         }
 
-        // check for monster at end position
-        Monster monster = Dungeon.getInstance().getMonsterFromNewPosition(
-                newPosition);
-
+        Monster monster = Dungeon.getInstance().getMonsterFromPoint(
+                endPosition);
         if (monster != null)
         {
             monster.takeDamage(this.getDamageLevel());
-            // TODO Debug info
-            System.out.println("Monsters Health: " + monster.getHealth());
-
             return true;
         }
 
-        // check for items
-        // TODO Do something with item
-        Item item = this.currentRoom.loot(newPosition);
-
+        Item item = this.room.loot(endPosition);
         if (item != null)
         {
-
-            this.currentRoom.removeItem(item);
-            this.notifyObservers(new LootItem(item));
             if (item instanceof Weapon)
                 this.pickupItem((Weapon) item);
             if (item instanceof Armor)
                 this.pickupItem((Armor) item);
+            this.room.removeItem(item);
+            this.notifyObservers(new LootItem(item));
         }
-
-        // set position and notify observers..
-        this.position = newPosition;
+        
+        this.position = endPosition;
         this.notifyObservers(new PlayerMoved(this.position));
 
         return true;
