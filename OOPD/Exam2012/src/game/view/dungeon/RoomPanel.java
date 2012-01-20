@@ -13,29 +13,22 @@ import game.model.Room;
 import game.model.items.Item;
 import game.model.players.Hero;
 import game.model.players.Monster;
-import game.model.players.Player;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
 
 public class RoomPanel extends JPanel implements Observer<INotification>
 {
     private static final long serialVersionUID = -4264054111483744630L;
-    private static final int tilePixelSize = 32;
 
-    private static final String resourceDirectory = "res";
     private static final String floorTileFile = "pebble_brown";
     private static final int numFloorTiles = 9;
     private static final String wallTileFile = "brick_brown";
@@ -70,60 +63,21 @@ public class RoomPanel extends JPanel implements Observer<INotification>
         }
 
         // Load tiles
-        try
+        this.wallTiles = new ArrayList<BufferedImage>();
+        for (int i = 0; i < RoomPanel.numWallTiles; i++)
         {
-            this.wallTiles = new ArrayList<BufferedImage>();
-            for (int i = 0; i < RoomPanel.numWallTiles; i++)
-            {
-                this.wallTiles.add(ImageIO.read(new File(
-                        RoomPanel.resourceDirectory, RoomPanel.wallTileFile + i
-                                + ".png")));
-            }
-            this.floorTiles = new ArrayList<BufferedImage>();
-            for (int i = 0; i < RoomPanel.numFloorTiles; i++)
-            {
-                this.floorTiles.add(ImageIO.read(new File(
-                        RoomPanel.resourceDirectory, RoomPanel.floorTileFile
-                                + i + ".png")));
-            }
-            this.doorTile = ImageIO.read(new File(RoomPanel.resourceDirectory,
-                    RoomPanel.doorTileFile));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
+            this.wallTiles.add(TileLoader.getTile(RoomPanel.wallTileFile
+                    + i + ".png"));
         }
+        this.floorTiles = new ArrayList<BufferedImage>();
+        for (int i = 0; i < RoomPanel.numFloorTiles; i++)
+        {
+            this.floorTiles.add(TileLoader.getTile(RoomPanel.floorTileFile
+                            + i + ".png"));
+        }
+        this.doorTile = TileLoader.getTile(RoomPanel.doorTileFile);
 
         this.drawRoom();
-    }
-
-    private static final BufferedImage getTile(Player p)
-    {
-        try
-        {
-            String filename = p.getClass().getSimpleName().toLowerCase()
-                    .concat(".png");
-            return ImageIO
-                    .read(new File(RoomPanel.resourceDirectory, filename));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static final BufferedImage getTile(Item i)
-    {
-        try
-        {
-            String filename = i.getClass().getSimpleName().toLowerCase()
-                    .concat(".png");
-            return ImageIO
-                    .read(new File(RoomPanel.resourceDirectory, filename));
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private Point relativePoint(Point p)
@@ -137,8 +91,8 @@ public class RoomPanel extends JPanel implements Observer<INotification>
     private void drawRoom()
     {
         Bounds roomBounds = room.getBounds();
-        int width = (roomBounds.getWidth() + 2) * RoomPanel.tilePixelSize;
-        int height = (roomBounds.getHeight() + 2) * RoomPanel.tilePixelSize;
+        int width = (roomBounds.getWidth() + 2) * TileLoader.tilePixelSize;
+        int height = (roomBounds.getHeight() + 2) * TileLoader.tilePixelSize;
 
         // Use a BufferedImage to represent the dungeon map
         this.roomMap = new BufferedImage(width, height,
@@ -154,23 +108,23 @@ public class RoomPanel extends JPanel implements Observer<INotification>
          */
         Random rand = new Random();
         // Draw walls
-        for (int x = 0; x < width; x += RoomPanel.tilePixelSize)
+        for (int x = 0; x < width; x += TileLoader.tilePixelSize)
         {
             this.gfx.drawImage(
                     this.wallTiles.get(rand.nextInt(RoomPanel.numWallTiles)),
                     x, 0, null);
             this.gfx.drawImage(
                     this.wallTiles.get(rand.nextInt(RoomPanel.numWallTiles)),
-                    x, height - RoomPanel.tilePixelSize, null);
+                    x, height - TileLoader.tilePixelSize, null);
         }
-        for (int y = 0; y < height; y += RoomPanel.tilePixelSize)
+        for (int y = 0; y < height; y += TileLoader.tilePixelSize)
         {
             this.gfx.drawImage(
                     this.wallTiles.get(rand.nextInt(RoomPanel.numWallTiles)),
                     0, y, null);
             this.gfx.drawImage(
                     this.wallTiles.get(rand.nextInt(RoomPanel.numWallTiles)),
-                    width - RoomPanel.tilePixelSize, y, null);
+                    width - TileLoader.tilePixelSize, y, null);
         }
         // Draw floor
         for (int x = 1; x <= roomBounds.getWidth(); x++)
@@ -179,8 +133,8 @@ public class RoomPanel extends JPanel implements Observer<INotification>
             {
                 this.gfx.drawImage(this.floorTiles.get(rand
                         .nextInt(RoomPanel.numFloorTiles)), x
-                        * RoomPanel.tilePixelSize, y * RoomPanel.tilePixelSize,
-                        null);
+                        * TileLoader.tilePixelSize, y
+                        * TileLoader.tilePixelSize, null);
             }
         }
         // Draw doors
@@ -202,8 +156,8 @@ public class RoomPanel extends JPanel implements Observer<INotification>
                 doorLocation.oneStep(Direction.SOUTH);
             }
             this.gfx.drawImage(this.doorTile, doorLocation.getX()
-                    * RoomPanel.tilePixelSize, doorLocation.getY()
-                    * RoomPanel.tilePixelSize, null);
+                    * TileLoader.tilePixelSize, doorLocation.getY()
+                    * TileLoader.tilePixelSize, null);
         }
         this.roomOnly = this.roomMap.getData();
     }
@@ -222,9 +176,9 @@ public class RoomPanel extends JPanel implements Observer<INotification>
             for (Item i : this.room.getItems())
             {
                 Point itemPos = this.relativePoint(i.getPosition());
-                this.gfx.drawImage(RoomPanel.getTile(i), itemPos.getX()
-                        * RoomPanel.tilePixelSize, itemPos.getY()
-                        * RoomPanel.tilePixelSize, null);
+                this.gfx.drawImage(TileLoader.getTile(i), itemPos.getX()
+                        * TileLoader.tilePixelSize, itemPos.getY()
+                        * TileLoader.tilePixelSize, null);
             }
         }
 
@@ -234,18 +188,18 @@ public class RoomPanel extends JPanel implements Observer<INotification>
             for (Monster m : this.room.getMonsters())
             {
                 Point monsterPos = this.relativePoint(m.getPosition());
-                this.gfx.drawImage(RoomPanel.getTile(m), monsterPos.getX()
-                        * RoomPanel.tilePixelSize, monsterPos.getY()
-                        * RoomPanel.tilePixelSize, null);
+                this.gfx.drawImage(TileLoader.getTile(m), monsterPos.getX()
+                        * TileLoader.tilePixelSize, monsterPos.getY()
+                        * TileLoader.tilePixelSize, null);
             }
         }
 
         // Draw hero
         Hero hero = Dungeon.getInstance().getHero();
         Point heroPos = this.relativePoint(hero.getPosition());
-        this.gfx.drawImage(RoomPanel.getTile(hero), heroPos.getX()
-                * RoomPanel.tilePixelSize, heroPos.getY()
-                * RoomPanel.tilePixelSize, null);
+        this.gfx.drawImage(TileLoader.getTile(hero), heroPos.getX()
+                * TileLoader.tilePixelSize, heroPos.getY()
+                * TileLoader.tilePixelSize, null);
 
     }
 

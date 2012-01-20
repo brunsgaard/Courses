@@ -20,7 +20,7 @@ public class DescriptionPanel extends JPanel
     public DescriptionPanel(String text)
     {
         JLabel label = new JLabel("<html>" + text
-                + "</html>");
+                + "</html>", JLabel.CENTER);
 
         View view = (View) label
                 .getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);

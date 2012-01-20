@@ -33,7 +33,7 @@ public abstract class Hero extends Player
         this.weapon = null;
         this.armor = null;
         this.name = name;
-        this.Inventory = new ArrayList<>();
+        this.Inventory = new ArrayList<Item>();
     }
 
     @Override
