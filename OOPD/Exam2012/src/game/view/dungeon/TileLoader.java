@@ -13,6 +13,11 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Class to load graphic "tiles" based on an object or class. Returns tiles as
+ * BufferedImages. Caches loaded images in a HashMap. Completely static for
+ * convenience. On error it returns a BufferedImage with a printed error message.
+ */
 public class TileLoader
 {
     public static final String resourceDirectory = "res";
@@ -49,15 +54,19 @@ public class TileLoader
             return TileLoader.errorTile();
         }
     }
-    
+
     public static BufferedImage getTile(String filename)
     {
         return TileLoader.cacheLookup(filename);
     }
 
+    /**
+     * Method to get a tile for a class instead of an object. Ie. Mage.class
+     */
     public static <T> BufferedImage getTile(Class<T> c)
     {
-        return TileLoader.cacheLookup(c.getSimpleName().toLowerCase().concat(".png"));
+        return TileLoader.cacheLookup(c.getSimpleName().toLowerCase()
+                .concat(".png"));
     }
 
     public static BufferedImage getTile(Player p)

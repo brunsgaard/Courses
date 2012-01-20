@@ -19,12 +19,14 @@ public abstract class Player extends
     protected int health;
     protected int unarmedDamage;
     protected int healthRegenerationRate;
+    protected int hitPoints;
     protected Room room;
 
     public Player(Point position, int unarmedDamage, int healthRegenerationRate, int hitpoints)
     {
         this.position = position;
-        this.health = hitpoints;
+        this.hitPoints = hitpoints;
+        this.health = this.hitPoints;
         this.unarmedDamage = unarmedDamage;
         this.healthRegenerationRate = healthRegenerationRate;
         TurnController.getInstance().addObserver(this);
@@ -37,7 +39,7 @@ public abstract class Player extends
 
     public void regenerate()
     {
-        this.health = Math.min(100, this.health + healthRegenerationRate);
+        this.health = Math.min(this.hitPoints, this.health + healthRegenerationRate);
         this.notifyObservers(new PlayerHealthChanged(this.health));
     }
 
