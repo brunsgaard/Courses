@@ -53,11 +53,7 @@ public class Point
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + x;
-        result = prime * result + y;
-        return result;
+        return (this.y<<16)+this.x;
     }
 
     @Override
@@ -76,21 +72,4 @@ public class Point
             return false;
         return true;
     }
-
-    // public int hashCode()
-    // {
-    // return this.y * 300 + this.x;
-    // }
-    //
-    // public boolean equals(Object obj) {
-    // if(this == obj) {
-    // return true;
-    // }
-    // if (!(obj instanceof Point)) {
-    // return false;
-    // }
-    // Point point = (Point)obj;
-    // return x == point.getX() && y == point.getY();
-    //
-    // }
 }

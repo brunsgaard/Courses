@@ -20,6 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -42,11 +43,13 @@ public class RoomPanel extends JPanel implements Observer<INotification>
     private ArrayList<BufferedImage> floorTiles;
     private ArrayList<BufferedImage> wallTiles;
     private BufferedImage doorTile;
+    private HashMap<Room, Raster> roomCache;
 
     public RoomPanel()
     {
         super(new BorderLayout());
         this.room = Dungeon.getInstance().getHero().getCurrentRoom();
+        this.roomCache = new HashMap<Room, Raster>();
 
         // Observe our dear hero
         Dungeon.getInstance().getHero().addObserver(this);
@@ -66,14 +69,14 @@ public class RoomPanel extends JPanel implements Observer<INotification>
         this.wallTiles = new ArrayList<BufferedImage>();
         for (int i = 0; i < RoomPanel.numWallTiles; i++)
         {
-            this.wallTiles.add(TileLoader.getTile(RoomPanel.wallTileFile
-                    + i + ".png"));
+            this.wallTiles.add(TileLoader.getTile(RoomPanel.wallTileFile + i
+                    + ".png"));
         }
         this.floorTiles = new ArrayList<BufferedImage>();
         for (int i = 0; i < RoomPanel.numFloorTiles; i++)
         {
-            this.floorTiles.add(TileLoader.getTile(RoomPanel.floorTileFile
-                            + i + ".png"));
+            this.floorTiles.add(TileLoader.getTile(RoomPanel.floorTileFile + i
+                    + ".png"));
         }
         this.doorTile = TileLoader.getTile(RoomPanel.doorTileFile);
 
@@ -90,7 +93,7 @@ public class RoomPanel extends JPanel implements Observer<INotification>
 
     private void drawRoom()
     {
-        Bounds roomBounds = room.getBounds();
+        Bounds roomBounds = this.room.getBounds();
         int width = (roomBounds.getWidth() + 2) * TileLoader.tilePixelSize;
         int height = (roomBounds.getHeight() + 2) * TileLoader.tilePixelSize;
 
@@ -102,9 +105,18 @@ public class RoomPanel extends JPanel implements Observer<INotification>
                                                   // Graphics2D
 
         /*
+         * Cache lookup. Room uses the default Object.hashCode, but since this
+         * is for caching only it's not that important.
+         */
+        if (this.roomCache.containsKey(this.room))
+        {
+            this.roomOnly = this.roomCache.get(this.room);
+            return;
+        }
+
+        /*
          * Walls are simply drawn around the room with a random tile Floors are
-         * drawn inside the room, likewise a random tile. Simplification: The
-         * room will look different each time the hero enters
+         * drawn inside the room, likewise a random tile.
          */
         Random rand = new Random();
         // Draw walls
@@ -160,6 +172,7 @@ public class RoomPanel extends JPanel implements Observer<INotification>
                     * TileLoader.tilePixelSize, null);
         }
         this.roomOnly = this.roomMap.getData();
+        this.roomCache.put(this.room, this.roomOnly);
     }
 
     /**
