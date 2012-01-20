@@ -2,7 +2,6 @@ package game.model.players;
 
 import game.controller.Observable;
 import game.controller.Observer;
-import game.controller.dungeon.Direction;
 import game.controller.dungeon.TurnController;
 import game.controller.notification.INotification;
 import game.controller.notification.PlayerHealthChanged;
