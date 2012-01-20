@@ -10,7 +10,6 @@ public class Warrior extends Hero
     public Warrior(String name, Point position)
     {
         super(name, position, 5, 5, 3);
-
     }
 
 }

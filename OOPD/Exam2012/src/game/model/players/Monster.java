@@ -117,7 +117,7 @@ public abstract class Monster extends Player
         case DEFAULT:
 
             if (this.doorOnRandomMove == null)
-                this.setRandomDoorAsTarget();
+                this.setRandomDoorAsTarget(); //FIXME do as part of construct
 
             moveDirection = this.getDirection(doorOnRandomMove,
                     MovementPattern.DEFAULT);
@@ -222,6 +222,7 @@ public abstract class Monster extends Player
                 + Math.abs(from.getY() - to.getY());
     }
 
+    // TODO add comments
     private void autonomousChangeRoom(Point newPosition)
     {
         Room newRoom = this.room.getDoors().get(newPosition);

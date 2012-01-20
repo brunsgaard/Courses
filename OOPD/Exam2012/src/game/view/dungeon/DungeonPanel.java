@@ -29,11 +29,11 @@ public class DungeonPanel extends JPanel
 
         JScrollPane roomScrollPane = new JScrollPane(this.room);
         this.pane.addTab(Language.DUNGEON_PANEL_ROOM, roomScrollPane);
-        this.pane.setMnemonicAt(0, KeyEvent.VK_R);
+        this.pane.setMnemonicAt(0, KeyEvent.VK_R); // FIXME replace with custom key codes
 
         JScrollPane mapScrollPane = new JScrollPane(this.map);
         this.pane.addTab(Language.DUNGEON_PANEL_MAP, mapScrollPane);
-        this.pane.setMnemonicAt(1, KeyEvent.VK_M);
+        this.pane.setMnemonicAt(1, KeyEvent.VK_M); // FIXME replace with custom key codes
         
         this.stats = new StatsPanel();
 

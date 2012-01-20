@@ -31,6 +31,7 @@ public class WelcomePanel extends JPanel
     private ChooseHeroCharacterPanel chooseHeroCharacter;
     private JButton startButton;
 
+    // FIXME: cleanup debug code
     public WelcomePanel()
     {
         super();
