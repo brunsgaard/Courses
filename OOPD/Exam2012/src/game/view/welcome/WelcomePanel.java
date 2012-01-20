@@ -31,37 +31,21 @@ public class WelcomePanel extends JPanel
     private ChooseHeroCharacterPanel chooseHeroCharacter;
     private JButton startButton;
 
-    // FIXME: cleanup debug code
     public WelcomePanel()
     {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
 
-        // setBackground(Color.magenta);
-
-        // Title (implement in Language)
         this.title = new JLabel(Language.WELCOME_PANEL_TITLE);
         title.setFont(new Font("Dialog", Font.ITALIC, 40));
-        // this.title.setSize(400, 430);
-        // this.title.setBackground(Color.cyan);
-        // this.title.setOpaque(true);
         this.title.setAlignmentX(CENTER_ALIGNMENT);
 
-        // Description
 
         this.description = new DescriptionPanel(Dungeon.getInstance()
                 .getDescription());
-        // this.description.setBackground(Color.DARK_GRAY);
-        // EnterHeroName
         this.enterHeroName = new EnterHeroNamePanel();
-        // this.enterHeroName.setBackground(Color.RED);
-
-        // ChooseHeroCaracter
         this.chooseHeroCharacter = new ChooseHeroCharacterPanel();
-        // this.chooseHeroCharacter.setBackground(Color.YELLOW);
-
-        // Start Button
         this.startButton = new JButton(Language.WELCOME_PANEL_BUTTON);
         this.startButton.setAlignmentX(CENTER_ALIGNMENT);
         this.startButton.addActionListener(new ActionListener()
@@ -74,7 +58,6 @@ public class WelcomePanel extends JPanel
             }
         });
 
-        // Put it all together
         this.draw();
 
     }

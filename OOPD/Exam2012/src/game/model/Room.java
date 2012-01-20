@@ -49,7 +49,6 @@ public class Room
         return new Bounds(this.topLeft, this.bottomRight);
     }
 
-    // FIXME remove, or convert to static method
     public static boolean isInNeighborRoom(Room room, Point position)
     {
         if (Room.getNeighborRoomFromPoint(room, position) != null)

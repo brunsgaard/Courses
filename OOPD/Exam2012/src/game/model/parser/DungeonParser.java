@@ -29,16 +29,14 @@ public class DungeonParser
     {
         try
         {
-            // TODO try both users homedir and file bundled in res folder
             this.in = new Scanner(new File(System.getProperty("user.home")
                     + "/dungeon.map"));
 
-            // first line in .map must be pointScaleFactor due to no identifier
-            // String
-            Dungeon.getInstance().setPointScaleFactor(in.nextInt());
-
             while (in.hasNext())
             {
+                
+                if (in.hasNextInt()) Dungeon.getInstance().setPointScaleFactor(in.nextInt());
+                
                 String token = in.next();
                 switch (Params.valueOf(token.substring(0, token.length() - 1)))
                 {
@@ -83,8 +81,8 @@ public class DungeonParser
     {
         Point point1 = new Point(x1, y1);
         Point point2 = new Point(x2, y2);
-        Room point1Room = new Room(point1, point2); // FIXME set to null
-        Room point2Room = new Room(point2, point1); // FIXME set to null
+        Room point1Room = null;
+        Room point2Room = null;
 
         for (Room r : Dungeon.getInstance().getRooms())
         {
@@ -101,13 +99,13 @@ public class DungeonParser
 
     public void addMonster(int x, int y, String monsterType)
     {
-        Room monsterRoom = null;
+        Room room = null;
+        Point position = new Point(x, y);
 
         for (Room r : Dungeon.getInstance().getRooms())
         {
-            // FIXME move point construction outside for loop
-            if (r.isInside(new Point(x, y)))
-                monsterRoom = r;
+            if (r.isInside(position))
+                room = r;
         }
         Monster monster = null;
 
@@ -123,10 +121,9 @@ public class DungeonParser
             monster = new Bat(new Point(x, y));
             break;
         }
-        if (monster != null && monsterRoom != null)
+        if (monster != null && room != null)
         {
-            monster.setCurrentRoom(monsterRoom);
-            monsterRoom.getMonsters().add(monster);
+            room.getMonsters().add(monster);
         }
 
     }
