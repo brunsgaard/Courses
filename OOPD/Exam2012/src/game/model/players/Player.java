@@ -22,7 +22,8 @@ public abstract class Player extends
     protected int hitPoints;
     protected Room room;
 
-    public Player(Point position, int unarmedDamage, int healthRegenerationRate, int hitpoints)
+    public Player(Point position, int unarmedDamage,
+            int healthRegenerationRate, int hitpoints)
     {
         this.position = position;
         this.hitPoints = hitpoints;
@@ -39,8 +40,13 @@ public abstract class Player extends
 
     public void regenerate()
     {
-        this.health = Math.min(this.hitPoints, this.health + healthRegenerationRate);
-        this.notifyObservers(new PlayerHealthChanged(this.health));
+        int newHealth = Math.min(this.hitPoints, this.health
+                + healthRegenerationRate);
+        if (newHealth > this.health)
+        { // with potions we can have more health than max hitpoints
+            this.health = newHealth;
+            this.notifyObservers(new PlayerHealthChanged(this.health));
+        }
     }
 
     public Point getPosition()
@@ -86,10 +92,10 @@ public abstract class Player extends
         if (change instanceof TurnEnd)
             this.update((TurnEnd) change);
     }
-    
+
     public void update(TurnStart change)
     {
-        
+
     }
 
     public void update(TurnEnd change)
