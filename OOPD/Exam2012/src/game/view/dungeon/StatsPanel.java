@@ -37,7 +37,8 @@ public class StatsPanel extends JPanel implements Observer<INotification>
         this.armor = new JLabel(Language.STAT_PANEL_ARMOR + "0", JLabel.CENTER);
         this.add(this.armor);
         this.weapon = new JLabel(Language.STAT_PANEL_WEAPON
-                + Dungeon.getInstance().getHero().getDamageLevel(),
+                + Dungeon.getInstance().getHero().getUnarmedDamage() + "x"
+                + Dungeon.getInstance().getHero().getDamageMagnifier(),
                 JLabel.CENTER);
         this.add(this.weapon);
         this.numTurns = 0;
@@ -61,7 +62,8 @@ public class StatsPanel extends JPanel implements Observer<INotification>
     public void update(PlayerWeaponChanged change)
     {
         this.weapon.setText(Language.STAT_PANEL_WEAPON
-                + Dungeon.getInstance().getHero().getDamageLevel());
+                + change.getWeapon().getDamage() + "x"
+                + Dungeon.getInstance().getHero().getDamageMagnifier());
     }
 
     public void update(TurnEnd change)

@@ -44,6 +44,16 @@ public abstract class Hero extends Player
                 .getDamage();
         return damage * damageMagnifier;
     }
+    
+    public int getUnarmedDamage()
+    {
+        return this.unarmedDamage;
+    }
+    
+    public int getDamageMagnifier()
+    {
+        return this.damageMagnifier;
+    }
 
     @Override
     public void takeDamage(int amount)
@@ -84,7 +94,7 @@ public abstract class Hero extends Player
         this.weapon = weapon;
         notifyObservers(new PlayerWeaponChanged(weapon));
     }
-
+    
     public void pickupItem(Weapon weapon)
     {
         this.inventory.add(weapon);
