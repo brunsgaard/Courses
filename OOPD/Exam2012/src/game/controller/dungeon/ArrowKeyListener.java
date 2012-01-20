@@ -14,7 +14,6 @@ public class ArrowKeyListener implements KeyListener
         // Auto-generated method stub
     }
 
-    // TODO i for inventory
     @Override
     public void keyReleased(KeyEvent keyEvent)
     {

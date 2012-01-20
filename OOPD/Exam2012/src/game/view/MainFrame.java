@@ -1,6 +1,7 @@
 package game.view;
 
 import game.controller.dungeon.ArrowKeyListener;
+import game.controller.dungeon.TabKeyListener;
 import game.model.Dungeon;
 import game.model.parser.DungeonParser;
 import game.view.dungeon.DungeonPanel;
@@ -49,6 +50,7 @@ public class MainFrame extends JFrame
         this.setVisible(true);
         this.dungeonPanel.grabFocus();
         this.dungeonPanel.addKeyListener(new ArrowKeyListener());
+        this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
     }
 
     public static MainFrame getInstance()
