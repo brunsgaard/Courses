@@ -1,0 +1,55 @@
+//msn378
+
+src/game/controller/welcome/EnterKeyListenerWP.java             Keylistener (The Enter key)for the welcome Panel.
+src/game/controller/Observer.java                               Observer class fra Slide Puzzle Assignment.
+src/game/controller/Observable.java                             Oberserver from Slide Puzzle Assignment.
+src/game/controller/dungeon/TabKeyListener.java                 Keylistener for keys 'r', 'i' and 'm' for shifting tab.
+src/game/controller/dungeon/Direction.java                      Enum for directions (NORTH, EAST...)
+src/game/controller/dungeon/InventoryActionListener.java        Reacts to actions in the inventory panel (clicking stuff).
+src/game/controller/dungeon/ArrowKeyListener.java               Listens for for input from arrowkey tesulting i a move.
+src/game/controller/dungeon/TurnController.java                 Controls Turns.
+src/game/controller/notification/TurnEnd.java                   Notification class for turn end.
+src/game/controller/notification/PlayerDied.java                Notification class for player died.
+src/game/controller/notification/INotification.java             Interface for notifications.
+src/game/controller/notification/TurnStart.java                 Notification class for turn start.
+src/game/controller/notification/ChangeRoom.java                Notification class for change room.
+src/game/controller/notification/PlayerArmorChanged.java        Notification class for player armor changed.
+src/game/controller/notification/LootItem.java                  Notification class for item looted.
+src/game/controller/notification/PlayerWeaponChanged.java       Notification class for player weapon changed.
+src/game/controller/notification/PlayerMoved.java               Notification class for player moved.
+src/game/controller/notification/PlayerHealthChanged.java       Notification class for player health changed.
+src/game/model/players/monsters/Orc.java                        The Orc type monster.
+src/game/model/players/monsters/Goblin.java                     The Goblin type monster.
+src/game/model/players/monsters/Bat.java                        The Bat type monster.
+src/game/model/players/heroes/Cleric.java                       The Cleric type of hero.
+src/game/model/players/heroes/Mage.java                         The Mage type of hero.
+src/game/model/players/heroes/Warrior.java                      The Warrior type of hero.
+src/game/model/players/Player.java                              The base class for all player.
+src/game/model/players/Hero.java                                The hero base class.
+src/game/model/players/Monster.java                             The monster base class.
+src/game/model/Point.java                                       Represents a point-pair in two-dimentional space.
+src/game/model/Bounds.java                                      Represents a two 'Point's (Point class) and thus the bounds of a square.
+src/game/model/items/Potion.java                                The Potion of type item.
+src/game/model/items/Armor.java                                 The Armor of type item.
+src/game/model/items/Item.java                                  The item base class.
+src/game/model/items/Weapon.java                                The Weapon of type item.
+src/game/model/Room.java                                        The model for a room in the dungeon.
+src/game/model/Dungeon.java                                     The mordel for the dungeon itself.
+src/game/model/parser/Params.java                               Enum used in map parser.
+src/game/model/parser/MonsterSymbols.java                       Enum used in map parser.
+src/game/model/parser/DungeonParser.java                        Parser for map files.
+src/game/model/parser/ItemSymbols.java                          Enum used in map parser.
+src/game/view/welcome/DescriptionPanel.java                     The panel that show the description at the welcome screen.
+src/game/view/welcome/WelcomePanel.java                         The panel shown when game is started.
+src/game/view/welcome/EnterHeroNamePanel.java                   The panel where to type the hero name at the welcome screen.
+src/game/view/welcome/ChooseHeroCharacterPanel.java             The panel that shows the RadioButtons at the welcome screen.
+src/game/view/MainFrame.java                                    The mainframe of the gui, contains the main method.
+src/game/view/dungeon/DungeonPanel.java                         The panel main in the playing state of the program.
+src/game/view/dungeon/RoomPanel.java                            The panel showing the room view in the game.
+src/game/view/dungeon/MapPanel.java                             The panel showing the map view of the game
+src/game/view/dungeon/StatsPanel.java                           The panel in the bottom og the screen in the playin.g state of the game.
+src/game/view/dungeon/TileLoader.java                           The util for loading tiles for the roomview.
+src/game/view/dungeon/InventoryPanel.java                       The panel showing the inventory in the playing state of the game.
+src/game/view/Language.java                                     The Languagefile for the game.
+res/*                                                           Some images for the room view.
+overview.txt                                                    The file you are reading right now.
