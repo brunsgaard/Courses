@@ -1,3 +1,4 @@
+//msn378
 package game.controller.notification;
 
 public class PlayerArmorChanged implements INotification

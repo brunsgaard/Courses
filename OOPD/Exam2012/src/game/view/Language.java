@@ -1,3 +1,4 @@
+//msn378
 package game.view;
 
 public final class Language
