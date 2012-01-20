@@ -11,6 +11,10 @@ import game.controller.notification.TurnStart;
 import game.model.Point;
 import game.model.Room;
 
+/**
+ * Class to represent properties mutual for all sub classes. 
+ * 
+ */
 public abstract class Player extends
         Observable<INotification, Observer<INotification>> implements
         Observer<INotification>
@@ -43,7 +47,8 @@ public abstract class Player extends
         int newHealth = Math.min(this.hitPoints, this.health
                 + healthRegenerationRate);
         if (newHealth > this.health)
-        { // with potions we can have more health than max hitpoints
+        {
+            // with potions we can have more health than max hitpoints
             this.health = newHealth;
             this.notifyObservers(new PlayerHealthChanged(this.health));
         }

@@ -17,6 +17,11 @@ public abstract class Monster extends Player
 
 {
     private Point doorOnRandomMove;
+    
+    public enum MovementPattern
+    {
+        DEFAULT, HERO_IN_ROOM, HERO_IN_NEXT_ROOM
+    }
 
     public Monster(Point position, int unarmedDamage,
             int healthRegenerationRate, int hitPoints)
