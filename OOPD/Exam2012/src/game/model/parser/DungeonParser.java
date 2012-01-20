@@ -12,8 +12,7 @@ import game.model.players.monsters.Bat;
 import game.model.players.monsters.Goblin;
 import game.model.players.monsters.Orc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class DungeonParser
@@ -24,49 +23,40 @@ public class DungeonParser
     {
     }
 
-    public void parseMapFile()
+    public void parseMapFile(InputStream input)
 
     {
-        try
-        {
-            this.in = new Scanner(new File(System.getProperty("user.home")
-                    + "/dungeon.map"));
+        this.in = new Scanner(input);
 
-            while (in.hasNext())
+        while (in.hasNext())
+        {
+
+            if (in.hasNextInt())
+                Dungeon.getInstance().setPointScaleFactor(in.nextInt());
+
+            String token = in.next();
+            switch (Params.valueOf(token.substring(0, token.length() - 1)))
             {
-                
-                if (in.hasNextInt()) Dungeon.getInstance().setPointScaleFactor(in.nextInt());
-                
-                String token = in.next();
-                switch (Params.valueOf(token.substring(0, token.length() - 1)))
-                {
-                case room:
+            case room:
 
-                    this.addRoom(in.nextInt(), in.nextInt(), in.nextInt(),
-                            in.nextInt());
-                    break;
-                case door:
+                this.addRoom(in.nextInt(), in.nextInt(), in.nextInt(),
+                        in.nextInt());
+                break;
+            case door:
 
-                    this.addDoor(in.nextInt(), in.nextInt(), in.nextInt(),
-                            in.nextInt());
-                    break;
-                case monster:
+                this.addDoor(in.nextInt(), in.nextInt(), in.nextInt(),
+                        in.nextInt());
+                break;
+            case monster:
 
-                    this.addMonster(in.nextInt(), in.nextInt(), in.next());
-                    break;
-                case item:
-                    this.addItem(in.nextInt(), in.nextInt(), in.next(),
-                            in.nextInt());
+                this.addMonster(in.nextInt(), in.nextInt(), in.next());
+                break;
+            case item:
+                this.addItem(in.nextInt(), in.nextInt(), in.next(),
+                        in.nextInt());
 
-                    break;
-                }
-
+                break;
             }
-        } catch (FileNotFoundException e1)
-        {
-            System.out.println("Woops.. something went wrong while"
-                    + " loading dungeon.map, please place a "
-                    + "valid dungeon.map file in your homedir ");
 
         }
     }
@@ -152,7 +142,7 @@ public class DungeonParser
             break;
         }
         if (item != null && itemRoom != null)
-            itemRoom.getItems().put(new Point(x, y),item);
+            itemRoom.getItems().put(new Point(x, y), item);
 
     }
 
