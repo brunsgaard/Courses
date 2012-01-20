@@ -104,7 +104,8 @@ public abstract class Monster extends Player
         }
 
         // If position is door and it's the one we're looking for change room
-        if (Dungeon.getInstance().isDoor(endPosition)
+       // if (Dungeon.getInstance().isDoor(endPosition)
+        if (this.room.checkForDoor(endPosition)
                 && endPosition.equals(target))
         {
             this.autonomousChangeRoom(endPosition);

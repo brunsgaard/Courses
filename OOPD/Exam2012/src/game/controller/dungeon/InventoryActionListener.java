@@ -1,9 +1,10 @@
-package game.view.dungeon;
+package game.controller.dungeon;
 
 import game.model.Dungeon;
 import game.model.items.Item;
 import game.model.items.Potion;
 import game.model.items.Weapon;
+import game.view.dungeon.InventoryPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
