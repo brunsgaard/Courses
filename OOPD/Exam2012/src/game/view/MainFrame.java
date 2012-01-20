@@ -1,3 +1,4 @@
+//msn378
 package game.view;
 
 import game.controller.dungeon.ArrowKeyListener;
@@ -28,9 +29,6 @@ public class MainFrame extends JFrame
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // set up dungeon
-        // this.setExtendedState(MAXIMIZED_BOTH); // maximize window
-
         this.welcomePanel = new WelcomePanel();
         this.setContentPane(this.welcomePanel);
 
@@ -51,6 +49,10 @@ public class MainFrame extends JFrame
         this.dungeonPanel.grabFocus();
         this.dungeonPanel.addKeyListener(new ArrowKeyListener(this.dungeonPanel));
         this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
+    }
+    
+    public void reInitialize(){
+        MainFrame.instance = new MainFrame();
     }
 
     public static MainFrame getInstance()
