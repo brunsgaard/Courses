@@ -22,9 +22,8 @@ public class MainFrame extends JFrame
         super(Language.MAIN_FRAME_TITLE);
         this.dungeonParser = new DungeonParser();
         dungeonParser.parseMapFile();
-        // :TODO: Dungeon Description see OODP forum discussion in regard to
-        // move description to map file and implement in parser
-        Dungeon.getInstance().setDescription(Language.WELCOME_PANEL_GAME_DESCRIPTION);
+        Dungeon.getInstance().setDescription(
+                Language.WELCOME_PANEL_GAME_DESCRIPTION);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

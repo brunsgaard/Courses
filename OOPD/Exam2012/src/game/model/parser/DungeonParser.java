@@ -92,8 +92,8 @@ public class DungeonParser
             if (r.isInside(point2))
                 point2Room = r;
         }
-        point1Room.addDoor(point2, point2Room);
-        point2Room.addDoor(point1, point1Room);
+        point1Room.getDoors().put(point2, point2Room);
+        point2Room.getDoors().put(point1, point1Room);
         Dungeon.getInstance().addToAllDoors(point1);
         Dungeon.getInstance().addToAllDoors(point2);
     }
@@ -125,7 +125,7 @@ public class DungeonParser
         if (monster != null && monsterRoom != null)
         {
             monster.setCurrentRoom(monsterRoom);
-            monsterRoom.addMonster(monster);
+            monsterRoom.getMonsters().put(new Point(x,y), monster);
         }
 
     }
@@ -151,7 +151,7 @@ public class DungeonParser
             break;
         }
         if (item != null && itemRoom != null)
-            itemRoom.addItem(item);
+            itemRoom.getItems().put(new Point(x, y),item);
 
     }
 

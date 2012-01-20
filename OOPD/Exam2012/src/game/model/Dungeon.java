@@ -130,28 +130,28 @@ public class Dungeon
 
     }
 
-    public Monster getMonsterFromPoint(Point position)
-    {
-        for (Room r : this.rooms)
-        {
-
-            for (Monster m : r.getMonsters())
-            {
-                if (m.getPosition().equals(position))
-                    return m;
-            }
-        }
-        return null;
-    }
-
-    public boolean isMonsterOnPosition(Point position)
-    {
-        if (this.getMonsterFromPoint(position) != null)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
-    }
+//    public Monster getMonsterFromPoint(Point position)
+//    {
+//        for (Room r : this.rooms)
+//        {
+//
+//            for (Monster m : r.getMonsters().values())
+//            {
+//                if (m.getPosition().equals(position))
+//                    return m;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public boolean isMonsterOnPosition(Point position)
+//    {
+//        if (this.getMonsterFromPoint(position) != null)
+//        {
+//            return true;
+//        } else
+//        {
+//            return false;
+//        }
+//    }
 }

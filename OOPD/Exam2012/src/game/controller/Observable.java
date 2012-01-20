@@ -1,7 +1,13 @@
 package game.controller;
 
 import java.util.LinkedList;
-
+/**
+ * 
+ * @author DIKU OOPD instructors
+ *
+ * @param <TypeOfValue>
+ * @param <TypeOfObserver>
+ */
 public class Observable<TypeOfValue, TypeOfObserver extends Observer<TypeOfValue>>
 {
     private LinkedList<TypeOfObserver> observers;

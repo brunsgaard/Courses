@@ -4,7 +4,6 @@ import game.model.items.Item;
 import game.model.players.Monster;
 import game.model.players.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Room
@@ -13,66 +12,26 @@ public class Room
     private Point bottomRight;
     private HashMap<Point, Room> doors;
 
-    private ArrayList<Item> items;
-    private ArrayList<Monster> monsters;
+    private HashMap<Point, Item> items;
+    private HashMap<Point, Monster> monsters;
 
     public Room(Point topLeft, Point bottomRight)
     {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
         this.doors = new HashMap<Point, Room>();
-        this.items = new ArrayList<Item>();
-        this.monsters = new ArrayList<Monster>();
+        this.items = new HashMap<Point, Item>();
+        this.monsters = new HashMap<Point, Monster>();
     }
 
-    public HashMap<Point, Room> getDoors()
-    {
-        return doors;
-    }
-
-    public void addDoor(Point point, Room room)
-    {
-        this.doors.put(point, room);
-    }
-
-    public ArrayList<Monster> getMonsters()
-    {
-        return monsters;
-    }
-
-    public void addMonster(Monster monster)
-    {
-        this.monsters.add(monster);
-    }
-
+    // method name and input names forced
+    // by exam description.
     public void removePlayer(Player player)
     {
         if (player instanceof Monster)
         {
-            int index = this.monsters.indexOf(player);
-            if (index == -1)
-                return;
-            this.monsters.remove(index);
+            this.getMonsters().remove(player.getPosition());
         }
-    }
-
-    public ArrayList<Item> getItems()
-    {
-        return items;
-    }
-
-    public void addItem(Item item)
-    {
-        this.items.add(item);
-    }
-
-    public boolean removeItem(Item item)
-    {
-        int index = this.items.indexOf(item);
-        if (index == -1)
-            return false;
-        this.items.remove(index);
-        return true;
     }
 
     public boolean isInside(Point inputPoint)
@@ -90,9 +49,9 @@ public class Room
     }
 
     // FIXME remove, or convert to static method
-    public boolean isInNeighborRoom(Point position) 
+    public static boolean isInNeighborRoom(Room room, Point position)
     {
-        if (this.getNeighborRoomFromPoint(position) != null)
+        if (Room.getNeighborRoomFromPoint(room, position) != null)
         {
             return true;
         } else
@@ -101,30 +60,77 @@ public class Room
         }
     }
 
-    // FIXME remove, or convert to static method
-    public Room getNeighborRoomFromPoint(Point position) 
+    public static Room getNeighborRoomFromPoint(Room room, Point position)
     {
-        for (Room r : this.doors.values())
+        for (Room r : room.getDoors().values())
         {
             if (r.isInside(position))
                 return r;
         }
         return null;
     }
-    
-    public Item loot(Point position)
+
+    public static Item loot(Room room, Point position)
     {
-        for (Item i : this.items)
+        Item item = room.getItems().get(position);
+        room.getItems().remove(position);
+        return item;
+
+    }
+
+    public boolean checkForDoor(Point position)
+    {
+        return this.doors.containsKey(position);
+    }
+
+    public static Monster getMonsterFromPoint(Room room, Point position)
+    {
+        for (Room r : room.getDoors().values())
         {
-            if (i.getPosition().equals(position))
-                return i;
+
+            for (Monster m : r.getMonsters().values())
+            {
+                if (m.getPosition().equals(position))
+                    return m;
+            }
         }
         return null;
     }
 
-    // FIXME remove, or convert to static method
-    public boolean checkForDoor(Point position)
+    public static boolean isMonsterOnPosition(Room room, Point position)
     {
-        return this.doors.containsKey(position);
+        if (Room.getMonsterFromPoint(room, position) != null)
+            return true;
+        return false;
+    }
+
+    public HashMap<Point, Room> getDoors()
+    {
+        return doors;
+    }
+
+    public void setDoors(HashMap<Point, Room> doors)
+    {
+        this.doors = doors;
+    }
+
+    public HashMap<Point, Item> getItems()
+    {
+        return items;
+    }
+
+    public void setItems(HashMap<Point, Item> items)
+    {
+        this.items = items;
+    }
+
+    public HashMap<Point, Monster> getMonsters()
+    {
+        return monsters;
+    }
+
+    public void setMonsters(HashMap<Point, Monster> monsters)
+    {
+        this.monsters = monsters;
     }
 }
