@@ -1,12 +1,19 @@
 package game.controller.dungeon;
 
 import game.model.Dungeon;
+import game.view.dungeon.DungeonPanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class ArrowKeyListener implements KeyListener
 {
+    private DungeonPanel panel;
+    
+    public ArrowKeyListener(DungeonPanel panel)
+    {
+        this.panel = panel;
+    }
 
     @Override
     public void keyPressed(KeyEvent keyEvent)
@@ -17,6 +24,7 @@ public class ArrowKeyListener implements KeyListener
     @Override
     public void keyReleased(KeyEvent keyEvent)
     {
+        if (this.panel.isInventoryOpen()) return;
         if (keyEvent.getKeyCode() == KeyEvent.VK_UP)
         {
             if (Dungeon.getInstance().getHero().tryMove(Direction.NORTH))

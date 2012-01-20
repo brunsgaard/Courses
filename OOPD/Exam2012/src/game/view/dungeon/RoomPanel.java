@@ -27,6 +27,12 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
 
+/**
+ * Draw the current room using graphical tiles loaded from PNGs. Hooks into the
+ * models through observer notifications. Caches the Room raster representation
+ * in a HashMap for performance. Since Room has no hashCode or equals override
+ * it can't guarantee against duplicates but for caching purposes this is okay.
+ */
 public class RoomPanel extends JPanel implements Observer<INotification>
 {
     private static final long serialVersionUID = -4264054111483744630L;

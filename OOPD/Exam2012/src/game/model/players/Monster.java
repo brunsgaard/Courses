@@ -13,15 +13,21 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Base class for all Monsters. Implements monster movement and damage. Monsters
+ * will move according to three different patterns; DEFAULT, HERO_IN_ROOM or
+ * HERO_IN_NEXT_ROOM. The default pattern picks a door at random and moves
+ * through it. HERO_IN* moves towards the hero, eventually damaging the hero.
+ */
 public abstract class Monster extends Player
-
 {
-    private Point doorOnRandomMove;
-    
     public enum MovementPattern
     {
         DEFAULT, HERO_IN_ROOM, HERO_IN_NEXT_ROOM
     }
+
+    private Point doorOnRandomMove;
+    private MovementPattern movementPattern;
 
     public Monster(Point position, int unarmedDamage,
             int healthRegenerationRate, int hitPoints)
@@ -30,6 +36,7 @@ public abstract class Monster extends Player
         this.room = Dungeon.getInstance().getRoom(position);
         this.doorOnRandomMove = null;
         this.setRandomDoorAsTarget();
+        this.movementPattern = MovementPattern.DEFAULT;
     }
 
     @Override
@@ -48,175 +55,117 @@ public abstract class Monster extends Player
         System.out.println("Monsters Health: " + this.getHealth());
     }
 
+    /**
+     * Moves the monster autonomously by following these steps. 1) Selects a
+     * movement pattern and target based on hero location. 2) calculate the
+     * optimal movement direction. 3) perform move.
+     */
     public void makeAutonomousMove()
     {
         Hero hero = Dungeon.getInstance().getHero();
-        MovementPattern movementPattern = MovementPattern.DEFAULT;
 
+        // Initialize
         Direction moveDirection = null;
         Point endPosition = null;
+        Point target = null;
 
+        // Select movement pattern and set target
         if (this.room.isInside(hero.getPosition()))
-            movementPattern = MovementPattern.HERO_IN_ROOM;
-        if (Room.isInNeighborRoom(room, hero.getPosition()))
-            movementPattern = MovementPattern.HERO_IN_NEXT_ROOM;
-
-        switch (movementPattern)
         {
-        case HERO_IN_ROOM:
-
-            moveDirection = this.getDirection(hero.getPosition(),
-                    MovementPattern.HERO_IN_ROOM);
-
-            endPosition = Point.oneStep(this.position, moveDirection);
-
-            if (moveDirection == null)
-                return;
-
-            if (endPosition.equals(hero.getPosition()))
-            {
-                hero.takeDamage(this.getDamageLevel());
-
-                if (hero.isDead())
-                {
-                    System.out.println("Hero Killed");
-                    this.notifyObservers(new PlayerDied());
-                }
-                return;
-            }
-
-            if (this.manhattenDistance(hero.getPosition(), endPosition) < this
-                    .manhattenDistance(hero.getPosition(), this.getPosition()))
-            {
-                this.position = endPosition;
-                this.notifyObservers(new PlayerMoved(endPosition));
-            }
-
-            break;
-
-        case HERO_IN_NEXT_ROOM:
-
-            Point doorToHero = null;
-
+            this.movementPattern = MovementPattern.HERO_IN_ROOM;
+            target = hero.getPosition();
+        } else if (Room.isInNeighborRoom(room, hero.getPosition()))
+        {
+            this.movementPattern = MovementPattern.HERO_IN_NEXT_ROOM;
             for (Point p : this.room.getDoors().keySet())
             {
                 if (hero.getCurrentRoom().isInside(p))
                 {
-                    doorToHero = p;
+                    target = p;
+                    break;
                 }
             }
-            moveDirection = this.getDirection(doorToHero,
-                    MovementPattern.HERO_IN_NEXT_ROOM);
-            endPosition = Point.oneStep(this.position, moveDirection);
-
-            if (moveDirection == null)
-                return;
-
-            if (endPosition.equals(doorToHero))
-            {
-                this.autonomousChangeRoom(doorToHero);
-            }
-
-            if (this.manhattenDistance(doorToHero, endPosition) < this
-                    .manhattenDistance(doorToHero, this.getPosition()))
-            {
-                this.position = endPosition;
-                this.notifyObservers(new PlayerMoved(endPosition));
-            }
-
-            break;
-
-        case DEFAULT:
-
-            moveDirection = this.getDirection(doorOnRandomMove,
-                    MovementPattern.DEFAULT);
-
-            if (moveDirection == null)
-                return;
-
-            endPosition = Point.oneStep(this.position, moveDirection);
-
-            if (endPosition.equals(doorOnRandomMove))
-            {
-                this.autonomousChangeRoom(doorOnRandomMove);
-            }
-
-            this.position = endPosition;
-
-            this.notifyObservers(new PlayerMoved(endPosition));
-
-            break;
-        }
-
-    }
-
-    private boolean isValidPosition(Point desiredEndPosition,
-            MovementPattern movementPattern)
-    {
-        boolean returnValue = false;
-
-        switch (movementPattern)
+        } else
         {
-        case HERO_IN_ROOM:
-            returnValue = this.room.isInside(desiredEndPosition)
-                    && (!Dungeon.getInstance().isDoor(desiredEndPosition)
-                            || desiredEndPosition.equals(Dungeon.getInstance()
-                                    .getHero().getPosition()) || this.room
-                                .isInside(Dungeon.getInstance().getHero()
-                                        .getPosition()))
-                    && !Room.isMonsterOnPosition(room, desiredEndPosition);
-            break;
-
-        case HERO_IN_NEXT_ROOM:
-            returnValue = (this.room.checkForDoor(desiredEndPosition) || this.room
-                    .isInside(desiredEndPosition))
-                    && !Room.isMonsterOnPosition(room, desiredEndPosition)
-                    && !Dungeon.getInstance().getHero().getPosition()
-                            .equals(desiredEndPosition);
-            break;
-
-        case DEFAULT:
-            returnValue = ((this.room.checkForDoor(desiredEndPosition) || this.room
-                    .isInside(desiredEndPosition)))
-
-            // TODO: what happens if two monsters meet in random walk an each
-            // side of a door.. Testing needed..
-                    && !Room.isMonsterOnPosition(room, desiredEndPosition);
-            break;
+            target = this.doorOnRandomMove;
         }
-        return returnValue;
+
+        // Calculate optimal direction
+        moveDirection = this.getDirection(target);
+        if (moveDirection == null)
+            return; // stay put
+
+        // Perform move
+        endPosition = Point.oneStep(this.position, moveDirection);
+        if (endPosition.equals(hero.getPosition()))
+        {
+            hero.takeDamage(this.getDamageLevel());
+            return;
+        }
+
+        // If position is door and it's the one we're looking for change room
+        if (Dungeon.getInstance().isDoor(endPosition)
+                && endPosition.equals(target))
+        {
+            this.autonomousChangeRoom(endPosition);
+        }
+
+        // Set new position and notify
+        this.position = endPosition;
+        this.notifyObservers(new PlayerMoved(endPosition));
     }
 
-    public Direction getDirection(Point position,
-            MovementPattern movementPattern)
+    /**
+     * Check if: 1) the desired position is a door OR inside room 2) there isn't
+     * another monster there already. Special case: if hero is standing on the
+     * door don't go through it, instead wait for him to leave.
+     */
+    private boolean isValidPosition(Point desiredEndPosition)
     {
-        Point pn = Point.oneStep(this.position,Direction.NORTH);
-        Point ps = Point.oneStep(this.position,Direction.SOUTH);
-        Point pe = Point.oneStep(this.position,Direction.EAST);
-        Point pw = Point.oneStep(this.position,Direction.WEST);
+        if (this.movementPattern == MovementPattern.HERO_IN_NEXT_ROOM
+                && Dungeon.getInstance().getHero().getPosition()
+                        .equals(desiredEndPosition))
+            return false;
+        return (this.room.checkForDoor(desiredEndPosition) || this.room
+                .isInside(desiredEndPosition))
+                && !Room.isMonsterOnPosition(room, desiredEndPosition);
+    }
+
+    /**
+     * Calculate manhatten distance for all four directions if the direction
+     * results in a valid position.
+     * 
+     * @return optimal direction or null if the optimal is to stay put
+     */
+    private Direction getDirection(Point position)
+    {
+        Point pn = Point.oneStep(this.position, Direction.NORTH);
+        Point ps = Point.oneStep(this.position, Direction.SOUTH);
+        Point pe = Point.oneStep(this.position, Direction.EAST);
+        Point pw = Point.oneStep(this.position, Direction.WEST);
         int nd = this.manhattenDistance(position, pn);
         int sd = this.manhattenDistance(position, ps);
         int ed = this.manhattenDistance(position, pe);
         int wd = this.manhattenDistance(position, pw);
 
         Direction shortestDirection = null;
-        int shortestDistance = 301;
-        if (nd < shortestDistance && this.isValidPosition(pn, movementPattern))
+        int shortestDistance = this.manhattenDistance(this.position, position);
+        if (nd < shortestDistance && this.isValidPosition(pn))
         {
             shortestDirection = Direction.NORTH;
             shortestDistance = nd;
         }
-        if (sd < shortestDistance && this.isValidPosition(ps, movementPattern))
+        if (sd < shortestDistance && this.isValidPosition(ps))
         {
             shortestDistance = sd;
             shortestDirection = Direction.SOUTH;
         }
-        if (ed < shortestDistance && this.isValidPosition(pe, movementPattern))
+        if (ed < shortestDistance && this.isValidPosition(pe))
         {
             shortestDistance = ed;
             shortestDirection = Direction.EAST;
         }
-        if (wd < shortestDistance && this.isValidPosition(pw, movementPattern))
+        if (wd < shortestDistance && this.isValidPosition(pw))
         {
             shortestDistance = wd;
             shortestDirection = Direction.WEST;
@@ -230,7 +179,12 @@ public abstract class Monster extends Player
                 + Math.abs(from.getY() - to.getY());
     }
 
-    // TODO add comments
+    /**
+     * Before the monster changes rooms, examine the new room's door's and
+     * remove the door it came from unless it's the only door. Chooses a new
+     * random door for the default move pattern. Also updates the monster's
+     * current room.
+     */
     private void autonomousChangeRoom(Point newPosition)
     {
         Room newRoom = this.room.getDoors().get(newPosition);

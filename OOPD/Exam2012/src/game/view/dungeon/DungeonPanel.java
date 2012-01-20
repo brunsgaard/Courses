@@ -9,6 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+/**
+ * Panel with three tabbed scroll panes containing; Room, Map and Inventory.
+ * Also adds a stats bar to the bottom
+ */
 public class DungeonPanel extends JPanel
 {
     private static final long serialVersionUID = 6591358346723891464L;
@@ -62,5 +66,10 @@ public class DungeonPanel extends JPanel
     public void showInventory()
     {
         this.pane.setSelectedComponent(this.inventoryScroll);
+    }
+    
+    public boolean isInventoryOpen()
+    {
+        return this.pane.getSelectedComponent() == this.inventoryScroll;
     }
 }

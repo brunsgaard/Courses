@@ -12,8 +12,12 @@ import game.model.Point;
 import game.model.Room;
 
 /**
- * Class to represent properties mutual for all sub classes. 
- * 
+ * Base class for all players (Hero and Monsters alike). Implements multiple
+ * common features such as regeneration and turn notifications. Subclasses
+ * should override the update method if they need to perform certain actions on
+ * TurnStart notifications. When overriding TurnEnd remember to call super().
+ * Since this class extends Obserable other classes that need to observe the
+ * players properties (such as health, armor etc) should attach to the notification loop.
  */
 public abstract class Player extends
         Observable<INotification, Observer<INotification>> implements
@@ -59,12 +63,11 @@ public abstract class Player extends
         return this.position;
     }
 
-    public boolean tryMove(Direction direction)
-    {
-        // Try move is a "Hero only" and , hence it
-        // is moved to the hero class.
-        return false;
-    }
+    // Try move is hero only, so it's moved to the Hero class
+    // public boolean tryMove(Direction direction)
+    // {
+    // return false;
+    // }
 
     public int getHealth()
     {

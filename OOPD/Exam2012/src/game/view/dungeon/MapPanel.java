@@ -27,7 +27,10 @@ import java.awt.image.Raster;
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
 
-
+/**
+ * Draw the entire dungeon using only AWT Graphics2D. Hooks into the models
+ * through observer notifications.
+ */
 public class MapPanel extends JPanel implements Observer<INotification>
 {
     private static final long serialVersionUID = -539579546590467691L;

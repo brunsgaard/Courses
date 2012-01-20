@@ -49,7 +49,7 @@ public class MainFrame extends JFrame
 
         this.setVisible(true);
         this.dungeonPanel.grabFocus();
-        this.dungeonPanel.addKeyListener(new ArrowKeyListener());
+        this.dungeonPanel.addKeyListener(new ArrowKeyListener(this.dungeonPanel));
         this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
     }
 

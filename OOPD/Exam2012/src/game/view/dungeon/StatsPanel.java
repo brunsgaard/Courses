@@ -68,7 +68,7 @@ public class StatsPanel extends JPanel implements Observer<INotification>
 
     public void update(TurnEnd change)
     {
-        this.turns.setText(Language.STAT_PANEL_TURNS + numTurns++);
+        this.turns.setText(Language.STAT_PANEL_TURNS + ++numTurns);
     }
 
     public void update(INotification change)

@@ -61,8 +61,10 @@ public abstract class Hero extends Player
         if (this.armor == null)
         {
             this.health -= amount;
-            if (this.isDead())
+            if (this.isDead()) {
+                System.out.println("Hero killed!");
                 this.notifyObservers(new PlayerDied());
+            }
             this.notifyObservers(new PlayerHealthChanged(this.health));
             return;
         }
@@ -71,8 +73,10 @@ public abstract class Hero extends Player
         {
             this.health += newArmorLevel;
             this.notifyObservers(new PlayerHealthChanged(this.health));
-            if (this.isDead())
+            if (this.isDead()) {
+                System.out.println("Hero killed!");
                 this.notifyObservers(new PlayerDied());
+            }
             this.armor = null;
             this.notifyObservers(new PlayerArmorChanged(0));
         } else
