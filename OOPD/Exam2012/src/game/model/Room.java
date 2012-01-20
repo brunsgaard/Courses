@@ -77,7 +77,6 @@ public class Room
         return true;
     }
 
-
     public boolean isInside(Point inputPoint)
     {
         boolean insideX = this.topLeft.getX() <= inputPoint.getX()

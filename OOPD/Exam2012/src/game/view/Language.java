@@ -10,5 +10,24 @@ public final class Language
     public static final String MAIN_FRAME_TITLE = "The Dungeon game";
     public static final String WELCOME_PANEL_BUTTON = "Weee.. let's go!!";
     public static final String WELCOME_PANEL_TITLE = "The DungeonGame";
+    public static final String WELCOME_PANE_CLERIC = "Cleric";
+    public static final String WELCOME_PANE_WARRIOR = "Warrior";
+    public static final String WELCOME_PANE_MAGE = "Mage";
+    public static final String WELCOME_PANE_CLERIC_STATS = "<html> Health Regeneration Rate: 20 <br /> "
+            + "Damage magnifier: 1 <html>";
+    public static final String WELCOME_PANE_WARRIOR_STATS = "<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>";
+    public static final String WELCOME_PANE_MAGE_STATS = "<html> Health Regeneration Rate: 10 <br /> "
+            + "Damage magnifier: 2 <html>";
+   
+    
+    public static final String STAT_PANEL_HP = "HP: ";
+    public static final String STAT_PANEL_ARMOR = "Armor: ";
+    public static final String STAT_PANEL_WEAPON = "Weapon ";
+    public static final String STAT_PANEL_TURNS = "Turns ";
+    
+    public static final String DUNGEON_PANEL_ROOM= "Room";
+    public static final String DUNGEON_PANEL_MAP = "Map";
+    
+    
     
 }

@@ -7,10 +7,8 @@ import game.model.players.Monster;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
-
 public class Dungeon
 {
-
     private String description;
     private Hero hero;
 
@@ -24,10 +22,11 @@ public class Dungeon
         this.rooms = new ArrayList<Room>();
         this.allDoors = new ArrayList<Point>();
     }
-    
+
     public static Dungeon getInstance()
     {
-        if (Dungeon.instance == null) Dungeon.instance = new Dungeon();
+        if (Dungeon.instance == null)
+            Dungeon.instance = new Dungeon();
         return Dungeon.instance;
     }
 
@@ -49,9 +48,8 @@ public class Dungeon
     public void setHero(Hero hero)
     {
         this.hero = hero;
-        // TODO: Maybe - Write dynamic function searching for room
-        // depending on where the players position.
-        hero.setCurrentRoom(Dungeon.getInstance().getRoom(new Point(0, 0)));
+        this.hero
+                .setCurrentRoom(Dungeon.getInstance().getRoom(new Point(0, 0)));
     }
 
     public ArrayList<Room> getRooms()
@@ -68,7 +66,7 @@ public class Dungeon
         }
         return null;
     }
-    
+
     public Bounds getBounds()
     {
         int minX = -1;
@@ -78,10 +76,14 @@ public class Dungeon
         for (Room r : this.getRooms())
         {
             Bounds b = r.getBounds();
-            if (minX == -1 || b.getTopLeft().getX() < minX) minX = b.getTopLeft().getX();
-            if (maxX == -1 || b.getBottomRight().getX() > maxX) maxX = b.getBottomRight().getX();
-            if (minY == -1 || b.getTopLeft().getY() < minY) minY = b.getTopLeft().getY();
-            if (maxY == -1 || b.getBottomRight().getY() > maxY) maxY = b.getBottomRight().getY();
+            if (minX == -1 || b.getTopLeft().getX() < minX)
+                minX = b.getTopLeft().getX();
+            if (maxX == -1 || b.getBottomRight().getX() > maxX)
+                maxX = b.getBottomRight().getX();
+            if (minY == -1 || b.getTopLeft().getY() < minY)
+                minY = b.getTopLeft().getY();
+            if (maxY == -1 || b.getBottomRight().getY() > maxY)
+                maxY = b.getBottomRight().getY();
         }
         return new Bounds(new Point(minX, minY), new Point(maxX, maxY));
     }
@@ -107,46 +109,45 @@ public class Dungeon
             this.pointScaleFactor = pointScaleFactor;
         }
     }
-    
-    public void addToAllDoors(Point point){
+
+    public void addToAllDoors(Point point)
+    {
         this.allDoors.add(point);
     }
-    
-    public boolean isDoor(Point point){
+
+    public boolean isDoor(Point point)
+    {
         return this.allDoors.contains(point);
-        
+
     }
-    
+
     public Item loot(Point position)
     {
         // method moved to Room Class. If placed on dungeon
         // the game have for each move search all roomes in the
         // dungeon for items.
-        // (because Dungeon is a singelton we could call 
+        // (because Dungeon is a singelton we could call
         // Dungeon.getInstance.getHero.getCurrentRoom
-        // and use this and at the seams more 
+        // and use this and at the seams more
         // correct to place it the function in the
         // room class)
         // this way the game only have to check one room.
         return null;
-        
+
     }
-    
+
     public Monster getMonsterFromPoint(Point position)
     {
+        for (Room r : this.rooms)
+        {
 
-        for (Room r: this.rooms){
-            
             for (Monster m : r.getMonsters())
             {
                 if (m.getPosition().equals(position))
                     return m;
             }
         }
-            
-        
         return null;
-
     }
 
     public boolean isMonsterOnPosition(Point position)
@@ -156,10 +157,7 @@ public class Dungeon
             return true;
         } else
         {
-
             return false;
         }
-
     }
-
 }

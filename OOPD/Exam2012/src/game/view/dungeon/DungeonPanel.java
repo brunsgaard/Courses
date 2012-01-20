@@ -1,5 +1,7 @@
 package game.view.dungeon;
 
+import game.view.Language;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -26,11 +28,11 @@ public class DungeonPanel extends JPanel
         this.map = new MapPanel();
 
         JScrollPane roomScrollPane = new JScrollPane(this.room);
-        this.pane.addTab("Room", roomScrollPane);
+        this.pane.addTab(Language.DUNGEON_PANEL_ROOM, roomScrollPane);
         this.pane.setMnemonicAt(0, KeyEvent.VK_R);
 
         JScrollPane mapScrollPane = new JScrollPane(this.map);
-        this.pane.addTab("Map", mapScrollPane);
+        this.pane.addTab(Language.DUNGEON_PANEL_MAP, mapScrollPane);
         this.pane.setMnemonicAt(1, KeyEvent.VK_M);
         
         this.stats = new StatsPanel();

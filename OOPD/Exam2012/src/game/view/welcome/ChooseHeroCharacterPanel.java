@@ -1,6 +1,7 @@
 package game.view.welcome;
 
 import game.controller.welcome.EnterKeyListenerWP;
+import game.view.Language;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -37,10 +38,10 @@ public class ChooseHeroCharacterPanel extends JPanel
         this.HeroDescription = new JLabel();
         this.HeroDescription.setFont(new Font("Dialog", Font.BOLD, 15));
 
-        this.warriorButton = new JRadioButton("Warrior");
+        this.warriorButton = new JRadioButton(Language.WELCOME_PANE_WARRIOR);
 
-        this.clericButton = new JRadioButton("Cleric");
-        this.mageButton = new JRadioButton("Mage");
+        this.clericButton = new JRadioButton(Language.WELCOME_PANE_CLERIC);
+        this.mageButton = new JRadioButton(Language.WELCOME_PANE_MAGE);
 
         this.groupOfHeroButtons = new ButtonGroup();
 
@@ -54,9 +55,9 @@ public class ChooseHeroCharacterPanel extends JPanel
 
         // Set default
         this.warriorButton.setSelected(true);
-        this.setSelectedHero("Warrior");
+        this.setSelectedHero(Language.WELCOME_PANE_WARRIOR);
         this.HeroDescription
-                .setText("<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>");
+                .setText(Language.WELCOME_PANE_WARRIOR_STATS);
 
         // add
         add(this.buttonPane);
@@ -90,8 +91,8 @@ public class ChooseHeroCharacterPanel extends JPanel
             public void actionPerformed(ActionEvent actionEvent)
             {
                 HeroDescription
-                        .setText("<html> Health Regeneration Rate: 5 <br /> Damage magnifier: 3 <html>");
-                setSelectedHero("Warrior");
+                        .setText(Language.WELCOME_PANE_WARRIOR_STATS);
+                setSelectedHero(Language.WELCOME_PANE_WARRIOR);
 
             }
         });
@@ -103,9 +104,8 @@ public class ChooseHeroCharacterPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 HeroDescription
-                        .setText("<html> Health Regeneration Rate: 20 <br /> "
-                                + "Damage magnifier: 1 <html>");
-                setSelectedHero("Cleric");
+                        .setText(Language.WELCOME_PANE_CLERIC_STATS);
+                setSelectedHero(Language.WELCOME_PANE_CLERIC);
 
             }
         });
@@ -116,9 +116,8 @@ public class ChooseHeroCharacterPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 HeroDescription
-                        .setText("<html> Health Regeneration Rate: 10 <br /> "
-                                + "Damage magnifier: 2 <html>");
-                setSelectedHero("Mage");
+                        .setText(Language.WELCOME_PANE_MAGE_STATS);
+                setSelectedHero(Language.WELCOME_PANE_MAGE);
 
             }
         });
