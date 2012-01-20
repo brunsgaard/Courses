@@ -1,8 +1,11 @@
 //msn378
 package game.view;
 
+import game.controller.Observer;
 import game.controller.dungeon.ArrowKeyListener;
 import game.controller.dungeon.TabKeyListener;
+import game.controller.notification.INotification;
+import game.controller.notification.PlayerDied;
 import game.model.Dungeon;
 import game.model.parser.DungeonParser;
 import game.view.dungeon.DungeonPanel;
@@ -15,8 +18,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class MainFrame extends JFrame
+public class MainFrame extends JFrame implements Observer<INotification>
 
 {
     private static final long serialVersionUID = 5337190480729465776L;
@@ -24,6 +28,7 @@ public class MainFrame extends JFrame
     private DungeonParser dungeonParser;
     private WelcomePanel welcomePanel;
     private DungeonPanel dungeonPanel;
+    private boolean godmode;
 
     private MainFrame()
     {
@@ -39,9 +44,26 @@ public class MainFrame extends JFrame
 
         this.pack();
         this.setVisible(true);
+        this.godmode = false;
     }
 
     public void shiftToDungeonPanel()
+    {
+        this.parseDungeon();
+        this.welcomePanel.sendSelectedHeroToDungeon();
+        this.welcomePanel.removeAll();
+        this.dungeonPanel = new DungeonPanel();
+        this.setContentPane(this.dungeonPanel);
+
+        this.setVisible(true);
+        this.dungeonPanel.grabFocus();
+        this.dungeonPanel
+                .addKeyListener(new ArrowKeyListener(this.dungeonPanel));
+        this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
+        Dungeon.getInstance().getHero().addObserver(this);
+    }
+
+    private void parseDungeon()
     {
         try
         {
@@ -64,18 +86,8 @@ public class MainFrame extends JFrame
         {
             e.printStackTrace();
         }
-        this.welcomePanel.sendSelectedHeroToDungeon();
-        this.welcomePanel.removeAll();
-        this.dungeonPanel = new DungeonPanel();
-        this.setContentPane(this.dungeonPanel);
-
-        this.setVisible(true);
-        this.dungeonPanel.grabFocus();
-        this.dungeonPanel
-                .addKeyListener(new ArrowKeyListener(this.dungeonPanel));
-        this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
     }
-    
+
     public static void main(String[] args)
     {
         MainFrame.getInstance().setVisible(true);
@@ -86,6 +98,27 @@ public class MainFrame extends JFrame
         if (MainFrame.instance == null)
             MainFrame.instance = new MainFrame();
         return MainFrame.instance;
+    }
+    
+    public void update(PlayerDied change)
+    {
+        if (this.godmode) return;
+        int n = JOptionPane.showConfirmDialog(
+                this,
+                "GAME OVER!\nWould you like to continue in god mode?",
+                "Game over",
+                JOptionPane.YES_NO_OPTION);
+        if (n == 1) {
+            System.exit(0);
+        } else {
+            this.godmode = true;            
+        }
+    }
+
+    @Override
+    public void update(INotification change)
+    {
+        if (change instanceof PlayerDied) this.update((PlayerDied) change);
     }
 
 }
