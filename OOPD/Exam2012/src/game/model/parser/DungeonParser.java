@@ -122,7 +122,6 @@ public class DungeonParser
         {
             monster.setCurrentRoom(monsterRoom);
             monsterRoom.addMonster(monster);
-            monster.setDoorOnRandomMove();
         }
 
     }

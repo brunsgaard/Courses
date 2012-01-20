@@ -121,19 +121,19 @@ public class MapPanel extends JPanel implements Observer<INotification>
 
         for (Room r : Dungeon.getInstance().getRooms())
         {
-            if (r.getMonsters() != null) {
-                this.gfx.setColor(Color.RED);
-                for (Monster m : r.getMonsters())
-                {
-                    this.gfx.fill(new Rectangle(m.getPosition().getX(), m
-                            .getPosition().getY(), 1, 1));
-                }
-            }
             if (r.getItems() != null) {
                 this.gfx.setColor(Color.GREEN);
                 for (Item i : r.getItems())
                 {
                     this.gfx.fill(new Rectangle(i.getPosition().getX(), i
+                            .getPosition().getY(), 1, 1));
+                }
+            }
+            if (r.getMonsters() != null) {
+                this.gfx.setColor(Color.RED);
+                for (Monster m : r.getMonsters())
+                {
+                    this.gfx.fill(new Rectangle(m.getPosition().getX(), m
                             .getPosition().getY(), 1, 1));
                 }
             }

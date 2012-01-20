@@ -1,5 +1,7 @@
 package game.model.players;
 
+import java.util.ArrayList;
+
 import game.controller.dungeon.Direction;
 import game.controller.notification.ChangeRoom;
 import game.controller.notification.LootItem;
@@ -21,6 +23,10 @@ public abstract class Hero extends Player
     protected Weapon weapon;
     protected Armor armor;
     protected int damageMagnifier;
+    protected ArrayList<Item> Inventory;
+    {
+        
+    }
 
     public Hero(String name, Point position, int unarmedDamage,
             int healthRegenerationRate, int damageMagnifier)
@@ -30,6 +36,7 @@ public abstract class Hero extends Player
         this.weapon = null;
         this.armor = null;
         this.name = name;
+        this.Inventory = new ArrayList<>();
     }
 
     @Override
@@ -76,6 +83,8 @@ public abstract class Hero extends Player
             this.weapon = weapon;
             notifyObservers(new PlayerWeaponChanged(weapon));
         }
+        
+        this.Inventory.add(weapon);
     }
 
     public void pickupItem(Armor armor)
@@ -87,6 +96,7 @@ public abstract class Hero extends Player
         this.armor.setResistence(this.armor.getResistence()
                 + armor.getResistence());
         notifyObservers(new PlayerArmorChanged(this.armor.getResistence()));
+        this.Inventory.add(armor);
     }
 
     public boolean tryMove(Direction direction)
@@ -129,5 +139,10 @@ public abstract class Hero extends Player
         this.notifyObservers(new PlayerMoved(this.position));
 
         return true;
+    }
+
+    public ArrayList<Item> getInventory()
+    {
+        return Inventory;
     }
 }

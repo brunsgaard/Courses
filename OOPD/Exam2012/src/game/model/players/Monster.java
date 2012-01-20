@@ -7,7 +7,9 @@ import game.controller.notification.PlayerMoved;
 import game.controller.notification.TurnStart;
 import game.model.Dungeon;
 import game.model.Point;
+import game.model.Room;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -104,10 +106,7 @@ public abstract class Monster extends Player
 
             if (endPosition.equals(doorToHero))
             {
-                this.room.removePlayer(this);
-                this.room = room.getDoors().get(endPosition);
-                this.room.addMonster(this);
-                this.setDoorOnRandomMove();
+                this.autonomousChangeRoom(doorToHero);
             }
 
             this.position = endPosition;
@@ -117,37 +116,26 @@ public abstract class Monster extends Player
 
         case DEFAULT:
             
-            // moveDirection = this.getDirection(doorOnRandomMove,
-            // MovementPattern.DEFAULT);
-            //
-            // if (moveDirection == null)
-            // return;
-            //
-            // endPosition = this.position.oneStep(moveDirection);
-            //
-            // System.out.println("current pos x= " + this.position.getX()
-            // + "current pos y= " + this.position.getY());
-            //
-            // System.out.println("newPosition pos x= " + endPosition.getX()
-            // + "newPosition pos y= " + endPosition.getY());
-            //
-            // System.out.println("Goal pos x= " + doorOnRandomMove.getX()
-            // + "Goal pos y= " + doorOnRandomMove.getY());
-            // System.out.println("----------------------------------");
-            //
-            // if (endPosition.equals(doorOnRandomMove))
-            // {
-            // this.setDoorOnRandomMove();
-            // this.room.removePlayer(this);
-            // this.room = room.getNeighborRoomFromPoint(endPosition);
-            // this.room.addMonster(this);
-            // }
-            //
-            // this.position = endPosition;
-            //
-            // this.notifyObservers(new PlayerMoved(endPosition));
-            //
-            // break;
+             if (this.doorOnRandomMove == null) this.setRandomDoorAsTarget();
+             
+             moveDirection = this.getDirection(doorOnRandomMove,
+             MovementPattern.DEFAULT);
+            
+             if (moveDirection == null)
+             return;
+             
+             endPosition = this.position.oneStep(moveDirection);
+            
+             if (endPosition.equals(doorOnRandomMove))
+             {
+                 this.autonomousChangeRoom(doorOnRandomMove);
+             }
+
+             this.position = endPosition;
+            
+             this.notifyObservers(new PlayerMoved(endPosition));
+            
+             break;
         }
 
     }
@@ -181,7 +169,7 @@ public abstract class Monster extends Player
             returnValue = ((this.room.checkForDoor(desiredEndPosition) || this.room
                     .isInside(desiredEndPosition)));
             // TODO: what happens if two monsters meet in randomwalk?
-            // && !Dungeon.getInstance().isMonsterOnPosition(desiredPosition);
+            // && !Dungeon.getInstance().isMonsterOnPosition();
             break;
         }
         return returnValue;
@@ -230,36 +218,30 @@ public abstract class Monster extends Player
                 + Math.abs(from.getY() - to.getY());
     }
 
-    public void setDoorOnRandomMove()
+    private void autonomousChangeRoom(Point newPosition)
     {
-        int size = this.room.getDoors().size();
-        int item = new Random().nextInt(size);
-        int i = 0;
-        for (Point p : this.room.getDoors().keySet())
-        {
-            if (i == item)
-                this.doorOnRandomMove = p;
-            i++;
+        Room newRoom = this.room.getDoors().get(newPosition);
+        ArrayList<Point> validDoors = new ArrayList<Point>();
+        for (Point p : newRoom.getDoors().keySet()) {
+            if (newRoom.getDoors().size() == 1 || !p.equals(this.getPosition()))
+            validDoors.add(new Point(p.getX(), p.getY()));
         }
+        this.doorOnRandomMove = validDoors.get(new Random().nextInt(validDoors.size()));
+        newRoom.addMonster(this);
+        this.room.removePlayer(this);
+        this.room = newRoom;
     }
-
-    public void setdoorOnRandomMove(Point currentPosition, Point newPosition)
+    
+    private void setRandomDoorAsTarget()
     {
-        Set<Point> avalibleRooms = this.room.getDoors().get(newPosition)
-                .getDoors().keySet();
-
-        if (avalibleRooms.size() < 0)
-        {
-            avalibleRooms.remove(currentPosition);
-        }
-        int size = this.room.getDoors().size();
-        int item = new Random().nextInt(size);
+        Set<Point> validDoors = this.room.getDoors().keySet();
+        int randomTarget = new Random().nextInt(validDoors.size());
         int i = 0;
-        for (Point p : avalibleRooms)
-        {
-            if (i == item)
-                this.doorOnRandomMove = p;
-            i++;
+        for (Point p : validDoors) {
+            if (i++ == randomTarget) {
+              this.doorOnRandomMove = p;
+              break;
+            }
         }
     }
 
