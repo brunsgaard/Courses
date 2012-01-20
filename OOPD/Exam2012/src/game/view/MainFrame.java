@@ -76,8 +76,9 @@ public class MainFrame extends JFrame
         this.dungeonPanel.addKeyListener(new TabKeyListener(this.dungeonPanel));
     }
     
-    public void reInitialize(){
-        MainFrame.instance = new MainFrame();
+    public static void main(String[] args)
+    {
+        MainFrame.getInstance().setVisible(true);
     }
 
     public static MainFrame getInstance()
