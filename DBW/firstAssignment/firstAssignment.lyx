@@ -11,6 +11,9 @@
 \usepackage{listings}
 \usepackage{color}
 
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -746,12 +749,16 @@ From the assignment we have a relation
 \begin_inset Formula $R$
 \end_inset
 
- has the functional depedencies 
+ has the functional dependencies 
 \begin_inset Formula $F=\{A\rightarrow BC,\: BC\rightarrow E,\: B\rightarrow D,\: C\rightarrow D,\}$
 \end_inset
 
 .
- We will now use the chase test to show that decomposition of 
+ We will now use the
+\emph on
+ chase test
+\emph default
+ to show that decomposition of 
 \begin_inset Formula $R$
 \end_inset
 
@@ -1172,6 +1179,7 @@ From the assignment we have a relation
 \end_layout
 
 \begin_layout Standard
+\align center
 First we use 
 \begin_inset Formula $A\rightarrow B$
 \end_inset
@@ -1568,6 +1576,7 @@ First we use
 \end_layout
 
 \begin_layout Standard
+\align center
 Then 
 \begin_inset Formula $A\rightarrow C$
 \end_inset
@@ -1964,6 +1973,7 @@ Then
 \end_layout
 
 \begin_layout Standard
+\align center
 then 
 \family roman
 \series medium
@@ -2372,6 +2382,7 @@ then
 \end_layout
 
 \begin_layout Standard
+\align center
 then 
 \begin_inset Formula $B\rightarrow D$
 \end_inset
@@ -2784,12 +2795,17 @@ then
 \end_layout
 
 \begin_layout Standard
+\noindent
 At this point, notice that the first row is 
 \begin_inset Formula $(a,b,c,d,e,f)$
 \end_inset
 
  which is our goal.
- And thus, this is our final tableau for the chase test.
+ And thus, this is our final tableau for the 
+\emph on
+chase test
+\emph default
+.
  Hence, whenever 
 \begin_inset Formula $R$
 \end_inset
@@ -2802,11 +2818,15 @@ At this point, notice that the first row is
 \begin_inset Formula $S_{2}$
 \end_inset
 
- and 
+ , 
 \begin_inset Formula $S_{3}$
 \end_inset
 
- and rejoined, the result is in 
+ and 
+\begin_inset Formula $S_{4}$
+\end_inset
+
+, and there after rejoined, the result is in 
 \begin_inset Formula $R$
 \end_inset
 
@@ -2820,12 +2840,14 @@ Is the decomposition dependency preserving?
 
 \begin_layout Standard
 We know that a decomposition is dependency preserving if 
-\begin_inset Formula $(F_{1}\cup F_{2}\cup F_{3}\cdots F_{n})^{+}=F^{+}$
+\begin_inset Formula 
+\[
+(F_{1}\cup F_{2}\cup F_{3}\cdots F_{n})^{+}=F^{+}
+\]
+
 \end_inset
 
-.
- Thus, lets test it.
- We have that 
+As before we have 
 \begin_inset Formula $R(A,B,C,D,E,F)$
 \end_inset
 
@@ -2834,30 +2856,18 @@ We know that a decomposition is dependency preserving if
 \end_inset
 
 .
- The decomposition are 
-\begin_inset Formula $S_{1}(A,F)$
-\end_inset
-
-, 
-\begin_inset Formula $S_{2}(A,E)$
-\end_inset
-
-, 
-\begin_inset Formula $S_{3}(A,B,C)$
-\end_inset
-
- and 
-\begin_inset Formula $S_{4}(B,D)$
-\end_inset
-
-.
-\begin_inset Newline newline
-\end_inset
-
-
+ 
 \end_layout
 
 \begin_layout Standard
+The decomposition in question are 
+\begin_inset Formula 
+\[
+S_{1}(A,F)\qquad S_{2}(A,E)\qquad S_{3}(A,B,C)\qquad S_{4}(B,D)
+\]
+
+\end_inset
+
 In 
 \begin_inset Formula $S_{1}$
 \end_inset
@@ -2870,10 +2880,6 @@ F_{1}=\{A\rightarrow A,\, F\rightarrow F,\, AF\rightarrow AF\}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 In 
 \begin_inset Formula $S_{2}$
 \end_inset
@@ -2889,10 +2895,6 @@ F_{2}=\{A\rightarrow A,\, E\rightarrow E,\, AE\rightarrow AE,\, A\rightarrow E\}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 In 
 \begin_inset Formula $S_{3}$
 \end_inset
@@ -2909,10 +2911,6 @@ BC\rightarrow BC,\, ABC\rightarrow ABC,\, AB\rightarrow AB,\, A\rightarrow B\, A
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 In 
 \begin_inset Formula $S_{4}$
 \end_inset
@@ -3004,12 +3002,29 @@ It is clear to us that
 \end_inset
 
  form a key.
- We can now use the functional dependecies to form a minimal key 
+ We can now use the functional dependencies to form a 
+\emph on
+minimal
+\emph default
+ 
+\emph on
+key
+\emph default
+ 
 \begin_inset Formula $A,B,C,G$
 \end_inset
 
-.
- Thus all of the keys can be find by using power set theory
+.(all left sides of the functional dependencies together with free attributes).
+ This is indeed the only minimal key.(no other set of attributes lets us
+ determine the hole relation)
+\end_layout
+
+\begin_layout Standard
+To find all of the 
+\emph on
+superkeys
+\emph default
+ we can use power set theory
 \begin_inset Foot
 status collapsed
 
@@ -3039,7 +3054,11 @@ If
 
 \end_inset
 
-Now we are able to list the keys below
+Now we are able to combine each part of the powerset with the 
+\emph on
+minimal key.
+\emph default
+
 \begin_inset Newline newline
 \end_inset
 
@@ -3272,12 +3291,22 @@ Now we are able to list the keys below
 \end_layout
 
 \begin_layout Standard
-Because we worked from the minimal key and used the powerset of the remanding
- attributes we know, that this is alle the keys.
- They are keys because those attributes functionally determine all other
+\noindent
+Because we started with the only 
+\emph on
+minimal key
+\emph default
+ and used the powerset of the remanding attributes we know, that this is
+ all the keys for the given relation.
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+Whose sets are keys because the attributes functionally determine all other
  attributes of the relation.
 \begin_inset Foot
-status open
+status collapsed
 
 \begin_layout Plain Layout
 The book p.70
@@ -3301,10 +3330,11 @@ The book p.70
 \uwave off
 \noun off
 \color none
+To summarize; 
 \begin_inset Formula $ABCG$
 \end_inset
 
- is 
+ is a 
 \begin_inset Quotes eld
 \end_inset
 
@@ -3326,7 +3356,7 @@ real
 \color inherit
 minimal key
 \emph default
-, all the keys are superkeys.
+, and all the keys are superkeys.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -3334,9 +3364,9 @@ Bring to BCNF
 \end_layout
 
 \begin_layout Standard
-All functional dependecies are BCNF violations, soo we choose one of them
+All functional dependencies are BCNF violations, so we choose one of them
  for our decomposition.
- Here I have choosen 
+ Here I have chosen 
 \begin_inset Formula $BC\rightarrow DE$
 \end_inset
 
@@ -3344,60 +3374,52 @@ All functional dependecies are BCNF violations, soo we choose one of them
 \end_layout
 
 \begin_layout Itemize
+
+\strikeout on
 \begin_inset Formula $S_{1}(B,C,D,E)$
 \end_inset
 
-
+ (not BCNF)
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-\begin_inset Formula $S_{2}(BD)$
+\begin_inset Formula $S_{2}(B,D)$
 \end_inset
 
-
+ (BCNF)
 \end_layout
 
 \begin_layout Itemize
-\begin_inset Formula $S_{3}$
+\begin_inset Formula $S_{3}(B,C,E)$
 \end_inset
 
-
+(BCNF)
 \end_layout
 
 \end_deeper
 \begin_layout Itemize
 
 \strikeout on
-\begin_inset Formula $S_{2}(A,B,C,G,H)$
+\begin_inset Formula $S_{4}(A,B,C,G,H)$
 \end_inset
 
-
-\strikeout default
- We keep 
-\begin_inset Formula $S_{1}$
-\end_inset
-
- because it is in BCNF and continue decomposition af 
-\begin_inset Formula $S_{2}$
-\end_inset
-
-
+(not BCNF)
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-\begin_inset Formula $S_{3}(G,H)$
+\begin_inset Formula $S_{5}(G,H)$
 \end_inset
 
-
+ (BCNF)
 \end_layout
 
 \begin_layout Itemize
-\begin_inset Formula $S_{4}(A,B,C,G)$
+\begin_inset Formula $S_{6}(A,B,C,G)$
 \end_inset
 
- (our minimal key)
+ (our minimal key, BCNF)
 \end_layout
 
 \end_deeper
@@ -3406,16 +3428,20 @@ Thus
 \begin_inset Formula $R(A,B,C,D,E,G,H)$
 \end_inset
 
- can be decomposed to
-\begin_inset Formula $S_{1}(B,C,D,E)$
+ can be decomposed to 
+\begin_inset Formula $S_{2}(B,D)$
+\end_inset
+
+, 
+\begin_inset Formula $S_{3}(B,C,E)$
 \end_inset
 
  ,
-\begin_inset Formula $S_{3}(G,H)$
+\begin_inset Formula $S_{4}(G,H)$
 \end_inset
 
 ,
-\begin_inset Formula $S_{4}(A,B,C,G)$
+\begin_inset Formula $S_{5}(A,B,C,G)$
 \end_inset
 
 .
@@ -3426,13 +3452,18 @@ Problem 3: Relational Algebra
 \end_layout
 
 \begin_layout Subsection
-Answer for Question 3.1 
+Answer for Question 3.1
+\end_layout
+
+\begin_layout Standard
+Here i find the name of actors that have played a character named 'James
+ Bond' 
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\pi_{\textrm{name}}\left(\sigma_{\textrm{char\_name=`James Bond'}}\left(\textrm{person}\bowtie\textrm{casting}\right)\right)
+\pi_{name}\left(\sigma_{char\_name=\textrm{`James Bond'}}\left(\textrm{person}\bowtie\textrm{casting}\right)\right)
 \]
 
 \end_inset
@@ -3445,19 +3476,43 @@ Answer for Question 3.2
 \end_layout
 
 \begin_layout Standard
+Here i  list the titles of movies directed by Ridley Scott and
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+I understand 
+\emph on
+and
+\emph default
+ like AND, an alternative understanding of the assignment would be to understand
+ 
+\emph on
+and
+\emph default
+ as OR.
+ But then i think the the proper wording would then be: 
+\emph on
+directed by either Ridley Scott or Steven Spielberg
+\emph default
+.
+\end_layout
+
+\end_inset
+
+ Steven Spielberg.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{multline*}
-\pi_{\textrm{title}}(\textrm{movie}\bowtie\left(\rho_{C1(\textrm{title,n1})}\left(\pi_{\textrm{movieid,name})}\left(\textrm{person}\bowtie_{\textrm{role=`director'}\wedge\textrm{name=`Ridley Scott'}}\textrm{casting}\right)\right)\right)\bowtie\\
-\left(\rho_{C1(\textrm{title,n2})}\left(\pi_{\textrm{movieid,name})}\left(\textrm{person}\bowtie_{\textrm{role=`director'}\wedge\textrm{name=`Steven Spielberg'}}\textrm{casting}\right)\right)\right))
+\pi_{title}(\textrm{movie}\bowtie\left(\rho_{C1(movie\textrm{\_}id,n1)}\left(\pi_{movie\textrm{\_}id,name)}\left(\textrm{person}\bowtie_{role\textrm{=`director'}\wedge\textrm{name=`Ridley Scott'}}\textrm{casting}\right)\right)\right)\bowtie\\
+\left(\rho_{C2(movie\textrm{\_}id,n1)}\left(\pi_{(movie\textrm{\_}id,name)}\left(\textrm{person}\bowtie_{role\textrm{=`director'}\wedge\textrm{name=`Steven Spielberg'}}\textrm{casting}\right)\right)\right))
 \end{multline*}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Alternative
+Alternative solution
 \end_layout
 
 \begin_layout Standard
@@ -3476,13 +3531,29 @@ Alternative
 \end_layout
 
 \begin_layout Subsection
-for Question 3.3
+Answer for Question 3.3
+\end_layout
+
+\begin_layout Standard
+Here i find for each role the number of persons assigned to the roles ordering
+ by the number of persons assigned.
+ This operation works on both sets and bags.
+ If we worked on sets only the last 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ could be changed to a 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\tau_{ctPersonID}(\gamma_{role,\textrm{COUNT}(person\textrm{\_}id)\rightarrow ctPersonId}(\pi_{role,person\textrm{\_}id}(casting))
+\tau_{ctPersonID}(\gamma_{role,\textrm{COUNT}(person\textrm{\_}id)\rightarrow ctPersonId}(\gamma_{role,person\textrm{\_}id}(casting))
 \]
 
 \end_inset
@@ -3490,12 +3561,224 @@ for Question 3.3
 
 \end_layout
 
+\begin_layout Subsection
+Answer for Question 3.4
+\end_layout
+
+\begin_layout Standard
+I am not sure if you would like me to draw 
+\begin_inset Formula $\bowtie_{\theta}$
+\end_inset
+
+ as one node in the tree, or if you would prefer that i do the natural join
+ and thereafter add the condition.
+ I have chosen the 
+\begin_inset Formula $\bowtie_{\theta}$
+\end_inset
+
+ form as it is an valid relational algebraic query.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Tree [.$
+\backslash
+pi_{name}$ [.$
+\backslash
+sigma_{char
+\backslash
+_name=
+\backslash
+textrm{`James Bond'}}$  [.$
+\backslash
+bowtie$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	[.
+ person ] 
+\end_layout
+
+\begin_layout Plain Layout
+
+	[.
+ casting ] ] ]]  
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Expression tree for assignment 3.1
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Below are show the other expression tree.
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Tree [.$
+\backslash
+pi_{title}$ [.$
+\backslash
+bowtie$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+[.$
+\backslash
+rho_{C1(movie
+\backslash
+textrm{
+\backslash
+_}id,n1)}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	[.$
+\backslash
+pi_{movie
+\backslash
+textrm{
+\backslash
+_}id,name)}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+		[.$
+\backslash
+bowtie_{role
+\backslash
+textrm{=`director'}
+\backslash
+wedge
+\backslash
+textrm{name=`Ridley Scott'}}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+			[.$
+\backslash
+textrm{person}$ ]]] ] 
+\end_layout
+
+\begin_layout Plain Layout
+
+[.$
+\backslash
+rho_{C2(movie
+\backslash
+textrm{
+\backslash
+_}id,n1)}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	[.$
+\backslash
+pi_{movie
+\backslash
+textrm{
+\backslash
+_}id,name)}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+		[.$
+\backslash
+bowtie_{role
+\backslash
+textrm{=`director'}
+\backslash
+wedge
+\backslash
+textrm{name=`Ridley Scott'}}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+			[.$
+\backslash
+textrm{casting}$ ]]]]]]  
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Expression tree for assignment 3.2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
-P4
+Problem 4: SQL
 \end_layout
 
 \begin_layout Subsection
-A41
+Answer for Question 4.1
+\end_layout
+
+\begin_layout Standard
+Here i find the titles of all movies with a title starting with 007.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3514,7 +3797,11 @@ SELECT title FROM movie WHERE title LIKE '007%';
 \end_layout
 
 \begin_layout Subsection
-A42
+Answer for Question 4.2
+\end_layout
+
+\begin_layout Standard
+Here i find the title of all movies with 'Mads Mikkelsen' 
 \end_layout
 
 \begin_layout Standard
@@ -3534,7 +3821,12 @@ s Mikkelsen';
 \end_layout
 
 \begin_layout Subsection
-A43
+Answer for Question 4.3
+\end_layout
+
+\begin_layout Standard
+In this subassignment i find the different roles that Kevin Bacon has had.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3554,7 +3846,11 @@ SELECT role FROM person NATURAL JOIN casting WHERE name='Kevin Bacon' GROUP
 \end_layout
 
 \begin_layout Subsection
-A44
+Answer for Question 4.4
+\end_layout
+
+\begin_layout Standard
+SQL for the highest number of persons casted for one movie? 
 \end_layout
 
 \begin_layout Standard
@@ -3574,7 +3870,13 @@ SELECT COUNT (*) FROM casting GROUP BY movie_id ORDER BY COUNT(*) DESC LIMIT
 \end_layout
 
 \begin_layout Subsection
-A45
+Answer for Question 4.5
+\end_layout
+
+\begin_layout Standard
+Here i find name of actors that have participated in both movies and tv-series
+ with the year 2003.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3633,11 +3935,12 @@ HAVING
 \end_layout
 
 \begin_layout Subsection
-A46
+Answer for Question 4.6
 \end_layout
 
 \begin_layout Standard
-If the title is the name of the show
+Here I find the title of all series that have more than 5 episodes, ff the
+ title is the name of the show
 \end_layout
 
 \begin_layout Standard
@@ -3667,7 +3970,8 @@ HAVING COUNT(episode_of)>5;
 
 \end_inset
 
-If the title is the title of all episodes
+If the title is the title of all the episodes the following SQL query will
+ give the answer
 \begin_inset listings
 inline false
 status open
@@ -3723,7 +4027,11 @@ ON movie.episode_of=s1.episode_of;
 \end_layout
 
 \begin_layout Subsection
-A47
+Answer for Question 4.7
+\end_layout
+
+\begin_layout Standard
+This query finds the many actors has Kevin Bacon acted together with? 
 \end_layout
 
 \begin_layout Standard
@@ -3778,7 +4086,12 @@ WHERE
 \end_layout
 
 \begin_layout Subsection
-A48
+Answer for Question 4.8
+\end_layout
+
+\begin_layout Standard
+Here I find the name of all actresses who have participated in all Pirates
+ of the Caribbean movies? 
 \end_layout
 
 \begin_layout Standard
@@ -3869,6 +4182,10 @@ HAVING COUNT(person_id)=
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Answer for Question 4.8
 \end_layout
 
 \end_body
