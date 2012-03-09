@@ -19,8 +19,8 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
  
 \lstset{ %
-  language=Octave,                % the language of the code
-  basicstyle=\tiny,           % the size of the fonts that are used for the code
+  language=SQL,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
   numbers=left,                   % where to put the line-numbers
   numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
   stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
@@ -36,7 +36,7 @@
   captionpos=b,                   % sets the caption-position to bottom
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+  %title=\lstname,                   % show the filename of files included with \lstinputlisting;
                                   % also try caption instead of title
   keywordstyle=\color{blue},          % keyword style
   commentstyle=\color{dkgreen},       % comment style
@@ -44,6 +44,7 @@
   escapeinside={\%*}{*)},            % if you want to add a comment within your code
   morekeywords={*,...}               % if you want to add more keywords to the set
 }
+\usetikzlibrary{positioning}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -96,7 +97,7 @@
 \quotes_language english
 \papercolumns 1
 \papersides 1
-\paperpagestyle default
+\paperpagestyle fancy
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -105,6 +106,39 @@
 \end_header
 
 \begin_body
+
+\begin_layout Standard
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+lhead{Fag DBW 1.Assignment} 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+chead{Name: Jonas Brunsgaard} 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+rhead{KU
+\backslash
+_id: msn378} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \begin_layout Section
 Problem 1: Modeling
@@ -119,8 +153,7 @@ Based
 \emph on
  
 \emph default
-on the information given by the assignmet I have made constructed figure
- .
+on the information given by the assignment I constructed this figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:E/R-model-for-the"
@@ -140,7 +173,7 @@ Database Systems: The Complete Book (2nd Edition), ISBN-13: 978-0131873254
 \end_inset
 
 .
- I have made the following assumptions and decisions.
+ I made the following assumptions and decisions.
 \end_layout
 
 \begin_layout Paragraph*
@@ -148,7 +181,7 @@ Nations
 \end_layout
 
 \begin_layout Standard
-I have made 
+I made 
 \family typewriter
 Nation
 \family default
@@ -166,16 +199,15 @@ See the book p.
 \end_inset
 
 .
- If the database was a on-application-system this might be a better choice
- because it would then be handled at the application layer.
- But in this case we don't know if more applications will access the database
- and how they differently will handle til nationality of an author.
- Maybe one system will use the ISO notation DK, GB etc, and another system
- will use Denmark, England etc.
- With this design we can add all the contries to the nation table and allow
- read-access only from 'normal' librarians and only allow the the 'Head
- of Librarians' (if that is a title) to add and remove nations from the
- db.
+ If the database was a single application system this might be a better
+ choice, because it could be handled at the application layer.
+ In this case we don't know if multiple applications will access the database,
+ and the different ways the might handle the nationality of an author.
+ Maybe one system will use the ISO notation DK, US etc, and another system
+ will use Denmark, USA etc.
+ With this design we can add all the countries to the nation table and allow
+ read-access only for 'normal' librarians, and only allow the 'Head Librarian',
+ (if that is a title,) to add and remove nations to the db.
  This way applications are forced to use the chosen notation for nations.
 \end_layout
 
@@ -184,10 +216,9 @@ Placenumber
 \end_layout
 
 \begin_layout Standard
-In the assignment it says that the books have an attribute called placenumber
+In the assignment it states that the books have an attribute named placenumber
  at the library.
- I assume that all copies of the same book will have the same placenumber
- value.
+ I assume that all copies of the book will have the same placenumber value.
  Otherwise the attribute should be moved to 
 \family typewriter
 Material
@@ -201,18 +232,19 @@ Type of books
 \end_layout
 
 \begin_layout Standard
-I assume that the library staff are conservative and thus has a strict and
- exhaustive list of genres, therefore i have implemented the genre called
- 
+I assume that the library staff are conservative and has a strict and exhaustive
+ list of genres.
+ Therefore I implemented the genre called 
 \family typewriter
 type
 \family default
  as an enum.
- If the wish a more loose partition of genres 
+ If a looser definition of genre 
 \family typewriter
 type
 \family default
-, an attribute or an independent entity might have been a better choice.
+ is required; a character attribute or an independent entity would be a
+ better choice.
  
 \begin_inset Float figure
 placement H
@@ -225,13 +257,6 @@ status collapsed
 \align center
 \begin_inset ERT
 status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-usetikzlibrary{positioning}
-\end_layout
 
 \begin_layout Plain Layout
 
@@ -576,7 +601,7 @@ status open
 \noindent
 
 \family typewriter
-Book (
+book (
 \bar under
 faust
 \bar default
@@ -587,31 +612,33 @@ faust
 \noindent
 
 \family typewriter
-Author (
+author (
 \bar under
 number
 \bar default
-, name, nationality)
-\end_layout
-
-\begin_layout Plain Layout
-\noindent
-
-\family typewriter
-AuthorNationality(
+, name, 
 \emph on
-\bar under
-author_number
+nation_countryname
 \emph default
-\bar default
-,nation)
+)
 \end_layout
 
 \begin_layout Plain Layout
 \noindent
 
 \family typewriter
-BookAuthor (
+nation (
+\bar under
+countryname
+\bar default
+)
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+
+\family typewriter
+bookauthor (
 \emph on
 \bar under
 book_faust
@@ -630,7 +657,7 @@ author_number
 \noindent
 
 \family typewriter
-Material (
+material (
 \bar under
 materialnumber
 \bar default
@@ -647,7 +674,7 @@ materialnumber
 \noindent
 
 \family typewriter
-Borrower (
+borrower (
 \bar under
 ssn
 \bar default
@@ -658,7 +685,7 @@ ssn
 \noindent
 
 \family typewriter
-Loan (
+loan (
 \emph on
 \bar under
 borrower_ssn
@@ -670,14 +697,18 @@ borrower_ssn
 material_materialnumber
 \emph default
 \bar default
-, lenddate, returndate) 
+, 
+\bar under
+lenddate
+\bar default
+, returndate) 
 \end_layout
 
 \begin_layout Plain Layout
 \noindent
 
 \family typewriter
-Reservation (
+reservation (
 \emph on
 \bar under
 borrower_ssn
@@ -689,16 +720,13 @@ borrower_ssn
 book_faust
 \emph default
 \bar default
-, time) 
+, 
+\bar under
+time
+\bar default
+) 
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Newpage pagebreak
 \end_inset
 
 
@@ -719,13 +747,6 @@ status open
 lstinputlisting[language=SQL]{1.3.sql}
 \end_layout
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Newpage pagebreak
 \end_inset
 
 
@@ -2801,7 +2822,7 @@ At this point, notice that the first row is
 \end_inset
 
  which is our goal.
- And thus, this is our final tableau for the 
+ Thus, this is our final tableau for the 
 \emph on
 chase test
 \emph default
@@ -2856,11 +2877,7 @@ As before we have
 \end_inset
 
 .
- 
-\end_layout
-
-\begin_layout Standard
-The decomposition in question are 
+ The decomposition in question are 
 \begin_inset Formula 
 \[
 S_{1}(A,F)\qquad S_{2}(A,E)\qquad S_{3}(A,B,C)\qquad S_{4}(B,D)
@@ -2921,12 +2938,12 @@ In
 \begin_layout Standard
 \begin_inset Formula 
 \[
-F_{1}=\{B\rightarrow B,\, D\rightarrow D,\, BD\rightarrow BD,\, B\rightarrow D\}
+F_{4}=\{B\rightarrow B,\, D\rightarrow D,\, BD\rightarrow BD,\, B\rightarrow D\}
 \]
 
 \end_inset
 
-We now have that 
+Which brings us to 
 \begin_inset Formula 
 \[
 (F_{1}\cup F_{2}\cup F_{3}\cdots F_{n})^{+}=\{A\rightarrow E,\, A\rightarrow B,\, A\rightarrow C,\, B\rightarrow D,\mathrm{\, trivial\, dependencies}\}
@@ -2954,7 +2971,7 @@ but
 \begin_inset Formula $C\rightarrow D$
 \end_inset
 
- are not in the set and thus 
+ are not in the set, thus 
 \family default
 \series default
 \shape default
@@ -3046,7 +3063,7 @@ If
 \begin_inset Formula $\{D,E,H\}$
 \end_inset
 
-, then the powerset is given by
+, then the power set is given by
 \begin_inset Formula 
 \[
 \mathcal{P}(S)=\{\{\},\{D\},\{E\},\{H\},\{D,E\},\{D,H\},\{E,H\},\{D,E,H\}\}
@@ -3054,7 +3071,7 @@ If
 
 \end_inset
 
-Now we are able to combine each part of the powerset with the 
+We are now able to combine each part of the power set with the 
 \emph on
 minimal key.
 \emph default
@@ -3296,14 +3313,14 @@ Because we started with the only
 \emph on
 minimal key
 \emph default
- and used the powerset of the remanding attributes we know, that this is
- all the keys for the given relation.
+ and used the power set of the remaining know attributes, this is all the
+ keys for the given relation.
  
 \end_layout
 
 \begin_layout Standard
 \noindent
-Whose sets are keys because the attributes functionally determine all other
+These sets are keys because the attributes functionally determine all other
  attributes of the relation.
 \begin_inset Foot
 status collapsed
@@ -3456,8 +3473,8 @@ Answer for Question 3.1
 \end_layout
 
 \begin_layout Standard
-Here i find the name of actors that have played a character named 'James
- Bond' 
+Here I find the name of actors that played a character named 'James Bond'
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3476,7 +3493,7 @@ Answer for Question 3.2
 \end_layout
 
 \begin_layout Standard
-Here i  list the titles of movies directed by Ridley Scott and
+Here I list the titles of movies directed by Ridley Scott and
 \begin_inset Foot
 status collapsed
 
@@ -3491,7 +3508,7 @@ and
 and
 \emph default
  as OR.
- But then i think the the proper wording would then be: 
+ I think the proper wording for the latter would be: 
 \emph on
 directed by either Ridley Scott or Steven Spielberg
 \emph default
@@ -3522,7 +3539,7 @@ Alternative solution
 (\rho_{(movie\textrm{\_}id,p1,role,c1)}(\textrm{casting})\bowtie\\
 \rho_{(p1,n1,a1,g1)}(\sigma_{name=\textrm{'Ridley Scott'}}(\textrm{person}))\bowtie\\
 (\rho_{(movie\textrm{\_}id,p2,role,c2)}(\textrm{casting})\bowtie\\
-\textrm{\rho_{(p2,b2,a2,g2)}(\sigma_{name=\textrm{'Steven Spielberg'}}(\textrm{person})))}))
+\textrm{\rho_{(\ensuremath{p2,n2,a2,g2})}(\sigma_{\ensuremath{name}=\textrm{'Steven Spielberg'}}(\textrm{person})))}))
 \end{gather*}
 
 \end_inset
@@ -3535,7 +3552,7 @@ Answer for Question 3.3
 \end_layout
 
 \begin_layout Standard
-Here i find for each role the number of persons assigned to the roles ordering
+Here I find for each role the number of persons assigned to the roles ordered
  by the number of persons assigned.
  This operation works on both sets and bags.
  If we worked on sets only the last 
@@ -3570,13 +3587,13 @@ I am not sure if you would like me to draw
 \begin_inset Formula $\bowtie_{\theta}$
 \end_inset
 
- as one node in the tree, or if you would prefer that i do the natural join
- and thereafter add the condition.
- I have chosen the 
+ as one node in the tree, or if you would prefer that I do the natural join
+ and afterwards add the condition.
+ I chose the 
 \begin_inset Formula $\bowtie_{\theta}$
 \end_inset
 
- form as it is an valid relational algebraic query.
+ form as it's a valid relational algebraic query.
 \begin_inset Float figure
 placement H
 wide false
@@ -3642,7 +3659,7 @@ Expression tree for assignment 3.1
 
 \begin_layout Standard
 \noindent
-Below are show the other expression tree.
+The other expression tree is shown below.
 \begin_inset Float figure
 placement H
 wide false
@@ -3777,7 +3794,7 @@ Answer for Question 4.1
 \end_layout
 
 \begin_layout Standard
-Here i find the titles of all movies with a title starting with 007.
+Here I find the titles of all movies with a title starting with 007.
  
 \end_layout
 
@@ -3801,7 +3818,7 @@ Answer for Question 4.2
 \end_layout
 
 \begin_layout Standard
-Here i find the title of all movies with 'Mads Mikkelsen' 
+Here I find the title of all movies with 'Mads Mikkelsen' 
 \end_layout
 
 \begin_layout Standard
@@ -3825,7 +3842,7 @@ Answer for Question 4.3
 \end_layout
 
 \begin_layout Standard
-In this subassignment i find the different roles that Kevin Bacon has had.
+In this subassignment I find the different roles that Kevin Bacon has had.
  
 \end_layout
 
@@ -3874,8 +3891,8 @@ Answer for Question 4.5
 \end_layout
 
 \begin_layout Standard
-Here i find name of actors that have participated in both movies and tv-series
- with the year 2003.
+Here I find name of actors that participated in both movies and TV-series
+ in the year 2003.
  
 \end_layout
 
@@ -3939,8 +3956,7 @@ Answer for Question 4.6
 \end_layout
 
 \begin_layout Standard
-Here I find the title of all series that have more than 5 episodes, ff the
- title is the name of the show
+Here I find the title of all series that with more than 5 episodes.
 \end_layout
 
 \begin_layout Standard
@@ -3950,75 +3966,32 @@ status open
 
 \begin_layout Plain Layout
 
-SELECT episode_of 
+SELECT m.title  
 \end_layout
 
 \begin_layout Plain Layout
 
-FROM movie 
+FROM movie m 
 \end_layout
 
 \begin_layout Plain Layout
 
-GROUP BY episode_of 
+JOIN movie sm ON m.movie_id = sm.episode_of 
 \end_layout
 
 \begin_layout Plain Layout
 
-HAVING COUNT(episode_of)>5;
-\end_layout
-
-\end_inset
-
-If the title is the title of all the episodes the following SQL query will
- give the answer
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-SELECT title 
+WHERE m.episode_of IS NULL AND m.kind='TV' 
 \end_layout
 
 \begin_layout Plain Layout
 
-FROM movie 
+GROUP BY m.title 
 \end_layout
 
 \begin_layout Plain Layout
 
-JOIN (   
-\end_layout
-
-\begin_layout Plain Layout
-
-	SELECT episode_of
-\end_layout
-
-\begin_layout Plain Layout
-
-	FROM movie
-\end_layout
-
-\begin_layout Plain Layout
-
-	GROUP BY episode_of
-\end_layout
-
-\begin_layout Plain Layout
-
-	HAVING COUNT(episode_of)>5
-\end_layout
-
-\begin_layout Plain Layout
-
-	) s1
-\end_layout
-
-\begin_layout Plain Layout
-
-ON movie.episode_of=s1.episode_of;
+HAVING COUNT(sm.movie_id) > 5;
 \end_layout
 
 \end_inset
@@ -4031,7 +4004,7 @@ Answer for Question 4.7
 \end_layout
 
 \begin_layout Standard
-This query finds the many actors has Kevin Bacon acted together with? 
+This query finds the many actors Kevin Bacon has acted together with.
 \end_layout
 
 \begin_layout Standard
@@ -4077,7 +4050,7 @@ WHERE
 
 \begin_layout Plain Layout
 
-	c1.person_id != c2.person_id
+	c1.person_id != c2.person_id;
 \end_layout
 
 \end_inset
@@ -4091,7 +4064,7 @@ Answer for Question 4.8
 
 \begin_layout Standard
 Here I find the name of all actresses who have participated in all Pirates
- of the Caribbean movies? 
+ of the Caribbean movies.
 \end_layout
 
 \begin_layout Standard
@@ -4176,7 +4149,83 @@ HAVING COUNT(person_id)=
 
 \begin_layout Plain Layout
 
-	)
+	);
+\end_layout
+
+\end_inset
+
+Another solution using the more advanced PostgreSQL 8.4+ aggregate function
+ 
+\emph on
+array_agg
+\emph default
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+http://www.postgresql.org/docs/9.1/static/functions-aggregate.html
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+SELECT person.name 
+\end_layout
+
+\begin_layout Plain Layout
+
+FROM casting 
+\end_layout
+
+\begin_layout Plain Layout
+
+NATURAL JOIN person 
+\end_layout
+
+\begin_layout Plain Layout
+
+GROUP BY person.name 
+\end_layout
+
+\begin_layout Plain Layout
+
+HAVING (
+\end_layout
+
+\begin_layout Plain Layout
+
+	SELECT array_agg(movie_id) 
+\end_layout
+
+\begin_layout Plain Layout
+
+	FROM movie 
+\end_layout
+
+\begin_layout Plain Layout
+
+	WHERE title 
+\end_layout
+
+\begin_layout Plain Layout
+
+	LIKE 'Pirates of the Caribbean: %'
+\end_layout
+
+\begin_layout Plain Layout
+
+	) <@ array_agg(movie_id);
 \end_layout
 
 \end_inset
@@ -4185,7 +4234,371 @@ HAVING COUNT(person_id)=
 \end_layout
 
 \begin_layout Section
-Answer for Question 4.8
+Problem 5: SQL/Modeling
+\end_layout
+
+\begin_layout Subsection
+Answer for Question 5.1
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+scalebox{0.7}{
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[node distance=3cm] 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node[entity] (person) {Person};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node[relationship] (casted-for) [above right=2.5cm of person] {Casted-for}
+ edge (person);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node[entity] (movie) [below right=2.5cm of casted-for] {Movie} edge (casted-for);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (personid) [left=1cm of person] {
+\backslash
+key{person
+\backslash
+_id}} edge (person);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (name) [above left=1cm of person] {name} edge (person);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (age) [below left=1cm of person] {age} edge (person);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (gender) [below=1cm of person] {gender} edge (person);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (movieid) [right=1cm of movie] {
+\backslash
+key{movie
+\backslash
+_id}} edge (movie);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (title) [above right=1cm of movie] {title} edge (movie);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (year) [below right=1cm of movie] {year} edge (movie);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (kind) [above=1cm of movie] {kind} edge (movie);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[relationship] (episodeof) [below=1cm of movie] {episode
+\backslash
+_of};
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+draw (episodeof.75) edge [->](movie.290) ;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+draw (movie.250) edge (episodeof.115);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (role) [above right =1cm of casted-for] {role} edge  (casted-for
+);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+node[attribute] (charname) [above left=1cm of casted-for] {char
+\backslash
+_name} edge (casted-for);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+E/R model for Problem 3 schema(note the lines and arrow between episode_of
+ to movie(recursion))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Subsection
+Answer for Question 5.2
+\end_layout
+
+\begin_layout Paragraph*
+Answer for a
+\end_layout
+
+\begin_layout Standard
+Here the attribute age is removed from person 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ALTER TABLE person DROP COLUMN age;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Answer for b
+\end_layout
+
+\begin_layout Standard
+Here a new integer attribute length with 0 as default value is added to
+ movie 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ALTER TABLE person ADD COLUMN length int DEFAULT 0;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Answer for Question 5.3
+\end_layout
+
+\begin_layout Paragraph*
+Answer for a
+\end_layout
+
+\begin_layout Standard
+Here I add Sean Connery to the database
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+INSERT INTO person (person_id, name, gender) VALUES (321, 'Sean Connery',
+ 'M'); 
+\end_layout
+
+\begin_layout Plain Layout
+
+INSERT INTO casting (movie_id, person_id, role, char_name) VALUES (12345,
+ 321, 'Actor', 'James Bond');
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Answer for b
+\end_layout
+
+\begin_layout Standard
+Here I take movies starting with 'The ', replacing it with ', The' added
+ to the end of the string.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+UPDATE movie SET title=substr(title,5)||', The' WHERE title LIKE 'The %';
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Answer for c 
+\end_layout
+
+\begin_layout Standard
+I delete all movies with more than three producers.
+ I assume foreign keys do not cascade deletes.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+DELETE FROM movie WHERE movie_id = (SELECT movie_id FROM casting WHERE role
+ = 'Producer' GROUP BY movie_id HAVING COUNT(*) > 3); 
+\end_layout
+
+\begin_layout Plain Layout
+
+DELETE FROM casting WHERE movie_id = (SELECT movie_id FROM casting WHERE
+ role = 'Producer' GROUP BY movie_id HAVING COUNT(*) > 3);
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
