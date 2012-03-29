@@ -1,98 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://dbw.ku.dk/assignment2"
-  targetNamespace="http://dbw.ku.dk/assignment2" elementFormDefault="qualified">
-
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://dbw.ku.dk/assignment2" targetNamespace="http://dbw.ku.dk/assignment2" elementFormDefault="qualified">
   <xs:element name="northwind">
     <xs:complexType>
       <xs:sequence>
-
         <xs:element name="suppliers">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="supplier" type="supplierType"
-                minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="supplier" type="supplierType" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-
         <xs:element name="products">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="product" minOccurs="0"
-                maxOccurs="unbounded" />
+              <xs:element name="product" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        
         <xs:element name="categories">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="category" type="categoryType"
-                minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="category" type="categoryType" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-
       </xs:sequence>
     </xs:complexType>
     <xs:key name="keysupplierid">
-      <xs:selector xpath="suppliers/supplier" />
-      <xs:field xpath="@supplierid" />
+      <xs:selector xpath="suppliers/supplier"/>
+      <xs:field xpath="@supplierid"/>
     </xs:key>
     <xs:key name="keycategoryid">
-      <xs:selector xpath="categories/category" />
-      <xs:field xpath="@categoryid" />
+      <xs:selector xpath="categories/category"/>
+      <xs:field xpath="@categoryid"/>
     </xs:key>
     <xs:key name="keyproductid">
-      <xs:selector xpath="products/product" />
-      <xs:field xpath="@productid" />
+      <xs:selector xpath="products/product"/>
+      <xs:field xpath="@productid"/>
     </xs:key>
     <xs:keyref name="refersupplierid" refer="keysupplierid">
-      <xs:selector xpath="products/product" />
-      <xs:field xpath="@supplierid" />
+      <xs:selector xpath="products/product"/>
+      <xs:field xpath="@supplierid"/>
     </xs:keyref>
     <xs:keyref name="refercategoryid" refer="keycategoryid">
-      <xs:selector xpath="products/product" />
-      <xs:field xpath="@categoryid" />
+      <xs:selector xpath="products/product"/>
+      <xs:field xpath="@categoryid"/>
     </xs:keyref>
   </xs:element>
-
   <!-- Type definitions -->
-
   <xs:complexType name="supplierType">
     <xs:sequence>
-      <xs:element name="companyname" type="xs:string" minOccurs="0" />
-      <xs:element name="contactname" type="xs:string" minOccurs="0" />
-      <xs:element name="contacttitle" type="xs:string" minOccurs="0" />
-      <xs:element name="address" type="xs:string" minOccurs="0" />
-      <xs:element name="city" type="xs:string" minOccurs="0" />
-      <xs:element name="postalcode" type="xs:integer" minOccurs="0" />
-      <xs:element name="country" type="xs:string" minOccurs="0" />
-      <xs:element name="phone" type="xs:long" minOccurs="0" />
-      <xs:element name="fax" type="xs:long" minOccurs="0" />
+      <xs:element name="companyname" type="xs:string"/>
+      <xs:element name="contactname" type="xs:string"/>
+      <xs:element name="contacttitle" type="xs:string"/>
+      <xs:element name="address" type="xs:string"/>
+      <xs:element name="city" type="xs:string"/>
+      <xs:element name="postalcode" type="xs:integer"/>
+      <xs:element name="country" type="xs:string"/>
+      <xs:element name="phone" type="xs:long"/>
+      <xs:element name="fax" type="xs:long"/>
     </xs:sequence>
-    <xs:attribute name="supplierid" type="xs:integer"
-      use="required" />
+    <xs:attribute name="supplierid" type="xs:integer" use="required"/>
   </xs:complexType>
-
   <xs:complexType name="categoryType">
     <xs:sequence>
-      <xs:element name="categoryname" type="xs:string" />
-      <xs:element name="description" type="xs:string" />
+      <xs:element name="categoryname" type="xs:string"/>
+      <xs:element name="description" type="xs:string"/>
     </xs:sequence>
-    <xs:attribute name="categoryid" type="xs:integer" use="required" />
+    <xs:attribute name="categoryid" type="xs:integer" use="required"/>
   </xs:complexType>
-
   <xs:complexType name="productType">
     <xs:sequence>
-      <xs:element name="productname" type="xs:string" />
-      <xs:element name="quantityperunit" type="xs:integer" />
-      <xs:element name="unitprice" type="xs:integer" />
-      <xs:element name="unitsinstock" type="xs:integer" />
+      <xs:element name="productname" type="xs:string"/>
+      <xs:element name="quantityperunit" type="xs:integer"/>
+      <xs:element name="unitprice" type="xs:integer"/>
+      <xs:element name="unitsinstock" type="xs:integer"/>
     </xs:sequence>
-    <xs:attribute name="productid" type="xs:integer" use="required" />
-    <xs:attribute name="supplierid" type="xs:integer" use="required" />
-    <xs:attribute name="categoryid" type="xs:integer" use="required" />
+    <xs:attribute name="productid" type="xs:integer" use="required"/>
+    <xs:attribute name="supplierid" type="xs:integer" use="required"/>
+    <xs:attribute name="categoryid" type="xs:integer" use="required"/>
   </xs:complexType>
-
 </xs:schema>
