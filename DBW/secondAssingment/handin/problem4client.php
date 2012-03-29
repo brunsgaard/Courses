@@ -2,10 +2,10 @@
 
 /*
  * This is the test client for problem 4 (web services).
-*
-* The code in this class are very clean,
-* so it is my opinion that code comments are not requred here.
-*/
+ *
+ * The code in this class are very clean,
+ * so it is my opinion that code comments are not requred here.
+ */
 
 header('Content-type: text/plain; charset=utf-8');
 $client = new SoapClient('problem4.wsdl',array('features'=>SOAP_SINGLE_ELEMENT_ARRAYS,'location'=>'http://qwa.dk/problem4server.php'));

@@ -78,10 +78,10 @@ div.orderdetails table {
 		$db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 		/*
-		 * If valid user input are present, then prepare and execute transaction
-		* 	The transaction are adding a new product to the order or updating an already existing product.
-		* 	The quantity added to the order are subtracted from unitsinstock at the nw_peoducts table.
-		*/
+		 *  If valid user input are present, then prepare and execute transaction
+ 		 * 	The transaction are adding a new product to the order or updating an already existing product.
+ 		 * 	The quantity added to the order are subtracted from unitsinstock in the nw_peoducts table.
+		 */
 		if(isset($_REQUEST["quantity"]) && !empty($_REQUEST["quantity"]) && is_numeric($_REQUEST["quantity"]) &&
 				isset($_REQUEST["discount"]) && is_numeric($_REQUEST["discount"])
 				&& ($_REQUEST["discount"]) >= 0 && ($_REQUEST["discount"]) <= 1){
@@ -89,9 +89,9 @@ div.orderdetails table {
 
 			$db->beginTransaction();
 
-			$db->exec("LOCK TABLE nw_orderdetail IN SHARE MODE");
+			$db->exec("LOCK TABLE nw_orderdetail IN ROW EXCLUSIVE MODE");
 
-			// Check how many of the needed product are in stock.
+			// Check how many of the required product are in stock.
 			$stmt = $db->prepare("SELECT unitsinstock FROM nw_product WHERE productid=:productid;");
 			$stmt->execute(array(":productid"=>$_REQUEST["productid"]));
 
@@ -103,7 +103,7 @@ div.orderdetails table {
 				$stmt->execute(array(":orderid"=>$_REQUEST["query"],":productid"=>$_REQUEST["productid"]));
 
 
-				// If the product are alaready present, then update nw_orderdeatil by adding the reqursted quantity to the existing quantity.
+				// If the product are already present, then update nw_orderdeatil by adding the reqursted quantity to the existing quantity.
 				if($stmt->rowCount()>0){
 
 					$stmt = $db->prepare("UPDATE nw_orderdetail SET quantity = quantity +:quantity WHERE orderid =:orderid AND productid=:productid");
@@ -130,9 +130,9 @@ div.orderdetails table {
 		}
 		
 		/*
-		 * If valid user input (orderid) are present prepare and executeg query
-		* else print "You have to enter a valid orderid..."
-		*/
+		 * If valid user input (orderid) are present, then prepare and executeg query
+		 * else print "You have to enter a valid orderid..."
+		 */
 		if (isset($_REQUEST["query"]) && !empty($_REQUEST["query"]) && (int) $_REQUEST["query"] != 0 && is_numeric($_REQUEST["query"]) && 2147483647 >= $_REQUEST["query"]) {
 
 			$stmt = $db->prepare(" SELECT orderid,orderdate,requireddate,shippeddate,freight,contactname,firstname,lastname,shipname,shipaddress,shipcity,shippostalcode,shipcountry FROM (nw_employee NATURAL JOIN nw_order) JOIN nw_customer ON nw_order.customerid=nw_customer.customerid WHERE orderid=:query;");
@@ -140,7 +140,6 @@ div.orderdetails table {
 
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-			
 			/*
 			 * If valid user input are present and result from SQL execution are not empty, then proceed
 			 * by printing general order infomation. Else print "Order not found...."
@@ -219,17 +218,17 @@ div.orderdetails table {
 				$stmt = $db->prepare("SELECT nw_orderdetail.productid,productname,nw_orderdetail.unitprice,quantity,discount,(nw_orderdetail.unitprice * quantity) AS price  FROM nw_orderdetail JOIN nw_product ON nw_orderdetail.productid=nw_product.productid WHERE orderid=:query ORDER BY productid");
 				$stmt->execute(array(":query"=>$_REQUEST["query"]));
 				
-				// variable to hold for Total cost
+				// variable to hold Total cost
 				$sum = 0;
 				
 				/*
-				 *  As long as it is possible to fetch rows from $stmt
-				*  then take one at a time, add the price from each row to $sum and print the row as a HTML.
-				*/
+				 *  As long as it is possible to fetch rows from the result
+				 *  then take one row at a time, add the price $sum and print the row as a HTML.
+				 */
 				
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-					// For each row, add price to  the total cost.
+					// For each row, add price to the total cost.
 					$sum += $row['price'];
 
 					echo "<tr>";

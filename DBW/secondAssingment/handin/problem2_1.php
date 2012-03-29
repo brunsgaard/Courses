@@ -58,7 +58,7 @@ body {
 
 
 
-				// Preparing and executing query based on whether or not user input are present	
+				// Preparing and executing query based on whether or not valid user input are present	
 				if (isset($_REQUEST["query"]) && !empty($_REQUEST["query"])){
 					$stmt = $db->prepare("SELECT employeeid,lastname,firstname,title,EXTRACT(EPOCH FROM birthdate ) AS birthdateepoch,EXTRACT(EPOCH FROM hiredate ) AS hiredateepoch,address,city,postalcode,country FROM nw_employee WHERE firstname ILIKE :query OR  lastname ILIKE :query ORDER BY lastname,firstname");
 					$stmt->execute(array(":query"=>"%".$_REQUEST["query"]."%"));

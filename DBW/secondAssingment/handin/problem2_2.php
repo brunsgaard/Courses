@@ -75,18 +75,17 @@ div.orderdetails table {
 	$db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 	/*
-	 * If valid user input are present prepare and executeg query
-	* else print "You have to enter a valid orderid..."
-	*/
+	 * If valid user input are present, prepare and execute query
+     * else print "You have to enter a valid orderid..."
+	 */
 	if (isset($_REQUEST["query"]) && !empty($_REQUEST["query"]) && (int) $_REQUEST["query"] != 0 && is_numeric($_REQUEST["query"]) && 2147483647 >= $_REQUEST["query"]) {
 
 		$stmt = $db->prepare(" SELECT orderid,orderdate,requireddate,shippeddate,freight,contactname,firstname,lastname,shipname,shipaddress,shipcity,shippostalcode,shipcountry FROM (nw_employee NATURAL JOIN nw_order) JOIN nw_customer ON nw_order.customerid=nw_customer.customerid WHERE orderid=:query;");
 		$stmt->execute(array(":query"=>$_REQUEST["query"]));
-
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		/*
-		 * If valid user input are present and result from execute are not empty, then proceed
+		 * If result from query execution are not empty, then proceed by printing the result
 		* else print "Order not found...."
 		*/
 		if(!empty($row)) {
@@ -158,18 +157,17 @@ div.orderdetails table {
 
 
 				<?php
-				// Preparing and executing a statement returning the order details.
-					
+				// Prepare and execute a statement returning the order details.
 				$stmt = $db->prepare("SELECT nw_orderdetail.productid,productname,nw_orderdetail.unitprice,quantity,discount,(nw_orderdetail.unitprice * quantity) AS price  FROM nw_orderdetail JOIN nw_product ON nw_orderdetail.productid=nw_product.productid WHERE orderid=:query ORDER BY productid");
 				$stmt->execute(array(":query"=>$_REQUEST["query"]));
 
-				// variable to hold for Total cost
+				// variable to hold total cost
 				$sum = 0;
 
 				/*
-				 *  As long as it is possible to fetch rows from $stmt
-				*  then take one at a time, add the price from each row to $sum and print the row as a HTML.
-				*/
+				 *  As long as it is possible to fetch rows from result
+				 *  then take one row at a time, add the (int) price to $sum and print the row as a HTML.
+				 */
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
 					// For each row, add price to  the total cost.

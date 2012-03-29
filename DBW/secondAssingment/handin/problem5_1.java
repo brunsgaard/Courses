@@ -96,7 +96,7 @@ public class problem5_1 {
 		System.out.print("|\n");
 
 		/*
-		 * Printf seperator between data and metadata
+		 * Printf seperator for data and metadata
 		 */
 		for (int i = 0; (rsmd.getColumnCount()) > i; i++) {
 

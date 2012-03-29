@@ -93,8 +93,8 @@ div.field input,div.field select {
 	<?php
 	/*
 	 * If valid user input are present then execute the transaction
-	*  to insert the new product.
-	*/
+	 * to insert the new product.
+	 */
 	if (isset($_REQUEST["productname"]) && !empty($_REQUEST["productname"])&&
 			strlen($_REQUEST["productname"]) <= 40 && strlen($_REQUEST["quantityperunit"]) <= 20 &&
 			$_REQUEST["unitprice"] <= 170141183460469231731687303715884105727 &&
@@ -103,7 +103,7 @@ div.field input,div.field select {
 
 		$db->beginTransaction();
 
-		$db->exec("LOCK TABLE nw_product IN SHARE MODE");
+		$db->exec("LOCK TABLE nw_product IN ROW EXCLUSIVE MODE");
 
 		// Could also use PostgreSQL's serial datatype but this is the SQL standard compliant method
 		$stmt = $db->prepare("SELECT max(productid) from nw_product");
@@ -137,9 +137,9 @@ div.field input,div.field select {
 				$stmt->execute();
 
 				/*
-				 *  As long as it is possible to fetch rows from $stmt
-				*  then take one at a time and print it as a HTML row.
-				*/
+				 *  As long as it is possible to fetch rows from the result
+				 *  then take one row at a time and print it as a HTML row.
+				 */
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
 					echo "<tr>";
