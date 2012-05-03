@@ -15,21 +15,66 @@
 \maketitle
 
 \begin{itemize}
-    \item[a.] A' has to be a permutation of A.
-    \item[b.] \textit{Loop invariant (2-4:)} In the subarray  $A[j...n]$, $j$ are the minimum element in the array. Also $A'[j...n]$ is a permutation of $A[j...n]$.
+    \item[a.] $A'$ has to be a permutation of $A$.
+    \item[b.] \textbf{Loop invariant (2-4):} In the subarray  $A[j...n]$, $j$ are the minimum element. Also $A'[j...n]$ is a permutation of $A[j...n]$.
         \begin{itemize}
-            \item[\textit{i.}] \textit{Initialization} At this point $j=n$ and therefore $A[j...n]=A[j]$, which satisfy the loop invariant.
-            \item[\textit{ii.}] \textit{Maintenance} By the initialization in the loop invariant we know that $A[j]$ is a minimum element. 
-                For each iteration we see that if $A[j] < A[j-1]$, then $A[j]$ and $A[j-1]$ are swapped, thus $A[j-1]$ will be a minimum element for the next
-                iteration where it is $A[j]$. The loop invariant then holds for maintenance.
-            \item[\textit{iii.}] \textit{Termination} The loop will terminate when $j=i$, at this point $A[i]$ will be the minimum element in $A[i...n]$.
+            \item[\textit{i.}] \textbf{Initialization:} At this point $j=n$ and therefore $A[j...n]=A[j]$, which satisfy the loop invariant.
+            \item[\textit{ii.}] \textbf{Maintenance:} For each iteration we see that if $A[j] < A[j-1]$, then $A[j]$ and $A[j-1]$ 
+                are swapped, thus $A[j-1]$ will be a minimum element for the next
+                iteration, where it will be referred to as $A[j]$. The loop invariant then holds for maintenance.
+            \item[\textit{iii.}] \textbf{Termination:} The loop will terminate when $j=i$, at this point $A[i]$ will be the minimum element in $A[i...n]$.
         \end{itemize}
-    \item[c.] \textit{Loop invariant (1-4):} The subarray $A[1...i-1]$ appended with $A[i...n]$ will be a permutation of the original $A$. The subarray array 
-        $A[1...i-1]$ will be sorted, which follows from \textit{b.}. Also all the elements in $A[1...i-1]$ will be smaller or equal to the the elements in $A[i...n]$.
+    \item[c.] \textbf{Loop invariant (1-4):} The subarray $A[1...i-1]$ appended with $A[i...n]$ are a permutation of the original $A$. The subarray array 
+        $A[1...i-1]$ will be sorted, which follows from \textit{b.}. Also, all the elements in $A[1...i-1]$ are smaller or equal to the elements in $A[i...n]$.
         \begin{itemize}
-            \item[i.]
+            \item[\textit{i.}]  \textbf{Initialization:} At this point $i=1$ and thus $A[1...i-1] = A[1...0]$, which are an empty list.  The substring $A[i...n]$ are, 
+                    at this point, identical to the original $A$, so it is clearly a permutation of $A$. 
+                    At this point the loop invariant holds and we are all good.
+                \item[\textit{ii.}] \textbf{Maintenance:} From the termination in sub-assignment \textit{b.} we know, that $i$ are the minimum element in $A[i...n]$ when the
+                    loop terminates, and because it increase by 1 for each iteration, we know that $A[1...i-1]$ are always in sorted order. 
+                    Also in each iteration we move one element from the unsorted
+                    array to the sorted array, thus we maintain the requirement, that the two arrays appended are a permutation of $A$.
+            \item[\textit{iii.}]\textbf{Termination:} The loop will terminate at the point where $i=A.length=n$, and thus the whole 
+                list $A[1...n]$ is sorted.
         \end{itemize}
-    \item[d.]
+    \item[d.] To find the worstcase running time of bubblesort we analyse each line of the algorithm.
+        
+        \begin{multicols}{3}
+
+    \begin{minipage}{0.40\textwidth}
+    \begin{codebox}
+    \Procname{$\proc{Bubblesort}(A)$}
+    \li \For $i \gets 1$ \To $\attrib{A}{length} - 1$ \Do
+    \li     \For $j \gets \attrib{A}{length}$ \Downto $i + 1$ \Do
+    \li         \If $A[j] < A[j - 1]$ \Then
+    \li             exchange $A[j]$ with $A[j - 1]$ 
+                    \End
+    \end{codebox}
+    \end{minipage}
+
+    \columnbreak
+    \hspace{0.4\textwidth}
+    \columnbreak
+
+    \begin{minipage}{0.2\textwidth}
+        \begin{tabular}{ c c }
+            \multicolumn{1}{c}{} \\
+            $cost$  & $times$ \\
+            $c_{1}$ & $n$ \\
+            $c_{2}$ & $\sum_{j=1}^{n-1}t_{j}$ \\
+            $c_{3}$ & $\sum_{j=1}^{n-1}(t_{j}-1)$ \\
+            $c_{4}$ & $\sum_{j=1}^{n-1}(t_{j}-1)$ \\
+        \end{tabular}
+    \end{minipage}
+   
+\end{multicols}
+If we sum up each line, this can be written as
+$$ T(n)=c_{1}n+c_{2}\sum_{j=1}^{n-1}t_{j}+c_{3}\sum_{j=1}^{n-1}(t_{j}-1)+c_{4}\sum_{j=1}^{n-1}(t_{j}-1)$$
+If we use a little math, and write up the worst case scenario, the following appear
+$$T(n) = c_{1}n + c_{2} \frac{1}{2} (n^2-n-2)+c_{3}\frac{1}{2}(n^2-3 n+2)+c_{4}\frac{1}{2} (n^2-3 n+2)$$
+We not really interested in $c_i$ for each line(it does not have any effect on the growth), so we assume $c_1=c_2=c_3=c_4=1$ and reduce the expression further
+$$T(n) = \frac{3}{2}n^2-\frac{5}{2}n+1$$
+Now we clearly see that bubblesort is a quadratic function of $n$. Thus, it has the same runtime as insertion sort.
 \end{itemize}
 
 \end{document}
