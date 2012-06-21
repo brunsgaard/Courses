@@ -1,7 +1,7 @@
 \section{Implementation of the parser}
     This section is about the decision making and implementation of the parser.
-    I have chosen the parser because it has been rewritten in the process and I
-    will explain why this was a good decision.
+    I have chosen the parser because it have been rewritten in the process and I
+    will explain why this where a good decision.
 
     First, take a look at the initial parser code, parsing the employees from
     the XML file.
@@ -34,20 +34,20 @@ if (employeeRoot != null) {
         }
 }}
     \end{lstlisting}
-    The code above was part of the very first parser. 
+    The code above where part of the very first parser. 
     
     This simple part of the parser looks for an attribute called delete. If the
     delete attribute is true, then we delete the employee from the database,
     else we insert the employee.
 
-    After more research in the field of C\# and XML, we found the LINQ package,
+    After more research in the field of C\# and XML, we found the LINQ package
     could help us with readability and robustness. Also we had some changes to
     the design of the application, as an example the images and thumbnails
     should no longer be a part of the XML file, but was loaded separately from
     a webserver, based on the employeeId.
 
     So we had more reasons to do a code rewrite. 
-    Below are shown the same code snip after the rewrite:
+    Below are shown the same code snippet after the rewrite:
     \begin{lstlisting}
 var ns = xdoc.Root.Name.Namespace; var results = from el in xdoc.Root.Elements
 (ns + "employees").Elements (ns + "employee") select el;
@@ -69,14 +69,14 @@ EmployeeHandler.Insert (id, firstName, lastName, title, phone, location,
 status, department );
     \end{lstlisting}
     After the code rewrite I think that the code was improved in the following
-    ways. In regard to readability, the code now uses LINQ, thus a SQL-like
-    syntax "from * in * select" are used, this syntax should be well known for
+    ways. In regard to readability, the code now uses LINQ. Thus a SQL-like
+    syntax "from * in * select" is used, this syntax should be well known for
     many programmers, so in that regard I will argue that we improved
     readability.
     
-    We found that LINQ, did a better job at handling flawed XML files and
-    dynamic namespaces, thus we improved robustness.
+    We found that LINQ did a better job at handling flawed XML files and
+    dynamic namespaces, thereby we improved robustness.
     
     Because we found a more optimal solution for image fetching, the parser
-    has become more simple. I think in all way this code rewrite improved the
+    became more simple. I think in all aspects this code rewrite improved the
     implementation of the parser.
