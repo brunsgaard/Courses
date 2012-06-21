@@ -1,0 +1,30 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{MMMNS00}
+
+\bibitem[BD10]{oose}
+Bernd Bruegge and Allen~H. Dutoit.
+\newblock {\em Object-Oriented Software Engeniering}.
+\newblock Pearson, 2010.
+
+\bibitem[CCD{\etalchar{+}}98]{mad-article}
+Michael Christensen, Andy Crabtree, Christian Damm, Klaus Hansen, Ole Madsen,
+  Pernille Marqvardsen, Preben Mogensen, Elmer Sandvad, Lennert Sloth, and
+  Michael Thomsen.
+\newblock The m.a.d. experience: Multiperspective application development in
+  evolutionary prototyping.
+\newblock In Eric Jul, editor, {\em ECOOP’98 — Object-Oriented
+  Programming}, volume 1445 of {\em Lecture Notes in Computer Science}, pages
+  13--40. Springer Berlin / Heidelberg, 1998.
+\newblock 10.1007/BFb0054085.
+
+\bibitem[MMMNS00]{factor}
+L.~Mathiassen, A.~Munk-Madsen, P.A. Nielsen, and J.~Stage.
+\newblock {\em Object-Oriented Analysis \& Design}.
+\newblock Marko Publishing House, 2000.
+
+\bibitem[Nau85]{naur}
+Peter Naur.
+\newblock Programming as theory building.
+\newblock 1985.
+
+\end{thebibliography}

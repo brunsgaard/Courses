@@ -1,0 +1,64 @@
+\section{Test plan}
+
+\subsection{Introduction}
+The main objective of this test plan is to determine the robustness
+of the application's core functionality.
+
+In consultation with the client we have decided to test only the core
+functionality of the application. This decision has been made in
+regard to the remaining time to deadline, where we find other
+tasks to have greater priority.
+
+\subsection{Relationship to other documents}
+To better understand the scope of the application and this test plan,
+we recommend that the reader read subreport four before proceeding.
+After reading subreport four, the reader will have a clear overview
+regarding the functional requirements, non-functional requirements,
+technical design and purpose of the application.
+
+\subsection{Features to be tested/not to be tested}
+All functionality in the model handlers will be tested. For Employees,
+Departments and Projects, this include all methods.
+
+The DataSources will be partially tested, this is due to the fact that
+the DataSources extend many iOS classes, and we do not intend to test
+the methods implemented by MonoTouch.
+
+The application as a whole, will be tested with around 130.000 random
+generated datasets. These tests will be quantitative, and thus we will
+not test that the output data are as expected, the purpose of these tests
+are to test  robustness of the data fetcher class (\texttt{FetchUpdates.cs})
+and the two XML parser classes (\texttt{FullFeedParser.cs} and
+\texttt{StatusParser.cs})
+
+As explained in the introduction, only core functionality is
+tested. Therefore this testplan does not include tests of
+functionality contained in the \texttt{Config.cs} class. 
+
+Also it has been decided that actual GUI testing falls outside the scope of 
+this test plan. 
+
+\subsection{Approach}
+Where it is possible we will use the NUnit testing framework.\footnote{NUnit is
+an open source unit testing framework for Microsoft .NET.} NUnit enables us to isolate each
+part of the program and show that the individual parts works as expected. NUnit is included
+in the Monotouch framework and runs on the iOS Simulator, allowing us to test all functionality
+on the target platform. By testing the parts of a program first and then testing the program itself,
+integration testing becomes much easier.
+
+Our unit testing has two main purposes, verification and validation. The verification process confirms
+that the software meets its technical specifications. A specification is a description of a function
+in terms of a measurable output value given a specific input value under specific preconditions.
+
+The validation process confirms that the software meets the business requirements. A defect is a
+variance between the expected and actual result.
+
+Where unit testing are not feasible, we use manual testing to achieve verification and validation,
+and thus that our code works as expected.
+
+Finally we have developed a web service in python, serving XML-feeds to the application. 
+This web service is used to emulate the production environment, and we generate and serve 
+around 130.000 random-generated datasets this way. 
+These tests are quantitative and for robustness only, and thus they do not focus on 
+validation and verification.
+

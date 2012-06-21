@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/dev/Arch Linux)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: exam.aux
+A level-1 auxiliary file: frontpage.aux
+A level-1 auxiliary file: sections/literature_review.aux
+The style file: alpha.bst
+A level-1 auxiliary file: sections/testplan.aux
+A level-1 auxiliary file: sections/testcases.aux
+A level-1 auxiliary file: sections/test_summary.aux
+Database file #1: references.bib
+Warning--empty journal in naur
+You've used 4 entries,
+            2543 wiz_defined-function locations,
+            588 strings with 5252 characters,
+and the built_in function-call counts, 1830 in all, are:
+= -- 161
+> -- 122
+< -- 3
++ -- 45
+- -- 44
+* -- 138
+:= -- 324
+add.period$ -- 14
+call.type$ -- 4
+change.case$ -- 31
+chr.to.int$ -- 4
+cite$ -- 5
+duplicate$ -- 70
+empty$ -- 114
+format.name$ -- 48
+if$ -- 361
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 6
+newline$ -- 25
+num.names$ -- 14
+pop$ -- 41
+preamble$ -- 1
+purify$ -- 37
+quote$ -- 0
+skip$ -- 52
+stack$ -- 0
+substring$ -- 49
+swap$ -- 12
+text.length$ -- 3
+text.prefix$ -- 1
+top$ -- 0
+type$ -- 24
+warning$ -- 1
+while$ -- 14
+width$ -- 6
+write$ -- 55
+(There was 1 warning)

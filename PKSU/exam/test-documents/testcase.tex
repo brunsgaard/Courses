@@ -1,0 +1,65 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath,amssymb,amsfonts}
+
+\title{Test Documentation}
+\author{S7 Dev team}
+
+\begin{document}
+\maketitle
+
+\part{Test case specification} % (fold)
+\label{prt:Test_case_specification}
+
+Indentifier: ModelHandlerTests
+
+\section{Test items} % (fold)
+\label{sec:Test_items}
+
+\fxfatal{Insert test case figure here}
+
+This tests case covers the handlers for the model objects. These handlers
+control the life cycle of all model objects, and are responsible for
+caching them. All features of the handlers will be tested to ensure
+expected behaviour. This includes the throwing of exceptions in error cases.
+Random input is fed to the classes to ensure that all edge cases are found.
+
+% section Test items (end)
+
+\section{Input specifications} % (fold)
+\label{sec:Input_specifications}
+
+To ensure robust testing, all inputs are randomly generated. This includes
+IDs for non-existant employees, and the values for randomly generated
+employee, department and project objects. This enables us to think about
+the conceptual operations the methods under testing perform, instead of
+the specifics of one object.
+
+% section Input specifications (end)
+
+\section{Output specifications} % (fold)
+\label{sec:Output_specifications}
+
+Outputs from all methods are tested against the randomly generated values.
+No transformations are made on the data, as all processing is done on the
+gateway server. This enables simple output tests which contain logic that
+is easy to validate.
+
+% section Output specifications (end)
+
+\section{Environmental needs} % (fold)
+\label{sec:Environmental_needs}
+
+\fxfatal{Reference}
+As specified in the Test Plan, all tests must be run in the iOS Simulator through the
+Monotouch port of NUnit.
+
+% section Environmental needs (end)
+
+% part Test case specification (end)
+
+\end{document}

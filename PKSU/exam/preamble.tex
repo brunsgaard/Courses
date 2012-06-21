@@ -1,0 +1,89 @@
+\pdfoptionpdfminorversion=5      % pdf 1.5
+\documentclass[a4paper]{article} % document class
+\usepackage[utf8]{inputenc}      % default input encoding
+\usepackage[english]{babel}      % hyphenation support
+\usepackage{amsmath,amssymb}     % math mode
+\usepackage{enumitem}
+\usepackage[draft,nomargin,inline,index,marginclue]{fixme} % highlight fixmes
+
+\usepackage{float}              % floats
+\usepackage{tikz}
+\usetikzlibrary{snakes}
+\usepackage{subfig}             % subfigures -- multiple figures in
+                                % one "figure"
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg} % Prioritized list of file
+                                           % endings
+\graphicspath{{./illustrations/}}          %default path to illustrations
+
+\usepackage{rotating}           % enable support for rotation of pages
+\usepackage[geometry]{ifsym}    % symbols
+\usepackage[]{appendix}         % appendix package
+\usepackage{tabulary}           % tables
+\usepackage{multirow}           % multirow tables
+\usepackage[super]{nth}
+
+\usepackage{color}              % colors -- used for typesetting code
+		%\definecolor{sourceYellow}{rgb}{1,1,0.85}
+        \definecolor{codecomment}{rgb}{0.5,0,0.5} % 4b5fbf
+        \definecolor{stringsGreen}{rgb}{0,0.5,0}
+        \definecolor{keywordsRed}{rgb}{0.6,0,0} 
+        \definecolor{commentsRed}{rgb}{0.8,0,0} 
+        \definecolor{keywordsBlue}{rgb}{0.0,0.0,0.84}
+        \definecolor{codedefine}{rgb}{0,0.5,0.5} % 007f7f
+\usepackage{listings}                            % code listings
+\lstdefinelanguage[sharp]{C}{   % default code language
+    morekeywords=[1]{Employee,Department,Project}, % add keywords -- classes
+}
+\lstset{                        % C# language settings
+    language=[sharp]C,
+    basicstyle=\ttfamily,             % monospaced font
+    stringstyle=\color{stringsGreen}, % style of strings
+    commentstyle=\color{commentsRed}, % comments
+    backgroundcolor=\color{white},    % background color
+    keywordstyle={\bfseries\color{keywordsBlue}}, % blue keywords
+    tabsize=2,
+}
+
+\newcommand{\inline}[1]{\lstinline!#1!}
+
+\usepackage{pdfpages}
+%\usepackage{chronology}
+%margins, and medskip instead of
+\usepackage{geometry}
+%% \geometry{verbose,tmargin=2.7cm,bmargin=2.7cm,lmargin=2.7cm,rmargin=2.7cm}
+\geometry{verbose,tmargin=2cm,bmargin=2cm}
+%\setlength{\parskip}{\medskipamount}
+%\setlength{\parindent}{0pt}
+\usepackage{setspace}
+%\setstretch{1.17}
+
+\usepackage{microtype}
+
+\usepackage[newcommands]{ragged2e}
+
+\widowpenalty=1000
+\clubpenalty=1000
+
+% for use with mockup images
+\newcommand{\graphicsfull}[2][] { \begin{figure}[H!]
+    \centering
+    \includegraphics[width=\textwidth]{#2}
+    \caption{Mockup #1}
+    \label{fig:mockup#1}
+\end{figure}
+\clearpage
+}
+
+%% displays page number if referenced section is on another page
+\newcommand{\aref}[1]{\nameref{#1}, \autoref{#1}\ifthenelse{\equal{\pageref{#1}}{\thepage}}{}{, page \pageref{#1}}}
+\newcommand{\fref}[1]{\autoref{#1}\ifthenelse{\equal{\pageref{#1}}{\thepage}}{}{, page \pageref{#1}}}
+
+
+% hyperref should always be loaded as the last package.
+\usepackage[
+    breaklinks=true,
+    %% bookmarks
+    unicode=true,
+    plainpages=false
+    ]{hyperref}

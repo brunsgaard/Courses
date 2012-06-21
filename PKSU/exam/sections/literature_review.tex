@@ -1,0 +1,107 @@
+\section{Literature review}
+In the following section we will review two articles, namely
+``Programming as theory building'' by Peter Naur (of DIKU fame), and
+``The M.A.D. Experience: Multiperspective Application Development in
+evolutionary prototyping'' by Michael Christensen, Andy Crabtree,
+Christian Heide Damm, Klaus Marius Hansen, Ole Lehrmann Madsen,
+Pernille Marqvardsen, Preben Mogensen, Elmer Sandvad, Lennert Sloth,
+Michael Thomsen from the computer science department at Århus
+University. \cite{naur, mad-article}
+
+\subsection{Programming as theory building}
+In ``Programming as theory building'', Peter Naur discusses the notion
+of programming not as a discipline where program code is produced
+(``program texts'' in the article), but rather a discipline where the
+product is the design, including documentation and rationale for the
+design decisions.
+
+To support the Theory Building View, Naur lists a few anecdotes, which
+we may gain some insight from, and draw some parallels
+to.
+
+With our project, we're essentially working as external software
+developers, catering to the needs of a client. Some of the
+restrictions regarding implementation are based on the hardware
+platform, while others are requirements set by Subsea7. One of these
+restrictions is that the code should be developed in C\#, in order to
+enable developers at Subsea7 to continue development if necessary.
+
+In \textit{Program Life, Death and Revival}, Naur argues strongly that
+it is insufficient for a new programmer joining a project to become familiar
+with a certain program and its corresponding documentation, but that
+it is an actual requirement to work alongside other programmers with
+an intimate knowledge of the system, as to convey the program
+theory. By extension, a revival of a program when following the Theory
+Building views, is impossible, as the need for a means of conveying
+the program theory remains unsatisfied.
+
+As external developers, the project we're delivering has some
+detachment issues when considering Naurs model, as at is unlikely that
+a future developer would take contact to our project group. One might
+argue that the need for contact follows the size of the project, and
+that for a project of the size of S7Finder, any developer should be
+able to understand the code after reading it a few times. On the other
+hand, we may also argue that some of the original design ideas are
+likely to be lost, and inconsistency may arise. Although the code is
+fairly well-documented, some features may seem less than intuitive,
+e.g. the use of file timestamps and the \texttt{touch}-ing of
+files.\footnote{\texttt{touch} is a standard Unix/Linux command, that in its
+  base case updates the timestamp of a file to ``now''.}
+This may can be seen as a loss of theory, hence supporting Naurs reasoning.
+
+Though the text is written in 1985, 27 years ago, the notion of
+programming as theory building as opposed to text production still
+holds. Drawing parallels from our own project, we realised during the
+fourth meeting with Subsea7 at their offices in Stavanger, as
+discussed in \aref{sec:version_control}, that they wouldn't make use
+of the originally implemented features.
+
+\subsection{The M.A.D. Experience}
+
+The article ``The M.A.D. Experience: Multiperspective Application
+Development in evolutionary prototyping'', the development of an
+application, a Global Customer Service System (GCSS) for a Danish
+goods transport company is described. Although the article is
+extremely explicit and favours unreasonably long paragraphs (a third
+of a page is not uncommon) and intellectual-sounding words over
+simplicity, while bordering on incomprehensibility on account of the
+required level of understanding of ethnography, some valuable points
+may be found in the article.\footnote{E.g.: what is the difference between a
+  ``naturalistic description'' and a regular one?  (pg. 10)}
+
+As we have demonstrated in our development process, the design phase is a
+cooperative activity, and at our visits to Stavanger, we took the
+opportinuty to act on inputs from Subsea7. In the development of the
+GCSS, the group from CIT followed a similar model, although much more
+in-depth, as the GCSS project is bigger both in scope and
+duration. Where we thrice took the trip to Stavanger and listened to
+ideas, complaints and constructive criticism, the CIT group had
+opportunity to visit several offices, both locally and globally
+(Malaysia, Singapore), for a duration of multiple weeks.
+
+In some places the two design processes differ.
+In ``The object-oriented perspective'', the CIT group notes that their
+focus was ``...on modelling as opposed to technical concepts like
+encapsulation and inheritance''. As this has been the first major OO
+project done by either of the group members, our modelling have served
+the same goals, but might have been more based on programming
+experience rather than pure modelling. Our choice of programming
+language and development platforms may also have been a contributer to
+the difference in modelling, as we've had the task to not only
+structure the project, but also learn a new programming language (only
+one group member had any real experience with C\#) and a full set of
+development tools (XCode and MonoDevelop). Further, our group consists
+of four programmers, while the CIT group consisted of an ethnographer,
+a participatory designer and developers.
+
+As they experienced, noted in ``The evolution of the model'', our
+initial model differs quite a bit from the final model. As explained
+in \aref{sec:version_control}, the final meeting with Subsea7 resulted
+in removal of some features, and the simplification of others. While
+it may have eased the design process to have an initial model more
+like the result, it is our experience that this hasn't been a
+hinderance. Rather like the conclusions of the CIT group, it is our
+understanding that ``a model cannot be effectively created in
+isolation from implementation''. While this may not always be true,
+preserving true separation between code and model might be detrimental
+to implementation efforts.

@@ -1,0 +1,43 @@
+\input{preamble}
+
+\begin{document}
+\include{frontpage}
+
+\listoffixmes
+
+\tableofcontents
+\clearpage
+\part{About the IT project}
+\clearpage
+\input{sections/introduction}
+%factor
+\input{sections/specification_requirements}
+\input{sections/system_design}
+\input{sections/program_system_test}
+\input{sections/gui_interaction}
+\input{sections/link_to_youtube_presentation}
+\input{sections/a_specific_task_implementation}
+
+\part{About collaboration with users and within the team}
+\input{sections/schematicoverview}
+\input{sections/partiesandroles}
+\input{sections/team_collaboration}
+\input{sections/strengthandweeknesses_in_planing}
+\input{sections/improvements}
+\part{Article discussion}
+%\include{sections/version_control}
+%\include{sections/project_collaboration}
+\include{sections/literature_review}
+
+\clearpage
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\clearpage
+\appendix
+\include{sections/testplan}
+\include{sections/testcases}
+\include{sections/test_summary}
+
+\end{document}

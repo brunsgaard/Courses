@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="26cm" height="23cm" viewBox="-621 179 502 442" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="-620" y="200" width="500" height="420"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="200" width="500" height="420"/>
+    <rect style="fill: #ffffff" x="-620" y="180" width="73.3" height="20"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="180" width="73.3" height="20"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="-618" y="195">Interface</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="-620" y="300" width="500" height="320"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="300" width="500" height="320"/>
+    <rect style="fill: #ffffff" x="-620" y="280" width="134.9" height="20"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="280" width="134.9" height="20"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="-618" y="295">Application Logic</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="-620" y="540" width="500" height="80"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="540" width="500" height="80"/>
+    <rect style="fill: #ffffff" x="-620" y="520" width="57.9" height="20"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-620" y="520" width="57.9" height="20"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="-618" y="535">Storage</text>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-300" y="220" width="112" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-300" y="220" width="112" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-252" y="247.825">
+      <tspan x="-252" y="247.825">GUI</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-212" y="224" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-212" y="224" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-216" y="228" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-216" y="228" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-216" y="236" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-216" y="236" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-339" y="320" width="187.646" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-339" y="320" width="187.646" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-255.354" y="347.825">
+      <tspan x="-255.354" y="347.825">DataSource</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-175.354" y="324" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-175.354" y="324" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-179.354" y="328" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-179.354" y="328" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-179.354" y="336" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-179.354" y="336" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-306" y="560" width="132" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-306" y="560" width="132" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-250" y="587.825">
+      <tspan x="-250" y="587.825">Model</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-198" y="564" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-198" y="564" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-202" y="568" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-202" y="568" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-202" y="576" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-202" y="576" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-525" y="320" width="132" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-525" y="320" width="132" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-469" y="347.825">
+      <tspan x="-469" y="347.825">Parser</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-417" y="324" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-417" y="324" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-421" y="328" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-421" y="328" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-421" y="336" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-421" y="336" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-600" y="560" width="200" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-600" y="560" width="200" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-508" y="587.825">
+      <tspan x="-508" y="587.825">ImageLoader</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-424" y="564" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-424" y="564" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-428" y="568" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-428" y="568" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-428" y="576" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-428" y="576" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-523" y="480" width="132" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-523" y="480" width="132" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-467" y="507.825">
+      <tspan x="-467" y="507.825">Utility</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-415" y="484" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-415" y="484" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-419" y="488" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-419" y="488" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-419" y="496" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-419" y="496" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-560" y="220" width="200" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-560" y="220" width="200" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-472" y="247.825">
+      <tspan x="-472" y="247.825">AppDelegate</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-384" y="224" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-384" y="224" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-388" y="228" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-388" y="228" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-388" y="236" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-388" y="236" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-360" y1="240" x2="-304.472" y2="240"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-312.236,245 -302.236,240 -312.236,235 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-310.472" y1="580" x2="-395.528" y2="580"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-318.236,585 -308.236,580 -318.236,575 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-387.764,575 -397.764,580 -387.764,585 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-244.683" y1="360.974" x2="-240.105" y2="555.529"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-245.286,547.885 -240.053,557.765 -235.289,547.65 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-460" y1="260" x2="-459.075" y2="315.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-464.203,307.849 -459.037,317.764 -454.205,307.682 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-244" y1="260" x2="-245.088" y2="315.529"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-249.935,307.668 -245.132,317.764 -239.937,307.864 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-459" y1="360" x2="-243.302" y2="556.984"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-252.407,555.441 -241.651,558.492 -245.664,548.057 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-459" y1="360" x2="-457.223" y2="395.533"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-462.605,388.029 -457.112,397.767 -452.617,387.53 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-496.726" y1="556.954" x2="-460.274" y2="523.046"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-494.446,548.005 -498.363,558.477 -487.635,555.327 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-462.554,531.995 -458.637,521.523 -469.365,524.673 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 20; stroke: #000000" x1="-245.176" y1="360" x2="-387.774" y2="496.903"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="-385.636,487.919 -389.387,498.451 -378.711,495.133 "/>
+  </g>
+  <g>
+    <g>
+      <rect style="fill: #ffffff" x="-523" y="400" width="132" height="40"/>
+      <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-523" y="400" width="132" height="40"/>
+    </g>
+    <text font-size="22.5778" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="-467" y="427.825">
+      <tspan x="-467" y="427.825">Config</tspan>
+    </text>
+    <g>
+      <g>
+        <rect style="fill: #ffffff" x="-415" y="404" width="20" height="20"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-415" y="404" width="20" height="20"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-419" y="408" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-419" y="408" width="10.25" height="4"/>
+      </g>
+      <g>
+        <rect style="fill: #ffffff" x="-419" y="416" width="10.25" height="4"/>
+        <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="-419" y="416" width="10.25" height="4"/>
+      </g>
+    </g>
+  </g>
+</svg>

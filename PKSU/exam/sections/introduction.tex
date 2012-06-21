@@ -1,0 +1,32 @@
+\section{Introduction, purpose and frame}
+We have been developing an iPad application for Subsea7, a subsea engineering and construction company from Norway.
+They have around 600 employees at their office in Stavanger, and a new building of the same size is planned for December 2012. Due to the large amount of employees, it can be problematic for an employee to locate those he wants to talk to.
+Therefore we're creating a “People Finder”-application, to be placed across the buildings besides the main stairs, that will be able to display the location and work-status of employees.
+
+The project is done in C\# with MonoTouch, which cross compiles to iOS.
+Subsea7 delivers a Web Service for communicating  data (using XML) to the iPads on a regularly basis. Each iPad is uniquely identified by its MAC address, so data and configuration can be set uniquely for a given iPad.
+
+FACTOR (as mentioned in \cite{factor}, please see section "Refrences") is used in this project to
+formulate a system definition.
+
+\begin{description}
+\item[Function] \hfill \\ Enable employees to quickly and effortlessly
+  locate another employee in the company, either by name, project or
+  department.
+\item[Application domain] \hfill \\ Company employee finder.
+\item[Conditions] \hfill \\ Usable without requiring any prior
+  knowledge (highly intuitive). No discernible delays when using the
+  application, no matter the condition.
+\item[Technology] \hfill \\ Target platform is an Apple iPad 2, while
+  enabling easy porting of the application to other, highly similar,
+  target (e.g. iPhone). Specifically, the application should be
+  written in C\#. Backend is highly irrelevant, with the only
+  restriction that the data should be delivered in XML format
+  validating against our XML Schema Definition.
+\item[Objects] \hfill \\ Employees, departments, projects.
+\item[Responsibility] \hfill \\ Automatic updates of data.
+\end{description}
+
+The project is part of the course Projektkursus: Systemudvikling\footnote{\url{http://sis.ku.dk/kurser/viskursus.aspx?knr=131371}}
+which forms the frame around the project. The goal with the course in to give the students a methodical well-founded and practical
+applicable introduction to IT-systemdevelopment.

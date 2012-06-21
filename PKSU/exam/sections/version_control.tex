@@ -1,0 +1,46 @@
+\section{Version control}
+\label{sec:version_control}
+After meeting with Subsea7 in Stavanger on the 23rd and 24th of May,
+quite a lot of the code base has changed. Originally we've programmed
+with a philisophy of being able to handle an arbitrary number of
+employees, department and projects. For the application to work in a
+satisfying manner with dealing of thousands of objects, we opted for
+supporting partial updates allowing to update a specific object (be it
+an employee, a department or a project) without sending a full
+record. This would allow us to reduce the amount of data being sent on
+the network by an order of magnitude or more.
+
+While this is a great feature, and possibly essential in some
+settings, the last meeting with Subsea7 clarified their needs and
+infrastructure, which has allowed us to substantially reduce the code
+base by removing some of the functionality.
+
+Comparing the last revision before the meeting with Subsea7 with the
+latest revision, the former consists of 3,558 standard lines of code (sloc)
+while the latter contains 3,024 sloc.\footnote{Both figures have been generated using
+  David A. Wheeler's 'SLOCCount'.}  This corresponds to a reduction of
+sloc in the order of ~15\%. Taken into account that the latter
+revision further adds some functionality not considered before the
+meeting (e.g. local scaling of images), an estimate of the real
+reduction in sloc may be as high as 20\%.
+
+Some of the most drastic changes in the code base are as follows:
+
+\begin{description}
+
+    \item[Config] \hfill \\
+        Configuration functionality has been revamped as to avoid a cluttered
+        structure. The \texttt{Config} subsystem now exists in a single file and has
+        support for default value for configuration settings.
+
+    \item[DBWrapper] \hfill \\
+        After the meeting with Subsea7, we decided to abandon the database
+        back-end of the application, as it has been made redundant with the
+        decision to drop support for partial updates.
+
+    \item[Model] \hfill \\
+        Due to the \texttt{DBWrapper} being removed, the \texttt{Model} could
+        be simplified significantly. This has lead to a much more maintainable
+        codebase.
+
+\end{description}
