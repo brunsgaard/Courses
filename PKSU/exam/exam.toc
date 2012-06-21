@@ -34,7 +34,7 @@
 \contentsline {section}{\numberline {8}Schematic course of events }{24}{section.8}
 \contentsline {section}{\numberline {9}Parties involved in the project}{24}{section.9}
 \contentsline {section}{\numberline {10}Team collaboration}{24}{section.10}
-\contentsline {section}{\numberline {11}Strength and weekness's in the planing}{25}{section.11}
+\contentsline {section}{\numberline {11}Strength and weakness's in the planning}{25}{section.11}
 \contentsline {section}{\numberline {12}Suggestions for improvement}{25}{section.12}
 \contentsline {part}{III\hspace {1em}Article discussion}{26}{part.3}
 \contentsline {section}{\numberline {13}Literature review}{27}{section.13}
