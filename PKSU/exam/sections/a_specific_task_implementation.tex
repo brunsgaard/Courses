@@ -1,82 +1,82 @@
 \section{Implementation of the parser}
     This section is about the decision making and implementation of the parser.
     I have chosen the parser because it has been rewritten in the process and I
-    will explain why this was a good idea.
+    will explain why this was a good decision.
 
-    First, take a look at the initial parser code parsing the employees from
-    the xml file
-
+    First, take a look at the initial parser code, parsing the employees from
+    the XML file.
+    \clearpage
     \begin{lstlisting}
 XNamespace f = "http://internal.s7.net/S7finder";
-XDocument.Load (dataFeed);
+XDocument doc = XDocument.Load (dataFeed);
 
-XElement employeeRoot = doc.Root.Element (f + "employees"); 
-if (employeeRoot !=null) { 
-    
-IEnumerable<XElement> employees = employeeRoot.Elements (f + "employee");
+XElement employeeRoot = doc.Root.Element (f + "employees");
+if (employeeRoot != null) {
+    IEnumerable<XElement> employees = 
+        employeeRoot.Elements (f + "employee");
 
-foreach (XElement e in employees) {
+    foreach (XElement e in employees) {
 
-    if (e.Attribute ("delete") != null && 
-                Convert.ToBoolean (e.Attribute("delete").Value)) 
-    { 
-    model.Employee.delete (db, Convert.ToInt64(e.Attribute ("id").Value));
-    } else { 
-        byte[] image = Convert.ToByte64(e.Element (f +"image").Value); 
-        Int64 employeeID = Convert.ToInt64(e.Attribute ("id").Value); 
-        string firstName = e.Element (f + "firstName").Value; string 
-        lastName = e.Element (f +"lastName").Value; 
-        string title = e.Element (f + "title").Value;
-        Int64 phone = Convert.ToInt64 (e.Element (f + "phone").Value);
-        string location = e.Element (f + "location").Value;
+        if (e.Attribute ("delete") != null && 
+            Convert.ToBoolean (e.Attribute ("delete").Value)) {
+            model.Employee.delete (db,Convert.ToInt64(e.Attribute("id").Value)); 
+        } else {
+            byte[] test = {1,2,3,4};
+            Int64 employeeID = Convert.ToInt64 (e.Attribute ("id").Value);
+            string firstName = e.Element (f + "firstName").Value;
+            string lastName = e.Element (f + "lastName").Value;
+            string title = e.Element (f + "title").Value;
+            Int64 phone = Convert.ToInt64 (e.Element (f + "phone").Value);
+            string location = e.Element (f + "location").Value;
 
-        model.Employee.create ( db,
-                                employeeID, 
-                                firstName, 
-                                lastName, 
-                                title, 
-                                phone, 
-                                location, 
-                                image, 
-                                thumbnail) 
-        } 
-    } 
-}
+            model.Employee.create (db, employeeID, firstName, lastName, 
+                                            title, phone, location, test, test);    
+        }
+}}
     \end{lstlisting}
+    The code above was part of the very first parser. 
+    
+    This simple part of the parser looks for an attribute called delete. If the
+    delete attribute is true, then we delete the employee from the database,
+    else we insert the employee.
 
-    This code was part of the very first parser. As the reader can see from the
-    code, the parser looks for an atirbute called delete. If the the delete
-    attribute is true, then we delete the employee from the db, else we insert.
-    Also at this stage in the analysing we have not yet figured out, that we would
-    fetch employee pictures from a webserver, instead of part as the xml feed. Also
-    after more extensive research in the field of C\# and XML, we found the LINQ
-    package, could help us with readability and robustness. So we choose to rewrite
-    the code. Below are shown the same code snip after the rewrite:
+    After more research in the field of C\# and XML, we found the LINQ package,
+    could help us with readability and robustness. Also we had some changes to
+    the design of the application, as an example the images and thumbnails
+    should no longer be a part of the XML file, but was loaded separately from
+    a webserver, based on the employeeId.
 
+    So we had more reasons to do a code rewrite. 
+    Below are shown the same code snip after the rewrite:
     \begin{lstlisting}
 var ns = xdoc.Root.Name.Namespace; var results = from el in xdoc.Root.Elements
 (ns + "employees").Elements (ns + "employee") select el;
 
 foreach (var r in results) {
 
-    ulong id = (ulong)r.Attribute ("id"); string firstName = (string)r.Element
-    (ns + "firstName"); string lastName = (string)r.Element (ns + "lastName");
-    string title = (string)r.Element (ns + "title"); string phone =
-    (string)r.Element (ns + "phone"); string location = (string)r.Element (ns +
-    "location"); Status status = (Status)Enum.Parse ( typeof(Status), r.Element
-    (ns + "status").Value); ulong department = (ulong)r.Element (ns +
-    "department");
+    ulong id = (ulong)r.Attribute ("id"); 
+    string firstName = (string)r.Element
+    (ns + "firstName");
+    string lastName = (string)r.Element (ns + "lastName");
+    string title = (string)r.Element (ns + "title"); 
+    string phone = (string)r.Element (ns + "phone"); 
+    string location = (string)r.Element (ns + "location"); 
+    Status status = (Status)Enum.Parse ( typeof(Status), 
+                                         r.Element (ns + "status").Value);
+    ulong department = (ulong)r.Element (ns + "department");
 
 EmployeeHandler.Insert (id, firstName, lastName, title, phone, location,
 status, department );
     \end{lstlisting}
-    After we figured these things out and reimplemented the parser, we had the
-    following improvements.
-
-
-
-
-
-
-
-
+    After the code rewrite I think that the code was improved in the following
+    ways. In regard to readability, the code now uses LINQ, thus a SQL-like
+    syntax "from * in * select" are used, this syntax should be well known for
+    many programmers, so in that regard I will argue that we improved
+    readability.
+    
+    We found that LINQ, did a better job at handling flawed XML files and
+    dynamic namespaces, thus we improved robustness.
+    
+    Because we found a more optimal solution for image fetching, the parser
+    has become more simple. I think in all way this code rewrite improved the
+    implementation of the parser.
