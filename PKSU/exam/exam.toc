@@ -30,29 +30,29 @@
 \contentsline {subsection}{\numberline {5.3}Think-aloud experiment}{20}{subsection.5.3}
 \contentsline {section}{\numberline {6}Audio/Visual presentation}{21}{section.6}
 \contentsline {section}{\numberline {7}Implementation of the parser}{21}{section.7}
-\contentsline {part}{II\hspace {1em}About collaboration with users and within the team}{22}{part.2}
-\contentsline {section}{\numberline {8}Schematic course of events }{23}{section.8}
-\contentsline {section}{\numberline {9}Parties involved in the project}{23}{section.9}
-\contentsline {section}{\numberline {10}Team collaboration}{23}{section.10}
-\contentsline {section}{\numberline {11}Strength and weekness's in the planing}{24}{section.11}
-\contentsline {section}{\numberline {12}Suggestions for improvement}{24}{section.12}
-\contentsline {part}{III\hspace {1em}Article discussion}{25}{part.3}
-\contentsline {section}{\numberline {13}Literature review}{26}{section.13}
-\contentsline {subsection}{\numberline {13.1}Programming as theory building}{26}{subsection.13.1}
-\contentsline {subsection}{\numberline {13.2}The M.A.D. Experience}{26}{subsection.13.2}
-\contentsline {section}{\numberline {A}Test plan}{29}{appendix.A}
-\contentsline {subsection}{\numberline {A.1}Introduction}{29}{subsection.A.1}
-\contentsline {subsection}{\numberline {A.2}Relationship to other documents}{29}{subsection.A.2}
-\contentsline {subsection}{\numberline {A.3}Features to be tested/not to be tested}{29}{subsection.A.3}
-\contentsline {subsection}{\numberline {A.4}Approach}{29}{subsection.A.4}
-\contentsline {section}{\numberline {B}ModelHandlerTests}{30}{appendix.B}
-\contentsline {subsection}{\numberline {B.1}Test items}{30}{subsection.B.1}
-\contentsline {subsection}{\numberline {B.2}Input specifications}{30}{subsection.B.2}
-\contentsline {subsection}{\numberline {B.3}Output specifications}{30}{subsection.B.3}
-\contentsline {subsection}{\numberline {B.4}Environmental needs}{30}{subsection.B.4}
-\contentsline {section}{\numberline {C}DataSourceTests}{31}{appendix.C}
-\contentsline {subsection}{\numberline {C.1}Test items}{31}{subsection.C.1}
-\contentsline {subsection}{\numberline {C.2}Input specifications}{31}{subsection.C.2}
-\contentsline {subsection}{\numberline {C.3}Output specifications}{31}{subsection.C.3}
-\contentsline {subsection}{\numberline {C.4}Environmental needs}{31}{subsection.C.4}
-\contentsline {section}{\numberline {D}Test summary}{32}{appendix.D}
+\contentsline {part}{II\hspace {1em}About collaboration with users and within the team}{23}{part.2}
+\contentsline {section}{\numberline {8}Schematic course of events }{24}{section.8}
+\contentsline {section}{\numberline {9}Parties involved in the project}{24}{section.9}
+\contentsline {section}{\numberline {10}Team collaboration}{24}{section.10}
+\contentsline {section}{\numberline {11}Strength and weekness's in the planing}{25}{section.11}
+\contentsline {section}{\numberline {12}Suggestions for improvement}{25}{section.12}
+\contentsline {part}{III\hspace {1em}Article discussion}{26}{part.3}
+\contentsline {section}{\numberline {13}Literature review}{27}{section.13}
+\contentsline {subsection}{\numberline {13.1}Programming as theory building}{27}{subsection.13.1}
+\contentsline {subsection}{\numberline {13.2}The M.A.D. Experience}{27}{subsection.13.2}
+\contentsline {section}{\numberline {A}Test plan}{30}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}Introduction}{30}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}Relationship to other documents}{30}{subsection.A.2}
+\contentsline {subsection}{\numberline {A.3}Features to be tested/not to be tested}{30}{subsection.A.3}
+\contentsline {subsection}{\numberline {A.4}Approach}{30}{subsection.A.4}
+\contentsline {section}{\numberline {B}ModelHandlerTests}{31}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}Test items}{31}{subsection.B.1}
+\contentsline {subsection}{\numberline {B.2}Input specifications}{31}{subsection.B.2}
+\contentsline {subsection}{\numberline {B.3}Output specifications}{31}{subsection.B.3}
+\contentsline {subsection}{\numberline {B.4}Environmental needs}{31}{subsection.B.4}
+\contentsline {section}{\numberline {C}DataSourceTests}{32}{appendix.C}
+\contentsline {subsection}{\numberline {C.1}Test items}{32}{subsection.C.1}
+\contentsline {subsection}{\numberline {C.2}Input specifications}{32}{subsection.C.2}
+\contentsline {subsection}{\numberline {C.3}Output specifications}{32}{subsection.C.3}
+\contentsline {subsection}{\numberline {C.4}Environmental needs}{32}{subsection.C.4}
+\contentsline {section}{\numberline {D}Test summary}{33}{appendix.D}

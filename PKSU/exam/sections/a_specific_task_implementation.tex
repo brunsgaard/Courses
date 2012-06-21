@@ -1,1 +1,82 @@
 \section{Implementation of the parser}
+    This section is about the decision making and implementation of the parser.
+    I have chosen the parser because it has been rewritten in the process and I
+    will explain why this was a good idea.
+
+    First, take a look at the initial parser code parsing the employees from
+    the xml file
+
+    \begin{lstlisting}
+XNamespace f = "http://internal.s7.net/S7finder";
+XDocument.Load (dataFeed);
+
+XElement employeeRoot = doc.Root.Element (f + "employees"); 
+if (employeeRoot !=null) { 
+    
+IEnumerable<XElement> employees = employeeRoot.Elements (f + "employee");
+
+foreach (XElement e in employees) {
+
+    if (e.Attribute ("delete") != null && 
+                Convert.ToBoolean (e.Attribute("delete").Value)) 
+    { 
+    model.Employee.delete (db, Convert.ToInt64(e.Attribute ("id").Value));
+    } else { 
+        byte[] image = Convert.ToByte64(e.Element (f +"image").Value); 
+        Int64 employeeID = Convert.ToInt64(e.Attribute ("id").Value); 
+        string firstName = e.Element (f + "firstName").Value; string 
+        lastName = e.Element (f +"lastName").Value; 
+        string title = e.Element (f + "title").Value;
+        Int64 phone = Convert.ToInt64 (e.Element (f + "phone").Value);
+        string location = e.Element (f + "location").Value;
+
+        model.Employee.create ( db,
+                                employeeID, 
+                                firstName, 
+                                lastName, 
+                                title, 
+                                phone, 
+                                location, 
+                                image, 
+                                thumbnail) 
+        } 
+    } 
+}
+    \end{lstlisting}
+
+    This code was part of the very first parser. As the reader can see from the
+    code, the parser looks for an atirbute called delete. If the the delete
+    attribute is true, then we delete the employee from the db, else we insert.
+    Also at this stage in the analysing we have not yet figured out, that we would
+    fetch employee pictures from a webserver, instead of part as the xml feed. Also
+    after more extensive research in the field of C\# and XML, we found the LINQ
+    package, could help us with readability and robustness. So we choose to rewrite
+    the code. Below are shown the same code snip after the rewrite:
+
+    \begin{lstlisting}
+var ns = xdoc.Root.Name.Namespace; var results = from el in xdoc.Root.Elements
+(ns + "employees").Elements (ns + "employee") select el;
+
+foreach (var r in results) {
+
+    ulong id = (ulong)r.Attribute ("id"); string firstName = (string)r.Element
+    (ns + "firstName"); string lastName = (string)r.Element (ns + "lastName");
+    string title = (string)r.Element (ns + "title"); string phone =
+    (string)r.Element (ns + "phone"); string location = (string)r.Element (ns +
+    "location"); Status status = (Status)Enum.Parse ( typeof(Status), r.Element
+    (ns + "status").Value); ulong department = (ulong)r.Element (ns +
+    "department");
+
+EmployeeHandler.Insert (id, firstName, lastName, title, phone, location,
+status, department );
+    \end{lstlisting}
+    After we figured these things out and reimplemented the parser, we had the
+    following improvements.
+
+
+
+
+
+
+
+
