@@ -545,35 +545,36 @@ struct
             val lst_code    = compileExp lst vtable lst_reg
             val inp_addr    = "_addr_reg_"^newName()
 
-            val sz_reg      = "_size_reg_"^newName()
-            val tmp         = "_tmp_reg_"^newName()
-            val sz_code     = [Mips.LI(sz_reg, "2")]
-
-            val arr1_sz_reg      = "_size_arr1_reg_" ^ newName()
-            val arr1_sz_code     = compileExp n vtable arr1_sz_reg
-            val arr1_hd_reg      = "_arr1_hd_reg_" ^ newName()
-
-
-            val sz_codes = sz_code @ arr1_sz_code
-
+            val new_sz_reg      = "_size_reg_"^newName()
+            val new_sz_code     = [Mips.LI(new_sz_reg, "2")]
 
             fun loopfun(i, r) = let val copy  =   if ( getElSize eltp = 1 )
                                                     then Mips.LB(r, inp_addr, "0")
-                                                    else Mips.LW(r, lst_reg, "0")
+                                                    else Mips.LW(r, inp_addr, "0")
 
                                     val incr  =   if ( getElSize eltp = 1 )
                                                     then [Mips.ADDI(inp_addr, inp_addr, "1")]
                                                     else [Mips.ADDI(inp_addr, inp_addr, "4")]
-                                in [copy]
+                                in copy :: incr
                                 end
 
-        in lst_code @ sz_codes @ dynalloc(sz_reg,place,otyp) @
-        [Mips.MOVE(inp_addr, place), Mips.ADDI(inp_addr, inp_addr, "8"),
-        Mips.SW(lst_reg, inp_addr, "0"),Mips.ADDI(inp_addr, inp_addr,
-        "4"),Mips.SW(lst_reg, inp_addr, "0")]
+            val arr1_reg        =  "_arr1_reg_" ^ newName()
+            val arr1_n        =  "_arr1_n_reg_" ^ newName()
+            val arr1_sz_code     = compileExp n vtable arr1_n
+            val arr1_code        = dynalloc(arr1_n, arr1_reg, eltp) @
+            [Mips.LW(inp_addr, lst_reg, "4")] @ compileDoLoop( getElSize eltp, arr1_n, arr1_reg, loopfun, pos )
 
-        (*in lst_code @ sz_codes @ dynalloc(sz_arr1_reg, place, eltp) @ [Mips.LW(inp_addr, lst_reg, "4")] @
-           compileDoLoop( getElSize eltp, sz_arr1_reg, place, loopfun, pos) *)
+            val arr2_reg         = "_arr2_reg_" ^ newName()
+            val arr2_n           = "_arr2_n_reg_" ^ newName()
+            val arr2_sz_code     = [Mips.LW(arr2_n, lst_reg, "0"), Mips.SUB(arr2_n, arr2_n, arr1_n)]
+            val arr2_code        = dynalloc(arr2_n, arr2_reg, eltp) @ compileDoLoop( getElSize eltp, arr2_n, arr2_reg, loopfun, pos )
+
+            val sz_codes = new_sz_code @ arr1_sz_code @ arr2_sz_code
+
+
+        in lst_code @ sz_codes @ arr1_code @ arr2_code @ dynalloc(new_sz_reg,place,otyp) @
+        [Mips.LW(inp_addr, place, "4")] @ [Mips.SW(arr1_reg, inp_addr, "0")] @
+        [Mips.ADDI(inp_addr, inp_addr, "4")] @ [Mips.SW(arr2_reg, inp_addr, "0")]
         end
 
     | Fasto.ZipWith  (fid, lst1, lst2, eltp1, eltp2, rtp, pos) =>
