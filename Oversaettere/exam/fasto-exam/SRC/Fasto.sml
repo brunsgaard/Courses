@@ -1,4 +1,4 @@
-(* 
+(*
 
 Fasto er et funktionelt array-sprog til oversættelse, F-A-S-T-O.
 Fasto er også et spansk ord, der betyder "pomp" eller "pragt".
@@ -20,18 +20,18 @@ struct
     | UNKNOWN (* filled by type checker *)
 
   and Exp
-    = Num of int * pos                     
-    | Log of bool * pos                    
+    = Num of int * pos
+    | Log of bool * pos
     | CharLit of char * pos
     | StringLit of string * pos            (* e.g., "Hello World!\n"       *)
     | ArrayLit of Exp list * Type * pos    (* e.g., { {1+x, 3}, {2, {1+4}} *)
-                                             (* Type is the array's element type *) 
+                                             (* Type is the array's element type *)
     | Var of string * pos                  (* e.g., x}    *)
     | Plus of Exp * Exp * pos              (* e.g., x + 3 *)
     | Minus of Exp * Exp * pos             (* e.g., x - 3 *)
     | Equal of Exp * Exp * pos             (* e.g., x = 3 *)
-    | Less of Exp * Exp * pos              
-    | If of Exp * Exp * Exp * pos         
+    | Less of Exp * Exp * pos
+    | If of Exp * Exp * Exp * pos
     | Apply of string * Exp list * pos     (* e.g., f(1, 3+x) *)
     | Let of Dec * Exp * pos               (* e.g., let x = 1 + y in x + y *)
 
@@ -43,10 +43,10 @@ struct
                                                    (* The first type  is the input-array  element type *)
                                                    (* The second type is the output-array element type *)
     | Reduce of string * Exp * Exp * Type * pos  (* reduce(f, 0, lst) *)
-                                                   (* Type is the input-array element type *) 
+                                                   (* Type is the input-array element type *)
     | Replicate of Exp * Exp * Type * pos        (* replicate(n, 0)   *)
-    | Split of Exp * Exp * Type * pos            (* index where to split, array, arraytype ,pos*)
-                                                   (* Type is the output-array element type *) 
+    | Split of Exp * Exp * Type * Type *  pos            (* index where to split, array, arraytype ,pos*)
+                                                   (* Type is the output-array element type *)
 
     | Read of Type * pos                         (* e.g., read(int) *)
                                                    (* Type is the type of the to-be-read element *)
@@ -89,7 +89,7 @@ struct
     | pp_exp d (Log   (b,  pos))     = Bool.toString b
     | pp_exp d (CharLit (c,  pos))   = "'" ^ Char.toCString c ^ "'"
     | pp_exp d (StringLit (s,  pos)) = "\"" ^ String.toCString s ^ "\""
-    | pp_exp d (ArrayLit (lst, t, pos) ) = 
+    | pp_exp d (ArrayLit (lst, t, pos) ) =
         ( case lst of
             [ ]    => " { } "
           | (a::l) => " { "^pp_exp d a^concat (map (fn x => ", "^pp_exp d x) l) ^ " } "
@@ -113,14 +113,14 @@ struct
                 makeDepth (d+1) ^ "if( " ^ pp_exp d e1 ^ " )\n" ^
 		makeDepth (d+2) ^ "then " ^ pp_exp (d+2) e2 ^ "\n" ^
                 makeDepth (d+2) ^ "else " ^ pp_exp (d+2) e3 ^ "\n" ^
-                makeDepth d 
-    | pp_exp d (Apply (id, args, pos))    = 
+                makeDepth d
+    | pp_exp d (Apply (id, args, pos))    =
                 ( case args of
                     []     => id ^ "() "
-                  | (a::l) => id ^ "( " ^ pp_exp d a ^ concat (map (fn x => ", "^pp_exp d x) l) ^ " ) " 
+                  | (a::l) => id ^ "( " ^ pp_exp d a ^ concat (map (fn x => ", "^pp_exp d x) l) ^ " ) "
                 )
-    | pp_exp d (Let   (Dec(id, e1, pos1), e2, pos2)) = 
-                "\n"^makeDepth(d+1)^"let " ^ id ^ " = " ^ pp_exp (d+2) e1 ^ 
+    | pp_exp d (Let   (Dec(id, e1, pos1), e2, pos2)) =
+                "\n"^makeDepth(d+1)^"let " ^ id ^ " = " ^ pp_exp (d+2) e1 ^
                 " in  " ^ pp_exp (d+2) e2
     | pp_exp d (Index (id, e, t, pos))       =
                 id ^ "[ " ^ pp_exp d e ^ " ]"
@@ -128,13 +128,13 @@ struct
     | pp_exp d (Iota (e, pos))         = "iota ( " ^ pp_exp d e ^ " ) "
     | pp_exp d (Map(id, e, _,_, pos))    = "map ( " ^ id ^ ", " ^ pp_exp d e ^ " ) "
     | pp_exp d (ZipWith(id, e1, e2, _,_,_, pos))    = "zipWith ( " ^ id ^ ", " ^ pp_exp d e1 ^ pp_exp d e2 ^ " ) "
-    | pp_exp d (Reduce(id, el, lst, t, pos)) = "reduce ( "^id^", "^pp_exp d el^", "^pp_exp d lst^" ) " 
-    | pp_exp d (Scan  (id, el, lst, t, pos)) = "scan ( "^id^", "^pp_exp d el^", "^pp_exp d lst^" ) " 
-    | pp_exp d (Replicate(e, el, t, pos)) = "replicate ( "^pp_exp d e^", "^pp_exp d el^" ) " 
+    | pp_exp d (Reduce(id, el, lst, t, pos)) = "reduce ( "^id^", "^pp_exp d el^", "^pp_exp d lst^" ) "
+    | pp_exp d (Scan  (id, el, lst, t, pos)) = "scan ( "^id^", "^pp_exp d el^", "^pp_exp d lst^" ) "
+    | pp_exp d (Replicate(e, el, t, pos)) = "replicate ( "^pp_exp d e^", "^pp_exp d el^" ) "
     | pp_exp d (Read (t,p)) = "read(" ^pp_type t ^") "
     | pp_exp d (Write (e,t,p)) = "write(" ^pp_exp d e ^") "
 
-    | pp_exp d (Split(exp1, exp2,typ, pos))    = "Split ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ ^ " ) "
+    | pp_exp d (Split(exp1, exp2, ityp, typ, pos))    = "Split ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ ^ " ) "
 
   (* pretty printing a type *)
   and pp_type (Int  pos) = "int "
@@ -152,9 +152,9 @@ struct
           | pp_bindings [bd]    = pp_bd bd
           | pp_bindings (bd::l) = pp_bd bd ^ concat (map pp_cbd l)
 
-    in "\n\nfun " ^ pp_type ret_tp ^ id ^ 
-       "( " ^ pp_bindings args ^ ") = \n" ^ 
-       makeDepth (d+1) ^ pp_exp (d+1) body 
+    in "\n\nfun " ^ pp_type ret_tp ^ id ^
+       "( " ^ pp_bindings args ^ ") = \n" ^
+       makeDepth (d+1) ^ pp_exp (d+1) body
     end
 
   (* pretty printing a PROGRAM *)

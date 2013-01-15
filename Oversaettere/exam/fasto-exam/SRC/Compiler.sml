@@ -141,8 +141,8 @@ struct
             val code_fi   = f(i_reg, res_reg)
             val code_assign  =
                   case el_sz of
-                    4 => [ Mips.SW(res_reg,addr_reg,"0"), Mips.ADDI(addr_reg,addr_reg,"4") ]
-                  | 1 => [ Mips.SB(res_reg,addr_reg,"0"), Mips.ADDI(addr_reg,addr_reg,"1") ]
+                    4 => [ Mips.SW(res_reg, addr_reg,"0"), Mips.ADDI(addr_reg,addr_reg,"4") ]
+                  | 1 => [ Mips.SB(res_reg, addr_reg,"0"), Mips.ADDI(addr_reg,addr_reg,"1") ]
                   | otherwise => raise Error("The Only Valid Element-Sizes Are 1 and 4. Error",pos)
             val epilog = [ Mips.ADDI(i_reg,i_reg,"1"), Mips.J loop_beg, Mips.LABEL loop_end ]
         in header @ code_fi @ code_assign @ epilog
@@ -540,35 +540,40 @@ struct
            compileDoLoop( getElSize rtp, sz_reg, place, loopfun, pos )
         end
 
-    | Fasto.Split  (n, lst, eltp, pos) =>
+    | Fasto.Split  (n, lst, eltp, otyp, pos) =>
         let val lst_reg     = "_arr_reg_"^newName()
             val lst_code    = compileExp lst vtable lst_reg
             val inp_addr    = "_addr_reg_"^newName()
 
             val sz_reg      = "_size_reg_"^newName()
+            val tmp         = "_tmp_reg_"^newName()
             val sz_code     = [Mips.LI(sz_reg, "2")]
 
-            val sz_arr1_reg      = "_size_arr1_reg_" ^ newName()
-            val sz_arr1_code     = compileExp n vtable sz_arr1_reg
+            val arr1_sz_reg      = "_size_arr1_reg_" ^ newName()
+            val arr1_sz_code     = compileExp n vtable arr1_sz_reg
+            val arr1_hd_reg      = "_arr1_hd_reg_" ^ newName()
 
-            val sz_arr2_reg      = "_size_arr2_reg_" ^ newName()
-            val sz_arr2_code     = [Mips.SUB(sz_arr2_reg, lst_reg, sz_arr1_reg)]
 
-            val sz_codes = sz_code @ sz_arr1_code @ sz_arr2_code
+            val sz_codes = sz_code @ arr1_sz_code
 
 
             fun loopfun(i, r) = let val copy  =   if ( getElSize eltp = 1 )
                                                     then Mips.LB(r, inp_addr, "0")
-                                                    else Mips.LW(r, inp_addr, "0")
+                                                    else Mips.LW(r, lst_reg, "0")
 
                                     val incr  =   if ( getElSize eltp = 1 )
                                                     then [Mips.ADDI(inp_addr, inp_addr, "1")]
                                                     else [Mips.ADDI(inp_addr, inp_addr, "4")]
-                                in copy :: incr
+                                in [copy]
                                 end
 
-        in lst_code @ sz_codes @ dynalloc(sz_arr1_reg, place, eltp) @ [Mips.LW(inp_addr, lst_reg, "4")] @
-           compileDoLoop( getElSize eltp, sz_arr1_reg, place, loopfun, pos)
+        in lst_code @ sz_codes @ dynalloc(sz_reg,place,otyp) @
+        [Mips.MOVE(inp_addr, place), Mips.ADDI(inp_addr, inp_addr, "8"),
+        Mips.SW(lst_reg, inp_addr, "0"),Mips.ADDI(inp_addr, inp_addr,
+        "4"),Mips.SW(lst_reg, inp_addr, "0")]
+
+        (*in lst_code @ sz_codes @ dynalloc(sz_arr1_reg, place, eltp) @ [Mips.LW(inp_addr, lst_reg, "4")] @
+           compileDoLoop( getElSize eltp, sz_arr1_reg, place, loopfun, pos) *)
         end
 
     | Fasto.ZipWith  (fid, lst1, lst2, eltp1, eltp2, rtp, pos) =>
