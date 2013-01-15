@@ -1,0 +1,9 @@
+fun bool  cond(char c) = ord(c) < 105 & 100 < ord(c) // >
+
+fun int main() = 
+    let charr = "abcdefgh"                    in
+    let farr  = filter(cond, charr)           in
+    let w     = write(farr)                   in
+    let q     = write(" ")                    in
+        
+        10

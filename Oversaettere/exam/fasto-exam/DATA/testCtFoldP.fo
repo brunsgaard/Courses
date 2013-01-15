@@ -1,0 +1,14 @@
+
+fun int main() = 
+    let arr = iota(4)   in
+    let x = 2 + 8 / 4   in
+    let a = read(int)   in
+
+    let y = a / (x - 3) + (x - 4) in
+
+    let b = read(bool)  in
+    let z = (b & True) in
+
+    if( not b | True | not z ) 
+    then write(y)  
+    else write(arr[2])

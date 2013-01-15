@@ -1,0 +1,12 @@
+
+fun int main() = 
+    let arr = iota(4) in
+    let x = 5         in
+    let y = x         in
+    let qqq = arr     in
+    let z = x         in
+    let q = y         in
+      if (y = 6) 
+      then   let w   = q   in write(w * z * qqq[2])
+      else   let www = qqq in write(q * y * www[2])
+

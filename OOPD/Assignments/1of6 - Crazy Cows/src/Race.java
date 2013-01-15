@@ -10,10 +10,11 @@ public class Race {
      * @param args
      */
     public static void main(String[] args) {
-	RaceTrack t = new RaceTrack(500, new Cow("joe", "persian fullblood"),
-		new Cow("william", "american jersey"), new Cow("jack",
-			"danish red"), new Cow("averell",
-			"australian shorthorn"));
+	RaceTrack t = new RaceTrack(1000, 
+            new Cow("Lund", "Datalogisk verdensmand"),
+            new Cow("Dr. Jones", "Uber instructor"),
+            new Cow("HK","Slikkemeister"), 
+            new Cow("Steph","Australian PornBeast"));
 	Race r = new Race(t);
 	r.run();
     }

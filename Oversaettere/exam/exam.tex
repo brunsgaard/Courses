@@ -1,0 +1,150 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+
+\title{Exam - Compilers}
+\author{Jonas Brunsgaard}
+
+\begin{document}
+\maketitle
+
+\section{Top-Down Parsing for if-then-else}
+\subsection{Left-factorization of the grammar}
+$$
+\begin{array}{lcl}
+    S & \rightarrow & \mathrm{if\:}BSS_* \\
+    S & \rightarrow & \mathrm{return\:NUM;} \\
+    S_* & \rightarrow & \varepsilon \\
+    S_* & \rightarrow & \mathrm{else}\:S \\
+    B & \rightarrow & \mathrm{(\,NUM\,)} \\
+\end{array}
+$$
+\subsection{Nullablility and First sets}
+
+First we find if terminals and nonterminals are \emph{nullable}.
+
+\begin{center}
+\begin{tabular}{c||c|c|c}
+Right-hand side & Init & First Iter & Sec Iter\tabularnewline
+\hline 
+\hline 
+$\mathrm{if\:}BSS*$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\hline 
+$\mathrm{return\:NUM;}$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\hline 
+$\varepsilon$ & \emph{false} & \emph{true} & \emph{true}\tabularnewline
+\hline 
+$\mathrm{else}\:S$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\hline 
+$\mathrm{(\,NUM\,)}$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\hline 
+Nonterminal & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \tabularnewline
+\hline 
+$S$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\hline 
+$S_*$ & \emph{false} & \emph{true} & \emph{true}\tabularnewline
+\hline 
+$B$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
+\end{tabular}
+\end{center}
+
+Then we derive the \emph{FIRST}-sets:
+
+\begin{center}
+\begin{tabular}{c||c|c|c}
+Right-hand side & Init & First Iter & Sec Iter\tabularnewline
+\hline 
+\hline 
+$\mathrm{if\:}BSS_*$       & $\emptyset$ & \{if\}        & \{if\}        \tabularnewline
+\hline                                                                
+$\mathrm{return\:NUM;}$ & $\emptyset$ & \{return\}    & \{return\}    \tabularnewline
+\hline                                                                
+$\varepsilon$           & $\emptyset$ & $\emptyset$   & $\emptyset$   \tabularnewline
+\hline                                                                
+$\mathrm{else}\:S$      & $\emptyset$ & \{else\}      & \{else\}      \tabularnewline
+\hline                                                                
+$\mathrm{(\,NUM\,)}$    & $\emptyset$ & \{(\}         & \{(\}         \tabularnewline
+\hline 
+Nonterminal & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \tabularnewline
+\hline 
+$S$                     & $\emptyset$ & \{if,return\} & \{if,return\} \tabularnewline
+\hline                                                                  
+$S_*$                   & $\emptyset$ & \{else\}      & \{else\}      \tabularnewline
+\hline                                                                 
+$B$                     & $\emptyset$ & \{(\}         & \{(\}         \tabularnewline
+\end{tabular}               
+\end{center}                
+
+\subsection{Calculate Follow sets for all nonterminals}
+By following the procedure on page 59 in the book, we find the following
+table. To handle the end-of-string condition we add the production
+$$S'\rightarrow S\$$$
+to the production
+
+\begin{center}
+    \begin{tabular}{ll}
+\hline 
+Production & Constraints\tabularnewline
+\hline 
+$S'     \rightarrow S\$$                    & $\{\$\}\subseteq FOLLOW(S)$ \tabularnewline
+$S      \rightarrow \mathrm{if\:}BSS_*$     & \begin{minipage}[t]{0.5\columnwidth}
+                                                $\{\mathrm{return, if}\}\subseteq FOLLOW(B)$,\\
+                                                $FOLLOW(S) \subseteq FOLLOW(S_*)$,\\
+                                                $\{\mathrm{else}\} \subseteq FOLLOW(S)$
+                                                \end{minipage}
+                                                \tabularnewline
+
+$S      \rightarrow \mathrm{return\:NUM;}$  & \tabularnewline
+$S_{*}  \rightarrow \varepsilon$            & \tabularnewline
+$S_{*}  \rightarrow \mathrm{else}\:S$       & $FOLLOW(S_*) \subseteq FOLLOW(S)$ \tabularnewline
+$B      \rightarrow \mathrm{(\:NUM\:)}$     & \tabularnewline
+\hline
+\end{tabular}
+\end{center}
+
+We first use the constraints $ \{\$\} \subseteq FOLLOW(S)$ and constraints
+of the form $FIRST(\dots)\subseteq FOLLOW(\dots)$ to get the initial sets.
+
+\begin{eqnarray*}
+    FOLLOW(S)       & \subseteq & \{\mathrm{else, \$} \} \\
+    FOLLOW(S_*)     & \subseteq & \{\emptyset\} \\
+    FOLLOW(B)       & \subseteq & \{\mathrm{if, return}\} \\
+\end{eqnarray*}
+
+and then use the constrains on the form $FOLLOW(\dots)\subseteq FOLLOW(\dots)$:
+
+\begin{eqnarray*}
+    FOLLOW(S)       & \subseteq & \{\mathrm{else, \$} \} \\
+    FOLLOW(S_*)     & \subseteq & \{\mathrm{else, \$} \} \\
+    FOLLOW(B)       & \subseteq & \{\mathrm{if, return}\} \\
+\end{eqnarray*}
+
+\subsection{Look-aheads sets}
+
+From the lecture slides the look ahead set is defined as
+
+$$la(X\rightarrow\alpha)=
+\begin{cases}
+    FIRST(\alpha)\cup FOLLOW(X) & \textrm{, if }NULLABLE(\alpha)\\
+    FIRST(\alpha)               & \textrm{, otherwise}
+\end{cases}$$
+Below the lookahead sets for our productions are shown.
+$$
+\begin{array}{lcl}
+    LA(S   \rightarrow  \mathrm{if\:}BSS_*)     & = &      \{\mathrm{if}\} \\
+    LA(S   \rightarrow  \mathrm{return\:NUM;})  & = &      \{\mathrm{return}\} \\
+    LA(S_* \rightarrow  \varepsilon)            & = &      \{\mathrm{else,} \$\} \\
+    LA(S_* \rightarrow  \mathrm{else}\:S)       & = &      \{\mathrm{else}\} \\
+    LA(B   \rightarrow  \mathrm{(\,NUM\,)})     & = &      \{\mathrm{(}\} \\
+\end{array}
+$$
+
+No, the grammar is not LL1.
+
+
+\end{document}
