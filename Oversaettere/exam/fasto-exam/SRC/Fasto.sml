@@ -45,8 +45,8 @@ struct
     | Reduce of string * Exp * Exp * Type * pos  (* reduce(f, 0, lst) *)
                                                    (* Type is the input-array element type *)
     | Replicate of Exp * Exp * Type * pos        (* replicate(n, 0)   *)
-    | Split of Exp * Exp * Type * Type *  pos            (* index where to split, array, arraytype ,pos*)
-    | Concat of Exp * Exp * Type * Type * Type *  pos
+    | Split of Exp * Exp * Type * pos            (* index where to split, array, arraytype ,pos*)
+    | Concat of Exp * Exp * Type *  pos
                                                    (* Type is the output-array element type *)
 
     | Read of Type * pos                         (* e.g., read(int) *)
@@ -135,8 +135,8 @@ struct
     | pp_exp d (Read (t,p)) = "read(" ^pp_type t ^") "
     | pp_exp d (Write (e,t,p)) = "write(" ^pp_exp d e ^") "
 
-    | pp_exp d (Split(exp1, exp2, ityp, typ, pos))    = "Split ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ ^ " ) "
-    | pp_exp d (Concat(exp1, exp2, typ1, typ2, _ , pos))    = "Concat ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ1 ^ ", " ^ pp_type typ2 ^ ") "
+    | pp_exp d (Split(exp1, exp2, typ, pos))    = "Split ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ ^ " ) "
+    | pp_exp d (Concat(exp1, exp2, typ, pos))   = "Concat ( " ^ pp_exp d exp1 ^ ", " ^ pp_exp d exp1 ^ ", " ^ pp_type typ ^ " ) "
 
   (* pretty printing a type *)
   and pp_type (Int  pos) = "int "

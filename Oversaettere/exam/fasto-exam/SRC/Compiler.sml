@@ -540,20 +540,20 @@ struct
            compileDoLoop( getElSize rtp, sz_reg, place, loopfun, pos )
         end
 
-    | Fasto.Split  (n, lst, eltp, otyp, pos) =>
+    | Fasto.Split  (n, lst, eltp, pos) =>
         let
-          (* existing lst*)
+          (* code for existing lst*)
           val lst_reg       = "_arr_reg_"^newName()
           val lst_code      = compileExp lst vtable lst_reg
 
-          (* index there to split *)
-          val index        =  "_index_" ^ newName()
-          val index_code  = compileExp n vtable index
+          (* index where to split *)
+          val index         =  "_index_reg" ^ newName()
+          val index_code    = compileExp n vtable index
 
-          (* find the start addresses for data for list 1 and 2 *)
-          val data_addr1     = "_addr1_reg_"^newName()
-          val data_addr2     = "_addr2_reg_"^newName()
-          val addr_code =
+          (* find start addresses for data after split*)
+          val data_addr1    = "_addr1_reg_"^newName()
+          val data_addr2    = "_addr2_reg_"^newName()
+          val addr_code     =
             let
               val set_el_sz =
                     if ( getElSize eltp = 1 )
@@ -565,24 +565,25 @@ struct
               Mips.ADD(data_addr2, data_addr1, data_addr2)]
             end
 
-          (* new list to hold the two lists after splitting *)
+          (* setting up the two new arrays used for *)
+          val arr1_reg      = "_arr2_reg_" ^ newName()
+          val arr1_sz       = "_arr2_sz_reg_" ^ newName()
+          val arr1_code     = dynalloc("0", arr1_reg, eltp) @
+                             [Mips.SW(index, arr1_reg, "0"),
+                              Mips.SW(data_addr1, arr1_reg, "4")]
+
+          val arr2_reg      = "_arr2_reg_" ^ newName()
+          val arr2_sz       = "_arr2_sz_reg_" ^ newName()
+          val arr2_code     = [Mips.LW(arr2_sz, lst_reg, "0"),
+                               Mips.SUB(arr2_sz, arr2_sz, index)] @
+                               dynalloc("0", arr2_reg, eltp) @
+                              [Mips.SW(arr2_sz, arr2_reg, "0"),
+                               Mips.SW(data_addr2, arr2_reg, "4")]
+
+          (* new array to hold the two inner arrays *)
           val sz_reg    = "_size_reg_"^newName()
           val sz_code   = [Mips.LI(sz_reg, "2")]
           val inp_addr     = "_inp_reg_"^newName()
-
-
-          (* #1 of the two arrays in the list after splitting *)
-          val arr1_reg      =  "_arr1_reg_" ^ newName()
-          val arr1_code     =  dynalloc("0", arr1_reg, otyp) @ [Mips.SW(index,
-          arr1_reg, "0"), Mips.SW(data_addr1, arr1_reg, "4")]
-
-
-          (* #2 of the two arrays in the list after splitting *)
-          val arr2_reg      = "_arr2_reg_" ^ newName()
-          val arr2_sz        = "_arr2_sz_reg_" ^ newName()
-          val arr2_sz_code  = [Mips.LW(arr2_sz, lst_reg, "0"), Mips.SUB(arr2_sz, arr2_sz, index)]
-          val arr2_code     =  arr2_sz_code @ dynalloc("0", arr2_reg, otyp) @ [Mips.SW(arr2_sz,
-          arr2_reg, "0"), Mips.SW(data_addr2, arr2_reg, "4")]
 
           (* code checking that 0 < n < len(lst)-1 *)
           val checkbounds =
@@ -602,14 +603,12 @@ struct
                   Mips.BGEZ(tmp_reg, err_lab)]
               end
 
-          (* grouping some of the code above *)
-          val setup = lst_code @ sz_code @ index_code @ addr_code
-          val arrays = arr1_code @ arr2_code
+          val setup = lst_code @ index_code @ checkbounds @
+                      sz_code@ addr_code @ arr1_code@ arr2_code
 
-        (* creating the new array of sz 2 and move arr1 and arr2 til the list*)
+        (* creating the new array of sz 2 and insert lst and arr2*)
         in
-          setup @ arrays @
-          dynalloc(sz_reg,place,otyp) @
+          setup @ dynalloc(sz_reg,place, Fasto.Int(pos)) @
           [Mips.LW(inp_addr, place, "4")] @
           [Mips.SW(arr1_reg, inp_addr, "0")] @
           [Mips.ADDI(inp_addr, inp_addr, "4")] @
@@ -617,9 +616,9 @@ struct
         end
 
 
-    | Fasto.Concat  (lst1, lst2, lst_typ1, lst_typ2, rtp, pos) =>
+    | Fasto.Concat  (lst1, lst2, eltp, pos) =>
         let
-          (* setup code for the first array *)
+          (* code for the first array *)
           val lst1_reg  = "_arr1_reg_"  ^newName()
           val lst1_place= "_arr1_place_" ^newName()
           val lst1_sz   = "_arr1_sz_" ^newName()
@@ -627,13 +626,13 @@ struct
               [Mips.LW(lst1_place, lst1_reg, "4")] @
               [Mips.LW(lst1_sz, lst1_reg, "0")]
 
-          (* setup code for the second array *)
+          (* code for the second array *)
           val lst2_reg  = "_arr2_reg_"  ^newName()
           val lst2_place= "_arr2_place_" ^newName()
           val lst2_code = compileExp lst2 vtable lst2_reg @
               [Mips.LW(lst2_place, lst2_reg, "4")]
 
-          (* size for final array *)
+          (* determine size of the final array *)
           val sz_reg    = "_size_reg_" ^newName()
           val sz_code   =
             let
@@ -644,7 +643,8 @@ struct
                Mips.ADD(sz_reg, sz_reg, tmp_r)]
             end
 
-          (* code for checking adjacentcy *)
+          (* code for checking adjacency, the value of lst_adj will be 0 after
+          * code execution if the two arrays are adjacent en the memory*)
           val lst_adj   = "_arr2_reg_"  ^newName()
           val lst_adj_code   =
             let
@@ -652,7 +652,7 @@ struct
               val set_diff =
                     [Mips.SUB(lst_adj, lst2_place, lst1_place)]
               val set_el_sz =
-                    if ( getElSize lst_typ1 = 1 )
+                    if ( getElSize eltp = 1 )
                     then [Mips.LI(lst_adj_tmp, "1")]
                     else [Mips.LI(lst_adj_tmp, "4")]
               val sub_el_sz_times_elemetes =
@@ -677,19 +677,19 @@ struct
               val lab = "_label_"  ^newName()
               val done = "_label_"  ^newName()
               val copy1 =
-                if ( getElSize lst_typ1 = 1 )
+                if ( getElSize eltp = 1 )
                 then Mips.LB(r, inp_addr1, "0")
                 else Mips.LW(r, inp_addr1, "0")
               val incr1 =
-                if ( getElSize lst_typ1 = 1 )
+                if ( getElSize eltp = 1 )
                 then [Mips.ADDI(inp_addr1, inp_addr1, "1")]
                 else [Mips.ADDI(inp_addr1, inp_addr1, "4")]
               val copy2 =
-                if ( getElSize lst_typ1 = 1 )
+                if ( getElSize eltp = 1 )
                 then Mips.LB(r, inp_addr2, "0")
                 else Mips.LW(r, inp_addr2, "0")
               val incr2 =
-                if ( getElSize lst_typ1 = 1 )
+                if ( getElSize eltp = 1 )
                 then [Mips.ADDI(inp_addr2, inp_addr2, "1")]
                 else [Mips.ADDI(inp_addr2, inp_addr2, "4")]
             in
@@ -700,17 +700,16 @@ struct
                 [Mips.LABEL(done)]
             end
 
+          (* setup labels used for branching, depending on adjacency *)
           val lab1 = "_label_"  ^newName()
           val lab2 = "_label_"  ^newName()
 
         in
-          lst_code @ sz_code @ dynalloc(sz_reg, place, lst_typ1) @ [Mips.BEQ("0",
+          lst_code @ sz_code @ dynalloc(sz_reg, place, eltp) @ [Mips.BEQ("0",
           lst_adj, lab1)] @  [Mips.LW(inp_addr1, lst1_reg, "4")] @ [Mips.LW(inp_addr2, lst2_reg, "4")] @
-           counter_code @ compileDoLoop( getElSize lst_typ1, sz_reg, place, loopfun, pos ) @ [Mips.J
-           lab2] @ [Mips.LABEL(lab1)] @ [Mips.J "_IllegalArrSizeError_"] @  [Mips.LABEL(lab2)]
+           counter_code @ compileDoLoop( getElSize eltp, sz_reg, place, loopfun, pos ) @ [Mips.J
+           lab2] @ [Mips.LABEL(lab1)] @ [Mips.SW(lst1_place, place, "4")]  @ [Mips.LABEL(lab2)]
         end
-
-
 
     | Fasto.ZipWith  (fid, lst1, lst2, eltp1, eltp2, rtp, pos) =>
         let val lst1_reg  = "_arr1_reg_"  ^newName()

@@ -311,7 +311,7 @@ struct
                                 ^ Fasto.pp_type f_arg_type , pos)
            end
 
-      | Fasto.Split (num, arr, arr_typ, res_t, pos)
+      | Fasto.Split (num, arr, typ, pos)
         => let
             (* type of first argument, should be Int *)
             val (n_type, n_dec) = expType vs num
@@ -319,17 +319,16 @@ struct
             val (arr_type, arr_dec) = expType vs arr
             (* type of elements in Array, if not Array and exception is thrown *)
             val el_type = case arr_type of
-                               Fasto.Array (t,_) => unifyTypes pos (arr_typ, t)
+                               Fasto.Array (t,_) => unifyTypes pos (typ, t)
                              | _ => raise Error ("Split: Second argument not an array",pos)
            in
              (* check if first argument is Int *)
              if typesEqual (n_type, Fasto.Int pos)
-             then (Fasto.Array (arr_type, pos), Fasto.Split (num ,arr, el_type,
-             Fasto.Array (el_type, pos), pos))
+             then (Fasto.Array (arr_type, pos), Fasto.Split (num ,arr_dec, el_type, pos))
              else raise Error ("Split: First argument type is not Int " ^ showType n_type, pos)
            end
 
-      | Fasto.Concat (arr1, arr2, arg1_typ, arg2_typ, res_t,  pos)
+      | Fasto.Concat (arr1, arr2, arg1_typ, pos)
         => let
             (* type of first argument, should be Array *)
             val (arr1_type, arr1_dec) = expType vs arr1
@@ -344,15 +343,14 @@ struct
 
             val el2_type
               = case arr2_type of
-                  Fasto.Array (t,_) => unifyTypes pos (arg2_typ, t)
+                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
                 | other => raise Error ("Concat: Second Array Argument not an array",pos)
 
            in
              (* check if first argument is Int *)
              if typesEqual (el1_type, el2_type)
-             then (unifyTypes pos (arr1_type, arr2_type), Fasto.Concat
-             (arr1_dec, arr2_dec, el1_type, el2_type, unifyTypes pos
-             (arr1_type, arr2_type), pos))
+             then (Fasto.Array (el1_type, pos), Fasto.Concat
+             (arr1_dec, arr2_dec, el1_type, pos))
              else raise Error ("Concat: Types in Array must be the same " ^
              showType el1_type, pos)
            end
