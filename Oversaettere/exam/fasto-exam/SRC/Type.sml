@@ -329,6 +329,34 @@ struct
              else raise Error ("Split: First argument type is not Int " ^ showType n_type, pos)
            end
 
+      | Fasto.Concat (arr1, arr2, arg1_typ, arg2_typ, res_t,  pos)
+        => let
+            (* type of first argument, should be Array *)
+            val (arr1_type, arr1_dec) = expType vs arr1
+            (* type of second argument, should be Array *)
+            val (arr2_type, arr2_dec) = expType vs arr2
+            (* type of elements in Array, if not Array and exception is thrown *)
+
+            val el1_type
+              = case arr1_type of
+                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
+                | other => raise Error ("Concat: First Array Argument not an array",pos)
+
+            val el2_type
+              = case arr2_type of
+                  Fasto.Array (t,_) => unifyTypes pos (arg2_typ, t)
+                | other => raise Error ("Concat: Second Array Argument not an array",pos)
+
+           in
+             (* check if first argument is Int *)
+             if typesEqual (el1_type, el2_type)
+             then (unifyTypes pos (arr1_type, arr2_type), Fasto.Concat
+             (arr1_dec, arr2_dec, el1_type, el2_type, unifyTypes pos
+             (arr1_type, arr2_type), pos))
+             else raise Error ("Concat: Types in Array must be the same " ^
+             showType el1_type, pos)
+           end
+
       | Fasto.ZipWith (f, arr1, arr2, arg_t1, arg_t2, res_t, pos)
         => let val (arr1_type, arr1_dec) = expType vs arr1
                val (arr2_type, arr2_dec) = expType vs arr2

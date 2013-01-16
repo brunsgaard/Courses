@@ -114,6 +114,9 @@ Exp :	  NUM            { Fasto.Num $1 }
         | SPLIT LPAR Exp COMMA Exp RPAR
                         { Fasto.Split ($3, $5, Fasto.UNKNOWN, Fasto.UNKNOWN, $1) }
 
+        | CONCAT LPAR Exp COMMA Exp RPAR
+                        { Fasto.Concat ($3, $5, Fasto.UNKNOWN, Fasto.UNKNOWN, Fasto.UNKNOWN, $1) }
+
 
         | SCAN LPAR OP BAND COMMA Exp COMMA Exp RPAR
                         { Fasto.Scan ("_band_", $6, $8, Fasto.UNKNOWN, $1) }

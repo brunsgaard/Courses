@@ -541,41 +541,176 @@ struct
         end
 
     | Fasto.Split  (n, lst, eltp, otyp, pos) =>
-        let val lst_reg     = "_arr_reg_"^newName()
-            val lst_code    = compileExp lst vtable lst_reg
-            val inp_addr    = "_addr_reg_"^newName()
+        let
+          (* existing lst*)
+          val lst_reg       = "_arr_reg_"^newName()
+          val lst_code      = compileExp lst vtable lst_reg
 
-            val new_sz_reg      = "_size_reg_"^newName()
-            val new_sz_code     = [Mips.LI(new_sz_reg, "2")]
+          (* new list to hold the two lists after splitting *)
+          val new_sz_reg    = "_size_reg_"^newName()
+          val new_sz_code   = [Mips.LI(new_sz_reg, "2")]
 
-            fun loopfun(i, r) = let val copy  =   if ( getElSize eltp = 1 )
-                                                    then Mips.LB(r, inp_addr, "0")
-                                                    else Mips.LW(r, inp_addr, "0")
+          (* util functions for move a range *)
+          val inp_addr      = "_addr_reg_"^newName()
+          fun loopfun(i, r) =
+            let
+              val copy =
+                if ( getElSize eltp = 1 )
+                then Mips.LB(r, inp_addr, "0")
+                else Mips.LW(r, inp_addr, "0")
+              val incr =
+                if ( getElSize eltp = 1 )
+                then [Mips.ADDI(inp_addr, inp_addr, "1")]
+                else [Mips.ADDI(inp_addr, inp_addr, "4")]
+            in
+              copy :: incr
+            end
 
-                                    val incr  =   if ( getElSize eltp = 1 )
-                                                    then [Mips.ADDI(inp_addr, inp_addr, "1")]
-                                                    else [Mips.ADDI(inp_addr, inp_addr, "4")]
-                                in copy :: incr
-                                end
+          (* #1 of the two arrays in the list after splitting *)
+          val arr1_reg      =  "_arr1_reg_" ^ newName()
+          val arr1_n        =  "_arr1_n_reg_" ^ newName()
+          val arr1_sz_code  = compileExp n vtable arr1_n
+          val arr1_code     = dynalloc(arr1_n, arr1_reg, eltp) @
+                              [Mips.LW(inp_addr, lst_reg, "4")] @
+                              compileDoLoop( getElSize eltp, arr1_n,
+                              arr1_reg, loopfun, pos )
 
-            val arr1_reg        =  "_arr1_reg_" ^ newName()
-            val arr1_n        =  "_arr1_n_reg_" ^ newName()
-            val arr1_sz_code     = compileExp n vtable arr1_n
-            val arr1_code        = dynalloc(arr1_n, arr1_reg, eltp) @
-            [Mips.LW(inp_addr, lst_reg, "4")] @ compileDoLoop( getElSize eltp, arr1_n, arr1_reg, loopfun, pos )
+          (* #2 of the two arrays in the list after splitting *)
+          val arr2_reg      = "_arr2_reg_" ^ newName()
+          val arr2_n        = "_arr2_n_reg_" ^ newName()
+          val arr2_sz_code  = [Mips.LW(arr2_n, lst_reg, "0"),
+                               Mips.SUB(arr2_n, arr2_n, arr1_n)]
+          val arr2_code     = dynalloc(arr2_n, arr2_reg, eltp) @
+                              compileDoLoop( getElSize eltp, arr2_n,
+                              arr2_reg, loopfun, pos )
 
-            val arr2_reg         = "_arr2_reg_" ^ newName()
-            val arr2_n           = "_arr2_n_reg_" ^ newName()
-            val arr2_sz_code     = [Mips.LW(arr2_n, lst_reg, "0"), Mips.SUB(arr2_n, arr2_n, arr1_n)]
-            val arr2_code        = dynalloc(arr2_n, arr2_reg, eltp) @ compileDoLoop( getElSize eltp, arr2_n, arr2_reg, loopfun, pos )
+          (* code checking that 0 < n < len(lst)-1 *)
+          val checkbounds =
+              let val tmp_sz_reg  = "_size_reg_" ^newName()
+                  val tmp_reg = "_tmp_reg_"  ^newName()
+                  val err_lab = "_error_lab_"^newName()
+                  val safe_lab= "_safe_lab_" ^newName()
+              in [Mips.LW(tmp_sz_reg,lst_reg,"0"),
+                  Mips.ADDI(arr1_n, arr1_n, "-1"),
+                  Mips.BGEZ(arr1_n, safe_lab),
+                  Mips.LABEL(err_lab),
+                  Mips.LI("5",makeConst (#1 pos)),
+                  Mips.J "_IllegalArrSizeError_",
+                  Mips.LABEL(safe_lab),
+                  Mips.ADDI(arr1_n, arr1_n, "1"),
+                  Mips.SUB(tmp_reg,arr1_n,tmp_sz_reg),
+                  Mips.BGEZ(tmp_reg, err_lab)]
+              end
 
-            val sz_codes = new_sz_code @ arr1_sz_code @ arr2_sz_code
+          (* grouping some of the code above *)
+          val sz_codes = new_sz_code @ arr1_sz_code @ arr2_sz_code
+          val arr_codes = arr1_code @ arr2_code
 
-
-        in lst_code @ sz_codes @ arr1_code @ arr2_code @ dynalloc(new_sz_reg,place,otyp) @
-        [Mips.LW(inp_addr, place, "4")] @ [Mips.SW(arr1_reg, inp_addr, "0")] @
-        [Mips.ADDI(inp_addr, inp_addr, "4")] @ [Mips.SW(arr2_reg, inp_addr, "0")]
+        (* creating the new array of sz 2 and move arr1 and arr2 til the list*)
+        in
+          lst_code @ sz_codes @ arr_codes @
+           dynalloc(new_sz_reg,place,otyp) @
+          [Mips.LW(inp_addr, place, "4")] @
+          [Mips.SW(arr1_reg, inp_addr, "0")] @
+          [Mips.ADDI(inp_addr, inp_addr, "4")] @
+          [Mips.SW(arr2_reg, inp_addr, "0")]
         end
+
+
+    | Fasto.Concat  (lst1, lst2, lst_typ1, lst_typ2, rtp, pos) =>
+        let
+          (* setup code for the first array *)
+          val lst1_reg  = "_arr1_reg_"  ^newName()
+          val lst1_place= "_arr1_place_" ^newName()
+          val lst1_sz   = "_arr1_sz_" ^newName()
+          val lst1_code = compileExp lst1 vtable lst1_reg @
+              [Mips.LW(lst1_place, lst1_reg, "4")] @
+              [Mips.LW(lst1_sz, lst1_reg, "0")]
+
+          (* setup code for the second array *)
+          val lst2_reg  = "_arr2_reg_"  ^newName()
+          val lst2_place= "_arr2_place_" ^newName()
+          val lst2_code = compileExp lst2 vtable lst2_reg @
+              [Mips.LW(lst2_place, lst2_reg, "4")]
+
+          (* size for final array *)
+          val sz_reg    = "_size_reg_" ^newName()
+          val sz_code   =
+            let
+              val tmp_r     =  "tmp_reg_" ^newName()
+            in
+              [Mips.LW(sz_reg, lst1_reg, "0"),
+               Mips.LW(tmp_r, lst2_reg, "0"),
+               Mips.ADD(sz_reg, sz_reg, tmp_r)]
+            end
+
+          (* code for checking adjacentcy *)
+          val lst_adj   = "_arr2_reg_"  ^newName()
+          val lst_adj_code   =
+            let
+              val lst_adj_tmp = "_arr2_reg_"  ^newName()
+              val set_diff =
+                    [Mips.SUB(lst_adj, lst2_place, lst1_place)]
+              val set_el_sz =
+                    if ( getElSize lst_typ1 = 1 )
+                    then [Mips.LI(lst_adj_tmp, "1")]
+                    else [Mips.LI(lst_adj_tmp, "4")]
+              val sub_el_sz_times_elemetes =
+                    [Mips.MUL(lst_adj_tmp, lst_adj_tmp, lst1_sz),
+                     Mips.SUB(lst_adj, lst_adj, lst_adj_tmp)]
+            in
+              set_diff @ set_el_sz @ sub_el_sz_times_elemetes
+            end
+
+          val lst_code  = lst1_code @ lst2_code @ lst_adj_code
+
+          (* code for copying values over *)
+          val inp_addr1  = "_input_reg_"^newName()
+          val inp_addr2  = "_input_reg_"^newName()
+
+          val counter   = "_arr1_sz_"  ^newName()
+          val counter_code = [Mips.LW(counter, lst1_reg, "0"),
+                              Mips.ADDI(counter, counter, "-1")]
+
+          fun loopfun(i, r) =
+            let
+              val lab = "_label_"  ^newName()
+              val done = "_label_"  ^newName()
+              val copy1 =
+                if ( getElSize lst_typ1 = 1 )
+                then Mips.LB(r, inp_addr1, "0")
+                else Mips.LW(r, inp_addr1, "0")
+              val incr1 =
+                if ( getElSize lst_typ1 = 1 )
+                then [Mips.ADDI(inp_addr1, inp_addr1, "1")]
+                else [Mips.ADDI(inp_addr1, inp_addr1, "4")]
+              val copy2 =
+                if ( getElSize lst_typ1 = 1 )
+                then Mips.LB(r, inp_addr2, "0")
+                else Mips.LW(r, inp_addr2, "0")
+              val incr2 =
+                if ( getElSize lst_typ1 = 1 )
+                then [Mips.ADDI(inp_addr2, inp_addr2, "1")]
+                else [Mips.ADDI(inp_addr2, inp_addr2, "4")]
+            in
+                [Mips.BGEZ(counter, lab)] @
+                [copy2] @ incr2 @ [Mips.J done] @
+                [Mips.LABEL(lab)] @
+                [copy1] @ incr1 @ [Mips.ADDI(counter, counter, "-1")] @
+                [Mips.LABEL(done)]
+            end
+
+          val lab1 = "_label_"  ^newName()
+          val lab2 = "_label_"  ^newName()
+
+        in
+          lst_code @ sz_code @ dynalloc(sz_reg, place, lst_typ1) @ [Mips.BEQ("0",
+          lst_adj, lab1)] @  [Mips.LW(inp_addr1, lst1_reg, "4")] @ [Mips.LW(inp_addr2, lst2_reg, "4")] @
+           counter_code @ compileDoLoop( getElSize lst_typ1, sz_reg, place, loopfun, pos ) @ [Mips.J
+           lab2] @ [Mips.LABEL(lab1)] @ [Mips.J "_IllegalArrSizeError_"] @  [Mips.LABEL(lab2)]
+        end
+
+
 
     | Fasto.ZipWith  (fid, lst1, lst2, eltp1, eltp2, rtp, pos) =>
         let val lst1_reg  = "_arr1_reg_"  ^newName()

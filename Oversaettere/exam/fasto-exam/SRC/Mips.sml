@@ -33,7 +33,7 @@ datatype mips
  | SLTI of string*string*string
  | BEQ  of string*string*string
  | BNE  of string*string*string
- | BGEZ of string*string 
+ | BGEZ of string*string
  | J of string
  | JAL of string * string list (* label + arg. reg.s *)
  | JR of string * string list (* jump reg. + result reg.s *)
