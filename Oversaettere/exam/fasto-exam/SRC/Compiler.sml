@@ -546,43 +546,43 @@ struct
           val lst_reg       = "_arr_reg_"^newName()
           val lst_code      = compileExp lst vtable lst_reg
 
-          (* new list to hold the two lists after splitting *)
-          val new_sz_reg    = "_size_reg_"^newName()
-          val new_sz_code   = [Mips.LI(new_sz_reg, "2")]
+          (* index there to split *)
+          val index        =  "_index_" ^ newName()
+          val index_code  = compileExp n vtable index
 
-          (* util functions for move a range *)
-          val inp_addr      = "_addr_reg_"^newName()
-          fun loopfun(i, r) =
+          (* find the start addresses for data for list 1 and 2 *)
+          val data_addr1     = "_addr1_reg_"^newName()
+          val data_addr2     = "_addr2_reg_"^newName()
+          val addr_code =
             let
-              val copy =
-                if ( getElSize eltp = 1 )
-                then Mips.LB(r, inp_addr, "0")
-                else Mips.LW(r, inp_addr, "0")
-              val incr =
-                if ( getElSize eltp = 1 )
-                then [Mips.ADDI(inp_addr, inp_addr, "1")]
-                else [Mips.ADDI(inp_addr, inp_addr, "4")]
+              val set_el_sz =
+                    if ( getElSize eltp = 1 )
+                    then [Mips.LI(data_addr2, "1")]
+                    else [Mips.LI(data_addr2, "4")]
             in
-              copy :: incr
+              set_el_sz @ [Mips.LW(data_addr1, lst_reg, "4"),
+              Mips.MUL(data_addr2, data_addr2, index),
+              Mips.ADD(data_addr2, data_addr1, data_addr2)]
             end
+
+          (* new list to hold the two lists after splitting *)
+          val sz_reg    = "_size_reg_"^newName()
+          val sz_code   = [Mips.LI(sz_reg, "2")]
+          val inp_addr     = "_inp_reg_"^newName()
+
 
           (* #1 of the two arrays in the list after splitting *)
           val arr1_reg      =  "_arr1_reg_" ^ newName()
-          val arr1_n        =  "_arr1_n_reg_" ^ newName()
-          val arr1_sz_code  = compileExp n vtable arr1_n
-          val arr1_code     = dynalloc(arr1_n, arr1_reg, eltp) @
-                              [Mips.LW(inp_addr, lst_reg, "4")] @
-                              compileDoLoop( getElSize eltp, arr1_n,
-                              arr1_reg, loopfun, pos )
+          val arr1_code     =  dynalloc("0", arr1_reg, otyp) @ [Mips.SW(index,
+          arr1_reg, "0"), Mips.SW(data_addr1, arr1_reg, "4")]
+
 
           (* #2 of the two arrays in the list after splitting *)
           val arr2_reg      = "_arr2_reg_" ^ newName()
-          val arr2_n        = "_arr2_n_reg_" ^ newName()
-          val arr2_sz_code  = [Mips.LW(arr2_n, lst_reg, "0"),
-                               Mips.SUB(arr2_n, arr2_n, arr1_n)]
-          val arr2_code     = dynalloc(arr2_n, arr2_reg, eltp) @
-                              compileDoLoop( getElSize eltp, arr2_n,
-                              arr2_reg, loopfun, pos )
+          val arr2_sz        = "_arr2_sz_reg_" ^ newName()
+          val arr2_sz_code  = [Mips.LW(arr2_sz, lst_reg, "0"), Mips.SUB(arr2_sz, arr2_sz, index)]
+          val arr2_code     =  arr2_sz_code @ dynalloc("0", arr2_reg, otyp) @ [Mips.SW(arr2_sz,
+          arr2_reg, "0"), Mips.SW(data_addr2, arr2_reg, "4")]
 
           (* code checking that 0 < n < len(lst)-1 *)
           val checkbounds =
@@ -591,25 +591,25 @@ struct
                   val err_lab = "_error_lab_"^newName()
                   val safe_lab= "_safe_lab_" ^newName()
               in [Mips.LW(tmp_sz_reg,lst_reg,"0"),
-                  Mips.ADDI(arr1_n, arr1_n, "-1"),
-                  Mips.BGEZ(arr1_n, safe_lab),
+                  Mips.ADDI(index, index, "-1"),
+                  Mips.BGEZ(index, safe_lab),
                   Mips.LABEL(err_lab),
                   Mips.LI("5",makeConst (#1 pos)),
                   Mips.J "_IllegalArrSizeError_",
                   Mips.LABEL(safe_lab),
-                  Mips.ADDI(arr1_n, arr1_n, "1"),
-                  Mips.SUB(tmp_reg,arr1_n,tmp_sz_reg),
+                  Mips.ADDI(index, index, "1"),
+                  Mips.SUB(tmp_reg,index,tmp_sz_reg),
                   Mips.BGEZ(tmp_reg, err_lab)]
               end
 
           (* grouping some of the code above *)
-          val sz_codes = new_sz_code @ arr1_sz_code @ arr2_sz_code
-          val arr_codes = arr1_code @ arr2_code
+          val setup = lst_code @ sz_code @ index_code @ addr_code
+          val arrays = arr1_code @ arr2_code
 
         (* creating the new array of sz 2 and move arr1 and arr2 til the list*)
         in
-          lst_code @ sz_codes @ arr_codes @
-           dynalloc(new_sz_reg,place,otyp) @
+          setup @ arrays @
+          dynalloc(sz_reg,place,otyp) @
           [Mips.LW(inp_addr, place, "4")] @
           [Mips.SW(arr1_reg, inp_addr, "0")] @
           [Mips.ADDI(inp_addr, inp_addr, "4")] @
