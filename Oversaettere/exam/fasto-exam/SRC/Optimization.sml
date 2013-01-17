@@ -1067,6 +1067,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
   (*************************************************************)
 
   fun ctFoldP ( exp, vtab ) = case exp of
+
       Fasto.Num(n,p) => (false, exp)
 
     | Fasto.Log(b,p) => (false, exp)
@@ -1089,9 +1090,10 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
           val (s2, e2new) = ctFoldP( e2, vtab )
+          val () = print(Fasto.pp_exp 1 e2new)
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalBinop(op+, e1new, e2new, p))
           else
@@ -1108,7 +1110,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val (s2, e2new) = ctFoldP( e2, vtab )
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalBinop(op-, e1new, e2new, p))
           else
@@ -1125,7 +1127,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val (s2, e2new) = ctFoldP( e2, vtab )
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalEq(e1new, e2new,p))
           else
@@ -1138,7 +1140,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val (s2, e2new) = ctFoldP( e2, vtab )
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalRelop(op<,e1new,e2new,p))
           else
@@ -1226,7 +1228,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val (s2, e2new) = ctFoldP( e2, vtab )
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalBinop(op*, e1new, e2new, p))
           else
@@ -1245,7 +1247,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val (s2, e2new) = ctFoldP( e2, vtab )
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalBinop(op div, e1new, e2new, p))
           else
@@ -1282,7 +1284,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
             end
         in
           if
-            (isCtVal e1new) andalso (isCtVal e1new)
+            (isCtVal e1new) andalso (isCtVal e2new)
           then
             (true,evalBinop(bitwiseand, e1new, e2new, p))
           else
@@ -1338,19 +1340,222 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           (s1 orelse s2, Fasto.Scan(str,e1new,e2new,t,p))
         end
 
+    | _ => (false, exp)
+
   (*************************************************************)
   (*************************************************************)
   (*** Copy/Constant Propagation -- Implement                ***)
   (*************************************************************)
   (*************************************************************)
   fun copyProp( exp, vtab ) = case exp of
-                                  Plus (e1, e2, p) => let val (s1, e1new) =
-                                 copyProp( e1, vtab )
-                                   val (s2, e2new) = copyProp( e2, vtab )
-                                                       in ( s1 orelse s2,
-                                                       Plus(e1new, e2new, p) )
-                                                       end
-                              | _ => (false, exp)
+      Fasto.Num(n,p) => (false, exp)
+
+    | Fasto.Log(b,p) => (false, exp)
+
+    | Fasto.CharLit(c,p) => (false, exp)
+
+    | Fasto.StringLit(s,p) => (false, exp)
+
+    | Fasto.ArrayLit(expl,t,p) =>
+        let
+          val (slist, explnew) = ListPair.unzip (map (fn e => copyProp(e,vtab)) expl)
+          val s = List.exists(fn x => x = true) slist
+        in
+          (s, Fasto.ArrayLit(explnew, t, p))
+        end
+
+    | Fasto.Var(id, p) => (case SymTab.lookup id vtab of
+                           NONE   => (false, exp)
+                        |  SOME e => (true, e))
+
+    | Fasto.Plus (e1, e2, p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          ( s1 orelse s2, Fasto.Plus(e1new, e2new, p) )
+        end
+
+    | Fasto.Minus (e1, e2, p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          ( s1 orelse s2, Fasto.Minus(e1new, e2new, p) )
+        end
+
+    | Fasto.Equal(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+            (s1 orelse s2, Fasto.Equal(e1new,e2new,p))
+        end
+
+    | Fasto.Less(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+            (s1 orelse s2, Fasto.Less(e1new,e2new,p))
+        end
+
+    | Fasto.If(e1,e2,e3,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+          val (s3, e3new) = copyProp( e3, vtab )
+          val optimized = s1 orelse s2 orelse s3
+          val newIf = Fasto.If(e1new,e2new,e3new,p)
+        in
+            (optimized, newIf)
+        end
+
+    | Fasto.Apply(str,expl,p) =>
+        let
+          val (slist, explnew) = ListPair.unzip (map (fn e => copyProp(e,vtab)) expl)
+          val s1 = List.exists(fn x => x = true) slist
+        in
+          (s1, Fasto.Apply(str, explnew, p))
+        end
+
+    | Fasto.Let(Fasto.Dec(id,e1,p1), e2, p2 ) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab );
+          val vtabnew = if isCtVal(e1new) orelse isCpVar(e1new)
+                        then SymTab.insert id e1new vtab
+                        else vtab
+        in
+          let
+            val (s2, e2new) = copyProp( e2, vtabnew )
+          in
+            if isCtVal(e1new) orelse isCpVar(e1new)
+              then (true, e2new)
+              else (s2 orelse s1, Fasto.Let(Fasto.Dec(id,e1new,p1), e2new, p2 ))
+          end
+        end
+    | Fasto.Index(str,e1,t,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Index(str, e1new,t,p))
+        end
+
+    | Fasto.Iota(e1,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Iota(e1new,p))
+        end
+
+    | Fasto.Map(str,e1,t1,t2,p)=>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Map(str,e1new,t1,t2,p))
+        end
+    | Fasto.Reduce(s, e1,e2,r,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1, Fasto.Reduce(s, e1new,e2new,r,p))
+        end
+    | Fasto.Split(e1,e2,t,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1, Fasto.Split(e1new,e2new,t,p))
+        end
+    | Fasto.Concat(e1,e2,t,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1, Fasto.Concat(e1new,e2new,t,p))
+        end
+    | Fasto.Read(t,p) => (false, exp)
+    | Fasto.Write(e1,t,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Write(e1new,t,p))
+        end
+
+    | Fasto.Times(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.Times(e1new,e2new,p))
+        end
+
+
+    | Fasto.Divide(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.Divide(e1new,e2new,p))
+        end
+
+
+    | Fasto.And(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.And(e1new,e2new,p))
+        end
+
+    | Fasto.Band(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.Times(e1new,e2new,p))
+        end
+
+    | Fasto.Or(e1,e2,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.Or(e1new,e2new,p))
+        end
+
+    | Fasto.Not(e1,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Not(e1new, p))
+        end
+
+    | Fasto.Negate(e1,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+        in
+          (s1, Fasto.Negate(e1new, p))
+        end
+
+    | Fasto.ZipWith(str,e1,e2,t1,t2,t3,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.ZipWith(str,e1new,e2new,t1,t2,t3,p))
+        end
+
+    | Fasto.Scan(str,e1,e2,t,p) =>
+        let
+          val (s1, e1new) = copyProp( e1, vtab )
+          val (s2, e2new) = copyProp( e2, vtab )
+        in
+          (s1 orelse s2, Fasto.Scan(str,e1new,e2new,t,p))
+        end
+    | _ => (false, exp)
+
 
 
   (*************************************************************)

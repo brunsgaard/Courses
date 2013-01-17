@@ -95,7 +95,7 @@ struct
             [ ]    => " { } "
           | (a::l) => " { "^pp_exp d a^concat (map (fn x => ", "^pp_exp d x) l) ^ " } "
         )
-    | pp_exp d (Var   (id, pos))     = id
+    | pp_exp d (Var   (id, pos))     = "" ^id
     | pp_exp d (Plus  (e1, e2, pos))    = " ( " ^ pp_exp d e1 ^ " + " ^ pp_exp d e2 ^ " ) "
     | pp_exp d (Minus (e1, e2, pos))    = " ( " ^ pp_exp d e1 ^ " - " ^ pp_exp d e2 ^ " ) "
 
