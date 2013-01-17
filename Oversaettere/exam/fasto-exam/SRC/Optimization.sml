@@ -1066,26 +1066,22 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
   (*************************************************************)
   (*************************************************************)
 
+  (* The code below is added as part of the exam *)
+
   fun ctFoldP ( exp, vtab ) = case exp of
-
       Fasto.Num(n,p) => (false, exp)
-
     | Fasto.Log(b,p) => (false, exp)
-
     | Fasto.CharLit(c,p) => (false, exp)
-
     | Fasto.StringLit(s,p) => (false, exp)
-
     | Fasto.ArrayLit(expl,t,p) =>
         let
-          val (slist, explnew) = ListPair.unzip (map (fn e => ctFoldP(e,vtab)) expl)
+          val (slist, explnew) = ListPair.unzip
+                                 (map (fn e => ctFoldP(e,vtab)) expl)
           val s = List.exists(fn x => x = true) slist
         in
           (s, Fasto.ArrayLit(explnew, t, p))
         end
-
     | Fasto.Var(s,p) => (false, exp)
-
     | Fasto.Plus(e1, e2, p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1103,7 +1099,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
               | ( _       , _         ) => (s1 orelse s2,
                                             Fasto.Plus(e1new,e2new,p))
         end
-
     | Fasto.Minus(e1, e2, p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1120,7 +1115,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
               | ( _       , _         ) => (s1 orelse s2,
                                             Fasto.Minus(e1new,e2new,p))
         end
-
     | Fasto.Equal(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1133,7 +1127,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           else
             (s1 orelse s2, Fasto.Equal(e1new,e2new,p))
         end
-
     | Fasto.Less(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1146,7 +1139,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           else
             (s1 orelse s2, Fasto.Equal(e1new,e2new,p))
         end
-
     | Fasto.If(e1,e2,e3,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1157,7 +1149,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
             (optimized, newIf)
         end
-
     | Fasto.Apply(str,expl,p) =>
         let
           val (slist, explnew) = ListPair.unzip (map (fn e => ctFoldP(e,vtab)) expl)
@@ -1165,7 +1156,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Apply(str, explnew, p))
         end
-
     | Fasto.Let(Fasto.Dec(s,e1,p1), e2, p2) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1179,14 +1169,12 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Index(str, e1new,t,p))
         end
-
     | Fasto.Iota(e1,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
         in
           (s1, Fasto.Iota(e1new,p))
         end
-
     | Fasto.Map(str,e1,t1,t2,p)=>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1221,7 +1209,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Write(e1new,t,p))
         end
-
     | Fasto.Times(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1240,7 +1227,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
               | ( _       , _         ) => (s1 orelse s2,
                                             Fasto.Times(e1new,e2new,p))
         end
-
     | Fasto.Divide(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1253,12 +1239,13 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           else
             case (e1new, e2new) of
                 ( Num(0,_), _         ) => (true,Fasto.Num(0, p))
-              | ( _       , Num(0,_ ) ) => raise Fail "Optimizser: Was ask to ctFold Divide exp with 0 on righthandside, This dows not make sense"
+              | ( _       , Num(0,_ ) ) =>
+                  raise Error ("Optimizer: Was ask to ctFold Divide exp with 0"^
+                              "on righthandside, This dows not make sense", p)
               | ( _       , Num(1,_ ) ) => (true,e1new)
               | ( _       , _         ) => (s1 orelse s2,
                                             Fasto.Divide(e1new,e2new,p))
         end
-
     | Fasto.And(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1270,7 +1257,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
             | ( Log(true,_) , Log(true,_)  ) => (true, Log(true,p))
             | ( _           , _            ) => (s1 orelse s2, Fasto.And(e1new,e2new,p))
         end
-
     | Fasto.Band(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1294,7 +1280,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
               | ( _       , _         ) => (s1 orelse s2,
                                             Fasto.Times(e1new,e2new,p))
         end
-
     | Fasto.Or(e1,e2,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1314,7 +1299,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
                 Fasto.Log(b,_)  => (true, Fasto.Log(not b, p))
               | _               => (s1, Fasto.Not(e1new, p))
         end
-
     | Fasto.Negate(e1,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1323,7 +1307,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
                 Fasto.Num(n,p1)  => (true, Fasto.Num(~n, p))
               | _               => (s1, Fasto.Negate(e1new, p))
         end
-
     | Fasto.ZipWith(str,e1,e2,t1,t2,t3,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1331,7 +1314,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.ZipWith(str,e1new,e2new,t1,t2,t3,p))
         end
-
     | Fasto.Scan(str,e1,e2,t,p) =>
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
@@ -1339,7 +1321,8 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Scan(str,e1new,e2new,t,p))
         end
-
+    (* Fallback, it can be discussed if it should be left out
+     * to clarify programming mistakes when adding new AbSyn nodes. *)
     | _ => (false, exp)
 
   (*************************************************************)
@@ -1349,13 +1332,9 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
   (*************************************************************)
   fun copyProp( exp, vtab ) = case exp of
       Fasto.Num(n,p) => (false, exp)
-
     | Fasto.Log(b,p) => (false, exp)
-
     | Fasto.CharLit(c,p) => (false, exp)
-
     | Fasto.StringLit(s,p) => (false, exp)
-
     | Fasto.ArrayLit(expl,t,p) =>
         let
           val (slist, explnew) = ListPair.unzip (map (fn e => copyProp(e,vtab)) expl)
@@ -1363,11 +1342,9 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s, Fasto.ArrayLit(explnew, t, p))
         end
-
     | Fasto.Var(id, p) => (case SymTab.lookup id vtab of
                            NONE   => (false, exp)
                         |  SOME e => (true, e))
-
     | Fasto.Plus (e1, e2, p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1375,7 +1352,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           ( s1 orelse s2, Fasto.Plus(e1new, e2new, p) )
         end
-
     | Fasto.Minus (e1, e2, p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1383,7 +1359,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           ( s1 orelse s2, Fasto.Minus(e1new, e2new, p) )
         end
-
     | Fasto.Equal(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1391,7 +1366,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
             (s1 orelse s2, Fasto.Equal(e1new,e2new,p))
         end
-
     | Fasto.Less(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1399,7 +1373,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
             (s1 orelse s2, Fasto.Less(e1new,e2new,p))
         end
-
     | Fasto.If(e1,e2,e3,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1410,7 +1383,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
             (optimized, newIf)
         end
-
     | Fasto.Apply(str,expl,p) =>
         let
           val (slist, explnew) = ListPair.unzip (map (fn e => copyProp(e,vtab)) expl)
@@ -1418,7 +1390,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Apply(str, explnew, p))
         end
-
     | Fasto.Let(Fasto.Dec(id,e1,p1), e2, p2 ) =>
         let
           val (s1, e1new) = copyProp( e1, vtab );
@@ -1440,14 +1411,12 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Index(str, e1new,t,p))
         end
-
     | Fasto.Iota(e1,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
         in
           (s1, Fasto.Iota(e1new,p))
         end
-
     | Fasto.Map(str,e1,t1,t2,p)=>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1482,7 +1451,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Write(e1new,t,p))
         end
-
     | Fasto.Times(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1490,8 +1458,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Times(e1new,e2new,p))
         end
-
-
     | Fasto.Divide(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1499,8 +1465,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Divide(e1new,e2new,p))
         end
-
-
     | Fasto.And(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1508,7 +1472,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.And(e1new,e2new,p))
         end
-
     | Fasto.Band(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1516,7 +1479,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Times(e1new,e2new,p))
         end
-
     | Fasto.Or(e1,e2,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1524,21 +1486,18 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Or(e1new,e2new,p))
         end
-
     | Fasto.Not(e1,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
         in
           (s1, Fasto.Not(e1new, p))
         end
-
     | Fasto.Negate(e1,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
         in
           (s1, Fasto.Negate(e1new, p))
         end
-
     | Fasto.ZipWith(str,e1,e2,t1,t2,t3,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1546,7 +1505,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.ZipWith(str,e1new,e2new,t1,t2,t3,p))
         end
-
     | Fasto.Scan(str,e1,e2,t,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
@@ -1554,9 +1512,11 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1 orelse s2, Fasto.Scan(str,e1new,e2new,t,p))
         end
+    (* Fallback, it can be discussed if it should be left out
+     * to clarify programming mistakes when adding new AbSyn nodes. *)
     | _ => (false, exp)
 
-
+  (* -------------------------end-------------------------- *)
 
   (*************************************************************)
   (*************************************************************)

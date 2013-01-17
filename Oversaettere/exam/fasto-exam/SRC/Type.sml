@@ -123,13 +123,6 @@ struct
     (* Project solution: Task1 Beg *)
     (*******************************)
 
-      | Fasto.Band (e1, e2, pos)
-        => let val (ts, es)
-                 = ListPair.unzip (List.map (expType vs) [e1,e2])
-               val t  = List.foldl (unifyTypes pos)(Fasto.Int pos) ts
-           in (Fasto.Int pos,
-               Fasto.Band (List.nth (es,0), List.nth (es,1), pos))
-           end
       | Fasto.Times (e1, e2, pos)
         => let val (ts, es)
                  = ListPair.unzip (List.map (expType vs) [e1,e2])
@@ -311,50 +304,6 @@ struct
                                 ^ Fasto.pp_type f_arg_type , pos)
            end
 
-      | Fasto.Split (num, arr, typ, pos)
-        => let
-            (* type of first argument, should be Int *)
-            val (n_type, n_dec) = expType vs num
-            (* type of second argument, should be Array *)
-            val (arr_type, arr_dec) = expType vs arr
-            (* type of elements in Array, if not Array and exception is thrown *)
-            val el_type = case arr_type of
-                               Fasto.Array (t,_) => unifyTypes pos (typ, t)
-                             | _ => raise Error ("Split: Second argument not an array",pos)
-           in
-             (* check if first argument is Int *)
-             if typesEqual (n_type, Fasto.Int pos)
-             then (Fasto.Array (arr_type, pos), Fasto.Split (num ,arr_dec, el_type, pos))
-             else raise Error ("Split: First argument type is not Int " ^ showType n_type, pos)
-           end
-
-      | Fasto.Concat (arr1, arr2, arg1_typ, pos)
-        => let
-            (* type of first argument, should be Array *)
-            val (arr1_type, arr1_dec) = expType vs arr1
-            (* type of second argument, should be Array *)
-            val (arr2_type, arr2_dec) = expType vs arr2
-            (* type of elements in Array, if not Array and exception is thrown *)
-
-            val el1_type
-              = case arr1_type of
-                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
-                | other => raise Error ("Concat: First Array Argument not an array",pos)
-
-            val el2_type
-              = case arr2_type of
-                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
-                | other => raise Error ("Concat: Second Array Argument not an array",pos)
-
-           in
-             (* check if first argument is Int *)
-             if typesEqual (el1_type, el2_type)
-             then (Fasto.Array (el1_type, pos), Fasto.Concat
-             (arr1_dec, arr2_dec, el1_type, pos))
-             else raise Error ("Concat: Types in Array must be the same " ^
-             showType el1_type, pos)
-           end
-
       | Fasto.ZipWith (f, arr1, arr2, arg_t1, arg_t2, res_t, pos)
         => let val (arr1_type, arr1_dec) = expType vs arr1
                val (arr2_type, arr2_dec) = expType vs arr2
@@ -456,6 +405,72 @@ struct
               else raise Error ("Replicate: wrong argument type "
                                 ^ showType n_type, pos)
            end
+
+      (* Block below are added as part of the exam *)
+
+      | Fasto.Band (e1, e2, pos) =>
+          let
+            val (ts, es) = ListPair.unzip (List.map (expType vs) [e1,e2])
+            (* ts holds the type, we unify with int *)
+            val t  = List.foldl (unifyTypes pos)(Fasto.Int pos) ts
+         in (Fasto.Int pos, Fasto.Band (List.nth (es,0),
+                                        List.nth (es,1), pos))
+         end
+
+      | Fasto.Split (num, arr, typ, pos)
+        => let
+            (* type of first argument, should be Int *)
+            val (n_type, n_dec) = expType vs num
+            (* type of second argument, should be Array *)
+            val (arr_type, arr_dec) = expType vs arr
+            (* type of elements in Array, if not Array an exception is thrown *)
+            val el_type = case arr_type of
+                  (* typ is Unknown, we unify with the types and
+                  * determine the elements types of the Array..
+                  * Unifying are not stricly necessary here, but
+                  * we do it to keep consistency in the code eg.
+                  * Reduce also uses this practice,
+                  * alternativly we could just return t
+                  * the first tuple element in Array *)
+                  Fasto.Array (t,_) => unifyTypes pos (typ, t)
+                | _ => raise Error ("Split: Second argument not an array",pos)
+           in
+             (* check if first argument is Int *)
+             if
+               typesEqual (n_type, Fasto.Int pos)
+             then
+               (Fasto.Array (arr_type, pos),
+                Fasto.Split (num ,arr_dec, el_type, pos))
+             else
+               raise Error ("Split: First argument type is not Int " ^
+                            showType n_type, pos)
+           end
+
+      | Fasto.Concat (arr1, arr2, arg1_typ, pos)
+        => let
+            (* type of first argument, should be Array *)
+            val (arr1_type, arr1_dec) = expType vs arr1
+            (* type of second argument, should be Array *)
+            val (arr2_type, arr2_dec) = expType vs arr2
+            (* type of elements in Array, if not Array and exception is thrown *)
+            val el1_type = case arr1_type of
+                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
+                | other => raise Error ("Concat: First Array Argument "^
+                                        "not an array",pos)
+            val el2_type = case arr2_type of
+                  Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
+                | other => raise Error ("Concat: Second Array Argument "^
+                                        "not an array",pos)
+            val el_type_unified = unifyTypes pos (el2_type, el1_type)
+           (* An alternative solution would be to check with typesEqual, this
+            * way we could have used a if-then-else and raised a more specific
+            * error. *)
+           in
+             (Fasto.Array (el_type_unified, pos), Fasto.Concat(arr1_dec,
+             arr2_dec, el_type_unified, pos))
+           end
+
+      (* -------------------------end------------------------- *)
 
 
 

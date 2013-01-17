@@ -34,40 +34,41 @@ struct
     | If of Exp * Exp * Exp * pos
     | Apply of string * Exp list * pos     (* e.g., f(1, 3+x) *)
     | Let of Dec * Exp * pos               (* e.g., let x = 1 + y in x + y *)
-
     (* arrays *)
     | Index of string * Exp * Type * pos         (* arr[3]            *)
-                                                   (* Type is the input-array element type *)
     | Iota of Exp * pos                          (* iota(n)           *)
     | Map of string * Exp * Type * Type * pos    (* map(f, lst)       *)
-                                                   (* The first type  is the input-array  element type *)
-                                                   (* The second type is the output-array element type *)
     | Reduce of string * Exp * Exp * Type * pos  (* reduce(f, 0, lst) *)
-                                                   (* Type is the input-array element type *)
     | Replicate of Exp * Exp * Type * pos        (* replicate(n, 0)   *)
-    | Split of Exp * Exp * Type * pos            (* index where to split, array, arraytype ,pos*)
-    | Concat of Exp * Exp * Type *  pos
-                                                   (* Type is the output-array element type *)
-
     | Read of Type * pos                         (* e.g., read(int) *)
-                                                   (* Type is the type of the to-be-read element *)
     | Write of Exp * Type * pos                  (* e.g., write(map(f, replicate(3,x))) *)
                                                    (* Type is the type of the to-be-written element *)
 (* extension in G exercise *)
     | Times of Exp * Exp * pos
     | Divide of Exp * Exp * pos
     | And of Exp * Exp * pos
-    | Band of Exp * Exp * pos
     | Or of Exp * Exp * pos
     | Not of Exp * pos
     | Negate of Exp * pos
 
     (* second-order-array combinators *)
     | ZipWith of string * Exp * Exp * Type * Type * Type * pos  (* zipWith(plus, {1,2,3}, {4,5,6}) == {5, 7, 9} *)
-                                                                   (* The first  Type is the first  input-array element type *)
-                                                                   (* The second Type is the second input-array element type *)
     | Scan of string * Exp * Exp * Type * pos                   (* scan plus 0 { 1, 2, 3 } = { 0, 1, 3, 6 } *)
-                                                                   (* Type is the input-array element type *)
+
+    (* code added for exam  *)
+
+    (* Split: arguments are: splitindex(Num), array(Array), type of elements
+     * in Array elements(Fasto.Unknown until typechecking) , pos *)
+    | Split of Exp * Exp * Type * pos
+
+    (* Concat: arguments are: array1(Array), array2(Array), type of elements
+     * in Arrays elements(Fasto.Unknown until typechecking) , pos *)
+    | Concat of Exp * Exp * Type *  pos
+
+    (* Band (bitwise and): arguments are: Num, Num, pos *)
+    | Band of Exp * Exp * pos
+
+    (* -------- end ------- *)
 
   and Dec = Dec of string * Exp * pos
 

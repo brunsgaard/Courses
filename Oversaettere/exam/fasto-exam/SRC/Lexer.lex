@@ -20,10 +20,10 @@
        else getLineCol pos (line-1) ps
    | getLineCol pos line [] = raise LexicalError ("",(0,0))
 
- fun lexerError lexbuf s = 
+ fun lexerError lexbuf s =
      raise LexicalError (s, getPos lexbuf)
 
-(* This one is language specific, yet very common. Alternative would 
+(* This one is language specific, yet very common. Alternative would
    be to encode every keyword as a regexp. This one is much easier. *)
  fun keyword (s, pos) =
      case s of
@@ -42,8 +42,6 @@
        | "False"        => Parser.FALSE pos
 
        | "iota"         => Parser.IOTA pos
-       | "split"        => Parser.SPLIT pos
-       | "concat"       => Parser.CONCAT pos
        | "replicate"    => Parser.REPLICATE pos
        | "map"          => Parser.MAP pos
        | "reduce"       => Parser.REDUCE pos
@@ -52,8 +50,11 @@
        | "zipWith"      => Parser.ZIPWITH pos
        | "scan"         => Parser.SCAN pos
 
+       (* Code added for exam *)
        | "band"         => Parser.BAND pos
-
+       | "split"        => Parser.SPLIT pos
+       | "concat"       => Parser.CONCAT pos
+       (* ---------end--------*)
        | _              => Parser.ID (s, pos)
 
  }
