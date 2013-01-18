@@ -1,3 +1,0 @@
-fun int main() =
-    let x = read(int) in
-    let y = 45 in write(x band y)         // always prints true

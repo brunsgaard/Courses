@@ -7,14 +7,28 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 
-\title{Exam - Compilers}
-\author{Jonas Brunsgaard}
+\title{Report for ordinary compiler exam at DIKU - Taskset 4}
+\author{Jonas Brunsgaard (msn368}
 
 \begin{document}
 \maketitle
 
 \section{Top-Down Parsing for if-then-else}
+In this assignment we will work our way forward to determine whether or not
+a grammar is LL(1). This can be determined by deriving the Look-ahead sets for
+the grammar.
+
+To derive the Look-ahead sets we need to eliminate any left
+recursion, left-factorize the grammar, determine nullabilility, first sets
+and follow sets.
+
+The procedure used in this assignment are described in
+the book section 2.12, With the one exception that we use Look-ahead sets
+instead of a parse table to determine if the grammar is LL(1). Look ahead sets
+are described in the slides from the parser lecture.
+
 \subsection{Left-factorization of the grammar}
+Below is the new grammar after left-factorization.
 $$
 \begin{array}{lcl}
     S & \rightarrow & \mathrm{if\:}BSS_* \\
@@ -24,9 +38,10 @@ $$
     B & \rightarrow & \mathrm{(\,NUM\,)} \\
 \end{array}
 $$
+
 \subsection{Nullablility and First sets}
 
-First we find if terminals and nonterminals are \emph{nullable}.
+First we determine if terminals and nonterminals are \emph{nullable}.
 
 \begin{center}
 \begin{tabular}{c||c|c|c}
@@ -52,9 +67,7 @@ $S_*$ & \emph{false} & \emph{true} & \emph{true}\tabularnewline
 $B$ & \emph{false} & \emph{false} & \emph{false}\tabularnewline
 \end{tabular}
 \end{center}
-
-Then we derive the \emph{FIRST}-sets:
-
+Then we use fixed point iteration to determine the \emph{FIRST}-sets:
 \begin{center}
 \begin{tabular}{c||c|c|c}
 Right-hand side & Init & First Iter & Sec Iter\tabularnewline
@@ -81,8 +94,8 @@ $B$                     & $\emptyset$ & \{(\}         & \{(\}         \tabularne
 \end{center}                
 
 \subsection{Calculate Follow sets for all nonterminals}
-By following the procedure on page 59 in the book, we find the following
-table. To handle the end-of-string condition we add the production
+By following the procedure found on page 59 in the book, we derive the table
+below. To handle the end-of-string condition we add
 $$S'\rightarrow S\$$$
 to the production
 
@@ -133,7 +146,7 @@ $$la(X\rightarrow\alpha)=
     FIRST(\alpha)\cup FOLLOW(X) & \textrm{, if }NULLABLE(\alpha)\\
     FIRST(\alpha)               & \textrm{, otherwise}
 \end{cases}$$
-Below the lookahead sets for our productions are shown.
+Below you see the lookahead sets for our productions.
 $$
 \begin{array}{lcl}
     LA(S   \rightarrow  \mathrm{if\:}BSS_*)     & = &      \{\mathrm{if}\} \\
@@ -143,8 +156,13 @@ $$
     LA(B   \rightarrow  \mathrm{(\,NUM\,)})     & = &      \{\mathrm{(}\} \\
 \end{array}
 $$
+From the course slides on parsing we know that if for each nonterminal $X
+\in N$ in grammar $G$, all productions of $X$ have disjoint look-ahead sets,
+then the grammar $G$ is LL(1). This is not the case in out grammar d to the
+production $S_*$, an thus our production is not LL(1)
 
-No, the grammar is not LL1.
+\subsection{Resolving ambiguity in a recursive-decent parser}
+
 
 
 \end{document}

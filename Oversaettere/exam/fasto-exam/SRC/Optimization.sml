@@ -1028,6 +1028,7 @@ fun isCtVal( exp ) = case exp of
 
 fun isCpVar( exp ) = case exp of
         Var(id, p) => true
+      | Index(id, e,tp, p) => true
       | otherwise  => false
 
 fun evalBinop ( bop, Num(n1,p1), Num(n2, p2), pos ) = Num(bop(n1, n2),pos)
@@ -1086,7 +1087,6 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         let
           val (s1, e1new) = ctFoldP( e1, vtab )
           val (s2, e2new) = ctFoldP( e2, vtab )
-          val () = print(Fasto.pp_exp 1 e2new)
         in
           if
             (isCtVal e1new) andalso (isCtVal e2new)
@@ -1147,7 +1147,10 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           val optimized = s1 orelse s2 orelse s3
           val newIf = Fasto.If(e1new,e2new,e3new,p)
         in
-            (optimized, newIf)
+          case e1new of
+               Log(true,_)  => (true, e2new)
+             | Log(false,_) => (true, e3new)
+             | _            => (optimized, newIf)
         end
     | Fasto.Apply(str,expl,p) =>
         let
@@ -1254,6 +1257,8 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           case (e1new, e2new) of
               ( Log(false,_), _            ) => (true, Log(false,p))
             | ( _           , Log(false,_) ) => (true, Log(false,p))
+            | ( Log(true,_), _            ) =>  (true, e2new)
+            | ( _           , Log(true,_) ) =>  (true, e1new)
             | ( Log(true,_) , Log(true,_)  ) => (true, Log(true,p))
             | ( _           , _            ) => (s1 orelse s2, Fasto.And(e1new,e2new,p))
         end
@@ -1288,6 +1293,8 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
           case (e1new, e2new) of
               ( Log(true,_), _              ) => (true, Log(true,p))
             | ( _           , Log(true,_)   ) => (true, Log(true,p))
+            | ( Log(false,_), _              ) => (true, e2new)
+            | ( _           , Log(false,_)   ) => (true, e1new)
             | ( Log(false,_) , Log(false,_) ) => (true, Log(false,p))
             | ( _           , _             ) => (s1 orelse s2, Fasto.Or(e1new,e2new,p))
         end
@@ -1390,6 +1397,7 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
         in
           (s1, Fasto.Apply(str, explnew, p))
         end
+
     | Fasto.Let(Fasto.Dec(id,e1,p1), e2, p2 ) =>
         let
           val (s1, e1new) = copyProp( e1, vtab );
@@ -1405,11 +1413,13 @@ fun evalRelop ( bop, Num(n1,p1),     Num(n2,p2),     pos ) = Log(bop(n1,n2),pos)
               else (s2 orelse s1, Fasto.Let(Fasto.Dec(id,e1new,p1), e2new, p2 ))
           end
         end
-    | Fasto.Index(str,e1,t,p) =>
+    | Fasto.Index(id,e1,t,p) =>
         let
           val (s1, e1new) = copyProp( e1, vtab )
         in
-          (s1, Fasto.Index(str, e1new,t,p))
+          (case SymTab.lookup id vtab of
+                           NONE   => (s1, Fasto.Index(id, e1new,t,p))
+                        |  SOME e => (true, e))
         end
     | Fasto.Iota(e1,p) =>
         let
