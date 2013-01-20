@@ -1,7 +1,0 @@
-// example program for split/concat from the task description
-fun int main() = let arr0 = write(split(1,{True, False, False, True})) in
-                 let arr1 = write(split(1,{'a', 'b','c','d'})) in
-                 let arr2 = write(split(1,{'1', '2','3','4'})) in
-                 length(arr0) + length(arr1) + length(arr2)
-
-
