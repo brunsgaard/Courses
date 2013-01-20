@@ -1,4 +1,0 @@
-// example program for split/concat from the task description
-fun [int] main() = let arr = split(1,{1, 2, 3, 4})
-                   in write(concat(arr[1],arr[0])) // writes { 2 3 4 1 }
-

@@ -1,2 +1,0 @@
-fun int intwrite(int x) = write(x)
-fun [int] main() = map(intwrite,map(length, { "abc", "de", "f" }))

@@ -6,12 +6,54 @@
 \usepackage{listings}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
+\usepackage{courier}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\usepackage{float}
+\newfloat{Code}{H}{myc}
+
+
+\lstset{ %
+  backgroundcolor=\color{white},  % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\scriptsize\ttfamily,       % the size of the fonts that are used for the code
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                % sets automatic line breaking
+  captionpos=b,                   % sets the caption-position to bottom
+  commentstyle=\color{dkgreen},   % comment style
+  deletekeywords={...},           % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},         % if you want to add LaTeX within your code
+  frame=single,                   % adds a frame around the code
+  keywordstyle=\color{blue},      % keyword style
+  language=ml,                % the language of the code
+  morekeywords={*,...},           % if you want to add more keywords to the set
+  rulecolor=\color{gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,               % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,         % underline spaces within strings only
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  stringstyle=\color{mauve},      % string literal style
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  title=\lstname                  % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
 
 \title{Report for ordinary compiler exam at DIKU - Taskset 4}
-\author{Jonas Brunsgaard (msn368}
+\author{Jonas Brunsgaard (msn368)}
 
 \begin{document}
 \maketitle
+\newpage
+\tableofcontents
+\newpage
+\section*{Shot commings}
+
+\begin{itemize}
+  \item When running the whole test suite with the optimizer enabled, some tests still fail
+  \item The handed out test \texttt{testSplitConcat.fo} fails due to bounds checking, which in my opinion are correct 
+\end{itemize}
 
 \section{Top-Down Parsing for if-then-else}
 In this assignment we will work our way forward to determine whether or not
@@ -40,7 +82,6 @@ $$
 $$
 
 \subsection{Nullablility and First sets}
-
 First we determine if terminals and nonterminals are \emph{nullable}.
 
 \begin{center}
@@ -95,9 +136,8 @@ $B$                     & $\emptyset$ & \{(\}         & \{(\}         \tabularne
 
 \subsection{Calculate Follow sets for all nonterminals}
 By following the procedure found on page 59 in the book, we derive the table
-below. To handle the end-of-string condition we add
-$$S'\rightarrow S\$$$
-to the production
+below. To handle the end-of-string condition we add $S'\rightarrow S\$$
+to the production.
 
 \begin{center}
     \begin{tabular}{ll}
@@ -119,28 +159,21 @@ $B      \rightarrow \mathrm{(\:NUM\:)}$     & \tabularnewline
 \hline
 \end{tabular}
 \end{center}
-
 We first use the constraints $ \{\$\} \subseteq FOLLOW(S)$ and constraints
 of the form $FIRST(\dots)\subseteq FOLLOW(\dots)$ to get the initial sets.
-
 \begin{eqnarray*}
     FOLLOW(S)       & \subseteq & \{\mathrm{else, \$} \} \\
     FOLLOW(S_*)     & \subseteq & \{\emptyset\} \\
     FOLLOW(B)       & \subseteq & \{\mathrm{if, return}\} \\
 \end{eqnarray*}
-
 and then use the constrains on the form $FOLLOW(\dots)\subseteq FOLLOW(\dots)$:
-
 \begin{eqnarray*}
     FOLLOW(S)       & \subseteq & \{\mathrm{else, \$} \} \\
     FOLLOW(S_*)     & \subseteq & \{\mathrm{else, \$} \} \\
     FOLLOW(B)       & \subseteq & \{\mathrm{if, return}\} \\
 \end{eqnarray*}
-
 \subsection{Look-aheads sets}
-
 From the lecture slides the look ahead set is defined as
-
 $$la(X\rightarrow\alpha)=
 \begin{cases}
     FIRST(\alpha)\cup FOLLOW(X) & \textrm{, if }NULLABLE(\alpha)\\
@@ -160,9 +193,531 @@ From the course slides on parsing we know that if for each nonterminal $X
 \in N$ in grammar $G$, all productions of $X$ have disjoint look-ahead sets,
 then the grammar $G$ is LL(1). This is not the case in out grammar d to the
 production $S_*$, an thus our production is not LL(1)
+\subsection{Resolving the ambiguity in a recursive-decent parser}
+As mentioned in the assignment the established convention when dealing with
+the dangling else is to attach the ``else'' to the nearby ``if'' statement.
 
-\subsection{Resolving ambiguity in a recursive-decent parser}
+In our case - as in the book - we can achieve this by removing the empty
+production of $S_*$. In more general we have to try rewriting the ambiguous
+grammar to a unambiguous one.
+
+Normally this is done by adding productions to keep track of the
+statement state(matched/unmatched). An example can be found in the book page 52 or at -
+http://www.parsifalsoft.com/ifelse.html.
+
+Also ambiguity can be resolved adding more terminals to the grammar, e.g the
+terminal "fi" - as used in Bash - which indicates the end of the conditionally
+executed code, or we could add the more common used braces to the grammar.
+
+\section{Implementing Band (bitwise and)}
+
+\subsection{Code changes to implement \texttt{band}}
+
+In this sub-assignment the bitwise \texttt{AND} operator \texttt{band} has
+been implemented. The first changes were made to the structure file -
+\texttt{Fasto.sml} - where I added the AbSyn node as part of the datatype
+\texttt{Exp} and implemented pretty printing functionality for the new node.
+
+Afterwords \texttt{band} was added to the lexer by adding the keyword
+\texttt{band} and thereafter the parser, by adding the token \texttt{BAND} and
+providing it with left association and the correct precedence, as shown below.
+\begin{lstlisting}
+...
+%left PLUS MINUS NEGATE
+%left BAND
+%left TIMES DIV
+...
+\end{lstlisting}
+Also in the parser \texttt{BAND} was added to the $Exp$ production as an
+independent expression(creating a \texttt{Fasto.Band} node), as well as part
+of any SOAC expressions taking an operator as an argument.
+
+Then \texttt{Fasto.Band} was added to the typechecker with the following code:
+\begin{lstlisting}
+| Fasto.Band (e1, e2, pos) =>
+   let
+     val (ts, es) = ListPair.unzip (List.map (expType vs) [e1,e2])
+     (* ts holds the type, we unify with int *)
+     val t  = List.foldl (unifyTypes pos)(Fasto.Int pos) ts
+   in
+     (Fasto.Int pos, Fasto.Band (List.nth (es,0),
+                                 List.nth (es,1), pos))
+   end
+\end{lstlisting}
+The code works by creating the list \texttt{ts} holding the
+types of the of the two expressions applied to \texttt{band}. The types in
+\texttt{ts} is unified with \texttt{Int}. The function \texttt{unifyTypes}
+will raise an error exception if the types are not \texttt{Int}. If no error
+is raised a tuple is returned containing the type of \texttt{band} and the
+\texttt{band} expression.
+
+Finally I added the case for \texttt{Fasto.Band} to the compiler:
+\begin{lstlisting}
+| Fasto.Band (e1,e2,pos)=>
+    let val t1 = "_band1_"^newName()
+        val t2 = "_band2_"^newName()
+        val code1 = compileExp e1 vtable t1
+        val code2 = compileExp e2 vtable t2
+    in  code1 @ code2 @
+        [Mips.AND (place,t1,t2)]
+    end
+\end{lstlisting}
+The code above recursively (by calling compileExp) determines the
+values of the input expressions and place them in registers \texttt{t1} and
+\texttt{t2}. \texttt{Mips.AND} then perform the bitwise operation on the two
+registers and place the result in \texttt{place}. Note that I have used only
+\texttt{Mips.AND}. One would be able to check, if one of the expressions were a
+\texttt{Fasto.Num} and then use \texttt{Mips.ANDI} and thus save a register.
+I did not do that to keep the code in line with the existing code base (see the
+\texttt{compileExp} case for for \texttt{Fasto.Plus, Fasto.Minus} etc..
+
+Finally cases for \texttt{Fasto.Band} were implemented in
+\texttt{Optimization.sml} for all existing functions, ass well as the
+functions for for constant propagation and constant folding. Below the node
+for constant folding are shown. I used the MosML word-library to achieve this
+functionality:
+\begin{lstlisting}
+ | Fasto.Band(e1,e2,p) =>
+     let
+       val (s1, e1new) = ctFoldP( e1, vtab )
+       val (s2, e2new) = ctFoldP( e2, vtab )
+       fun bitwiseand (n1,n2) =
+         let
+           val w1 = Word.fromInt(n1)
+           val w2 = Word.fromInt(n2)
+         in
+           Word.toInt(Word.andb(w1,w2))
+         end
+     in
+       if
+         (isCtVal e1new) andalso (isCtVal e2new)
+       then
+         (true,evalBinop(bitwiseand, e1new, e2new, p))
+       else
+         case (e1new, e2new) of
+             ( Num(0,_), _         ) => (true,Fasto.Num(0, p))
+           | ( _       , Num(0,_ ) ) => (true,Fasto.Num(0, p))
+           | ( _       , _         ) => (s1 orelse s2,
+                                         Fasto.Band(e1new,e2new,p)
+\end{lstlisting}
+\subsection{Correctness of Band}
+To ensure correctness of \texttt{band} the follow tests has been added to the
+\texttt{DATA} folder. The content of the .out files have been calculated by
+hand.
+\begin{description}
+  \item[testBand.fo] \hfill \\
+  Testing the correctness of \texttt{band} when applied to integers.
+  \item[testBandprecedens.fo] \hfill \\
+  Testing the correctness of \texttt{band} in regard to precedence and
+  associativity.
+  \item[testBandArrayError.fo] \hfill \\
+  Testing the correctness of \texttt{band} when used with \texttt{op} as
+  function argument..
+  \item[testBandArrayError.fo] \hfill \\
+  Type testing with an Array as one of the arguments.
+  \item[testBandBoolBothOperands.fo] \hfill \\
+  Type testing with booleans as both arguments.
+  \item[testBandBoolFstOperandErr.fo] \hfill \\
+  Type testing with boolean as first argument.
+  \item[testBandBoolSecondOperandErr.fo] \hfill \\
+  Type testing with boolean as second argument.
+  \item[testBandCharBothOperands.fo] \hfill \\
+  Type testing with chars as both arguments.
+  \item[testBandCharFstOperandErr.fo] \hfill \\
+  Type testing with char as first argument.
+  \item[testBandCharSecondOperandErr.fo] \hfill \\
+  Type testing with char as second argument.
+\end{description}
+
+\subsection{Source code}
+The full source code can be found in the \texttt{SRC} folder and where changes have
+been made there should be a comment before and after the code block. I put my
+exam number(msn378) in this comment so it would be easy to find by searching the files.
+
+\section{Implementation of the second order array combinators \texttt{split}
+and \texttt{concat}}
+In this sub assignment task was to implement the second-order-array-combinators \texttt{split}
+and \texttt{concat} into the Fasto language and the compiler.
+
+\subsection{Code changes}
+I started by adding the AbSyn nodes for \texttt{split} and \texttt{concat}
+to the structure in \texttt{Fasto.sml} as described in the handed out exam
+assignment. Also pretty printing functionality were implemented here.
+
+\subsubsection{Lexer}
+As specified in the exam paper, the tokens \texttt{split} and \texttt{concat}
+were added to the list of keywords in the lexer with the following code:
+\begin{lstlisting}
+| "split"        => Parser.SPLIT pos
+| "concat"       => Parser.CONCAT pos
+\end{lstlisting}
+
+\subsubsection{Parser}
+In the parser \texttt{split} and \texttt{concat} were added to the right hand
+side of the $Exp$ production.
+\begin{lstlisting}
+ | SPLIT LPAR Exp COMMA Exp RPAR
+                 { Fasto.Split ($3, $5, Fasto.UNKNOWN, $1) }
+ | CONCAT LPAR Exp COMMA Exp RPAR
+                 { Fasto.Concat ($3, $5, Fasto.UNKNOWN, $1) }
+\end{lstlisting}
+Note, at this point we do not know the type of the elements in the input
+array. Therefore we set the type in the to \texttt{Fasto.UNKNOWN}.
+The type is determined in the type checking phase.
+
+\subsubsection{Type checker}
+
+\paragraph{For \texttt{split}} the following case was added to the type checker. The full
+code sample is added due to the it informative comments.
+\begin{lstlisting}
+ | Fasto.Split (num, arr, typ, pos)
+   => let
+       (* type of first argument, should be Int *)
+       val (n_type, n_dec) = expType vs num
+       (* type of second argument, should be Array *)
+       val (arr_type, arr_dec) = expType vs arr
+       (* type of elements in Array, if not Array an 
+        * exception is thrown *)
+       val el_type = case arr_type of
+             (* typ is Unknown, we unify with the types and
+             * determine the elements types of the Array..
+             * Unifying are not stricly necessary here, but
+             * we do it to keep consistency in the code eg.
+             * Reduce also uses this practice,
+             * alternativly we could just return t
+             * the first tuple element in Array *)
+             Fasto.Array (t,_) => unifyTypes pos (typ, t)
+           | _ => raise Error ("Split: Second argument"^
+                               "not an array",pos)
+      in
+        (* check if first argument is type Int *)
+        if
+          typesEqual (n_type, Fasto.Int pos)
+        then
+          (Fasto.Array (arr_type, pos),
+           Fasto.Split (num ,arr_dec, el_type, pos))
+        else
+          raise Error ("Split: First argument type is not Int " ^
+                       showType n_type, pos)
+      end
+\end{lstlisting}
+With the comments hopefully it is easy to determine how the case is handled
+by the type checker.
+
+For the type checking to be successful the first expression must have
+the type \texttt{Fasto.Int}, the second expression must be of type
+\texttt{Fasto.Array}. The type of the elements in the array is not
+important to whether the type checking succeed. The elements could actually be
+\texttt{Fasto.UNKNOWN} and still pass type checking. This behavior may not be
+intentional and could be fixed by a different ordering of the cases in
+the function \texttt{unifyTypes}, which at this point is:
+\begin{lstlisting}
+fun unifyTypes pos (Fasto.UNKNOWN, t) =
+  | unifyTypes pos (t, Fasto.UNKNOWN) =
+  | unifyTypes pos (t1, t2) = (* typesEqual where
+                                 unknown and unknown
+                                 return false. but
+                                 unifyTypes has already
+                                 returned due to case
+                                 ordering *)
+\end{lstlisting}
+
+\paragraph{For \texttt{concat}} the following case was added to the type checker. The full
+code sample is again added below due to the comments explaining how it
+works.
+\begin{Code}
+\begin{lstlisting}
+| Fasto.Concat (arr1, arr2, arg1_typ, pos)
+  => let
+      (* type of first argument, should be Array *)
+      val (arr1_type, arr1_dec) = expType vs arr1
+      (* type of second argument, should be Array *)
+      val (arr2_type, arr2_dec) = expType vs arr2
+      (* type of elements in Array, if not Array and exception is thrown *)
+      val el1_type = case arr1_type of
+            Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
+          | other => raise Error ("Concat: First Array Argument "^
+                                  "not an array",pos)
+      val el2_type = case arr2_type of
+            Fasto.Array (t,_) => unifyTypes pos (arg1_typ, t)
+          | other => raise Error ("Concat: Second Array Argument "^
+                                  "not an array",pos)
+      val el_type_unified = unifyTypes pos (el2_type, el1_type)
+     (* An alternative solution would be to check with typesEqual, this
+      * way we could have used a if-then-else and raised a more specific
+      * error. *)
+     in
+       (Fasto.Array (el_type_unified, pos), Fasto.Concat(arr1_dec,
+       arr2_dec, el_type_unified, pos))
+     end
+\end{lstlisting}
+\end{Code}
+First we find the types with the function \texttt{expType} of the two input
+expression (we hope these are arrays, therefore the naming \texttt{arr1} and
+\texttt{arr2} of the input parameters).
+
+Then we pattern match on the types of the expressions \texttt{arr1} and
+\texttt{arr2}. If the pattern do not match the type \texttt{Fasto.Array} we
+raise the exception Error and inform the user with the error message.
+
+Now we have the element types of the two arrays, thus we are able to unify
+these and thus check equality.
+
+If no exception if thrown in the call to \texttt{unifyTypes}, then we can
+safely proceed and return a tuple holding the type of the \texttt{concat}
+expression and a updated \texttt{concat} expression.
+
+\subsection{Compiler}
+\paragraph{For \texttt{split}} a case was added to compileExp.
+Below are shown some pseudo code that roughly describes the idea of the implementation.
+\begin{lstlisting}
+split(int n, int[] lst, type eltp);
+{
+int *data1_adr;
+int *data2_adr;
+
+// Check bounds
+if (n-1 >= 0){ THROW( E)} 
+if (n-len(lst) >= 0){ THROW( E)} 
+
+// Get adresses where data is already stored
+data1_adr = lst[0];
+data2_adr = sizeof(elty) * n + data1_adr 
+
+// Create tow new inner array (only with header information)
+int arr1[1]
+int arr2[1]
+
+// Create the outer array
+int arr2[1]
+
+// Set number of elements
+arr1[0] = n
+arr2[0] = data2_adr-data1_adr
+
+// Copy over adresses for existing data
+arr1[1] = data1_adr
+arr2[1] = data2_adr
+
+// The outer Array has two elements, arr1 and arr2.
+arr3[0] = 2
+arr3[1] = &[arr1,arr2] 
+}
+\end{lstlisting}
+By this implementation we avoid allocation of memory for data already placed
+in memory.
+And thus, we only need to allocate new ``data entries'' in the memory for the
+outer array holding the two new inner arrays, but due to the way arrays work
+in Fasto, we still have to allocate two words of memory for every new array to
+hold the header information.
+
+In theory we could avoid allocation any new memory by placing the data in the
+registers. But it seams like a bad solution because registers are spare and
+a single call to the \texttt{split} method, would take $2*2 = 4$ registers to
+hold the information about the new inner arrays. And $2+2 = 4$ registers to
+hold information and data
+of the outer array. 
+
+Another solution to avoid memory allocation, would present itself if the array
+to be split was not used anywhere else in the program. Then we could be smart
+and ``reuse'' the array and thus saving the allocation of 2 words for the
+header information. But it would be essential for this to work, that the array
+we reuse 'dead'
+
+\paragraph{For \texttt{concat}} I also added a new case. \texttt{concat} first
+checks, whether the two lists to be joined are adjacent. This is done by Mips
+code with the same approach as in the pseudo code below
+\begin{lstlisting}
+// data_addr holds the memory address's where data start for the
+// two arrays to be joined. If adj is 0, the two arrays can be joined
+// without copy over data
+
+int adj
+adj = (data_addr1 - data_addr2) - (len(lst1) * sizeof(lst1_eltp))
+\end{lstlisting}
+If the arrays are adjacent we use \texttt{dynalloc} to create an 'empty'
+array only containing header information(thus avoiding memory allocation).
+
+If the two lists are not adjacent, then a new array are created with the size
+len(arr1) + len(arr2). And the data is copied over.
+\begin{lstlisting}
+// n is size of final array
+int n
+n = len(arr1) + len(arr2)
+
+// pointers to exsiting data
+eltp* data_addr1;
+eltp* data_addr2;
+
+//final array
+eltp final[n]
+
+// Loop n times to copy all elements to new array
+for (int i=0; i >= n; i++)
+{
+// if i is less than len(arr1) copy 
+// data from arr1 else copy data from arr2
+
+if (i < len(arr1)
+{
+final[i] = *data_addr1
+data_addr1 = data_addr1 + sizeof(eltp) 
+}
+final[i] = *data_addr2
+data_addr2 = data_addr2 + sizeof(eltp) 
+}
+\end{lstlisting}
+
+\subsubsection{Optimizer}
+Cases for \texttt{concat} and \texttt{split} has been added to the existing functions in the optimizer as
+well, as to the functions performing constant folding and constant propagation.
+
+\subsection{Memory allocation in the example}
+The \texttt{split}ting will make an outer array of size 2 holding the inner
+arrays, thus 2 words for data plus 2 words for the header information.
+
+The data itself will be reused, but the two inner arrays has to each allocate
+2 words for header information, thus at this point all in all 8 words has been allocated.
+
+The \texttt{concat}enation will reuse the data(because it is adjacent), but
+also allocate 2 words for header information. Thus, 10 words - also known
+as 40 bytes -  will be allocated.
+
+\subsection{Correctness of the code}
+To ensure correctness of \texttt{concat} and \texttt{split} the following
+tests has been added to the \texttt{DATA} folder.
+
+\subsubsection{Tests for \texttt{concat}}
+
+\begin{description}
+  \item[testConcatIntCharBool.fo] \hfill \\
+  Testing the correctness of \texttt{concat} when applied to arrays of bool,
+  char and int.
+  \item[testConcatArrays.fo] \hfill \\
+  Testing the correctness of \texttt{concat} when applied to two dimentional
+  array.
+  \item[testConcatFstArgBoolErr.fo] \hfill \\
+  Type testing with boolean as first argument..
+  \item[testConcatFstArgCharErr.fo] \hfill \\
+  Type testing with char as first argument..
+  \item[testConcatFstArgIntErr.fo] \hfill \\
+  Type testing with int as first argument..
+  \item[testConcatSecndArgBoolErr.fo] \hfill \\
+  Type testing with boolean as second argument..
+  \item[testConcatSecndArgCharErr.fo] \hfill \\
+  Type testing with char as second argument..
+  \item[testConcatSecndArgIntErr.fo] \hfill \\
+  Type testing with int as second argument..
+\end{description}
+
+\subsubsection{Tests for \texttt{split}}
+
+\begin{description}
+  \item[testSplitIntBoolChar.fo] \hfill \\
+  Testing the correctness of \texttt{split} when applied to arrays of boolean,
+  char and int.
+  \item[testSplitTwoDimArray.fo] \hfill \\
+  Testing the correctness of \texttt{concat} when applied to two dimensional
+  array.
+  \item[testSplitLowerBound.fo] \hfill \\
+  Testing correctness of lower bound handling.
+  \item[testSplitUpperBound.fo] \hfill \\
+  Testing correctness of upper bound handling.
+  \item[testSplitFstArgumentArrayErr.fo] \hfill \\
+  Type testing with array as first argument.
+  \item[testSplitFstArgumentBoolErr.fo] \hfill \\
+  Type testing with boolean as first argument.
+  \item[testSplitFstArgumentCharErr.fo] \hfill \\
+  Type testing with char as first argument.
+  \item[testSplitSecndArgumntBoolErr.fo] \hfill \\
+  Type testing with boolean as second argument.
+  \item[testSplitSecndArgumntChar.fo] \hfill \\
+  Type testing with char as second argument.
+  \item[testSplitSecndArgumntInt.fo] \hfill \\
+  Type testing with int as second argument.
+\end{description}
+
+\subsection{Source code}
+The full source code for \texttt{split} and \texttt{concat} can be found in
+the \texttt{SRC}. Search for 'msn378' to easily find the code blocks I have
+added or modified.
+
+\section{Implementing Constant Folding} 
+In this sub assignment constant folding have been implemented into
+\texttt{Optimization.sml}. The idea of constant folding is simple, if you have
+an expression $e$ holding other expression of constants, fold $e$ to a simpler
+expression if possible.
+In the optimizer all expression are uniquely named as a variable and put into
+a \texttt{Fasto.Let} expression. Thus, constant folding does nothing unless
+also constant propagation is used. Please note, that I have also completed the
+function performing constant propagation. 
+
+The two optimization methods go hand in hand, in the way that a constant
+propagation run through, may lead to new possible optimizations with constant
+folding, and visa versa.
+
+A lot of new code has been implemented, but instead of showing the rather
+uniform code here, I will instead summarize the cases where I have found to be able
+to make optimizations, and let you have a look at the code yourself. Note that
+much of the code implemented in the optimized relies on proper type
+checking, so when er get a expression of type \texttt{Fasto.Plus}, we assume
+that the types of the sub-expressions are of \texttt{Fasto.Int}.
 
 
+\subsection{Cases of optimization}
+Below is mentioned the folding optimizations I have done.
 
+\begin{description}
+    \item[\texttt{Fasto.Plus}] \hfill \\
+      If both input expressions are a \texttt{Num}, a \texttt{Fasto.Num} is returned.
+      If one of the expression is a \texttt{Num} with the value 0, the other expression is returned.
+  \item[Fasto.Minus] \hfill \\
+      If both expressions are a \texttt{Num},  a \texttt{Fasto.Num} is returned.
+      If $e1$ is a \texttt{Num} with the value 0, then Negate($e2$) is returned.
+      If $e2$ is a number with the value 0, then $e2$ is returned.
+  \item[Fasto.Less] \hfill \\
+      If $e1$ and $e2$ are constants they are fold with op<, and a \texttt{Log} expression is returned.
+  \item[Fasto.If] \hfill \\
+      If $e1$ (the condition) is a constant, $e2$ is returned if $e1$ is true, otherwise $e3$ is returned as $e1$ is false.
+  \item[Fasto.Times] \hfill \\
+      If $e1$ and $e2$ are both constants, they are multiplied and a \texttt{Num} expression is returned.
+      If $e2$ is a number-constant with the value 0 a \texttt{Num} expression with value 0 is return.
+      If $e1$ is a number-constant with the value 0 a \texttt{Num} expression with value 0 is return.
+      If $e1$ is a number-constant with the value 1, $e2$ is returned.
+      If $e2$ is a number-constant with the value 1, $e2$ is returned.
+  \item[Fasto.Divide] \hfill \\
+      If $e1$ and $e2$ are both number-constants, they are divided and a \texttt{Num} expression is returned.
+      If $e1$ is a number-constant with the value 0 a \texttt{Num} with value 0 is return.
+      If $e2$ is a number-constant with the value 0 a exception is thrown.(you cannot divide with zero)
+      If $e2$ is a number-constant with the value 1, $e1$ is returned
+  \item[Fasto.Band] \hfill \\
+      If $e1$ and $e2$ are constants, they are evaluated and a \texttt{Num} expression is returned.
+      If either $e1$ or $e2$ is a number-constant with the value 0, a \texttt{Num} with value 0 is returned.
+  \item[Fasto.And] \hfill \\
+      If $e1$ and $e2$ are both constants with the value true, a \texttt{Log} expression with value \texttt{true} is returned.
+      If either $e1$ or $e2$ are false, a \texttt{Log} expression is returned with the value \texttt{false}. 
+      If $e1$ is \texttt{true}, $e2$ is returned
+      If $e2$ is \texttt{true}, $e1$ is returned
+  \item[Fasto.Or] \hfill \\
+      If either $e1$ or $e2$ is a boolean-constant with the value \texttt{true}, a \texttt{Log} expression with value \texttt{true} is returned.
+      if $e1$ is a boolean-constant with the value \texttt{false}, $e2$ is returned
+      if $e2$ is a boolean-constant with the value \texttt{false}, $e1$ is returned
+  \item[Fasto.Not] \hfill \\
+      if $e1$ is a boolean-constant with the value \texttt{false}, it is folded to a \texttt{Log} with value \texttt{true}
+      if $e1$ is a boolean-constant with the value \texttt{true}, it is folded to a \texttt{Log} with value \texttt{false}
+  \item[Fasto.Negate] \hfill \\
+      if $e1$ is a number-constant, a \texttt{Num} expression with the negated constant is returned.
+      
+\end{description}
+
+\subsection{Correctness of Constant folding}
+The way I have tested constant folding was by using the already exsiting
+test files in \texttt{DATA}. By implementing constant propagation I was was
+able to see the code folding when compiled with the FastoC -o, and by removing
+the print statements from the optimizer and adding \texttt{-o} as argument in
+\texttt{testg.sh}, I was able to run all the test with optimization enabled and check
+correctness.
+
+\subsection{Source code}
+The full source code can be found in the \texttt{SRC}, in the file \texttt{Optimization.sml}
 \end{document}
