@@ -1,0 +1,36 @@
+digraph {
+  rankdir = LR;
+  node [shape=circle];
+
+  start1 [label="", shape=none, width=0, height=0];
+  start2 [label="", shape=none, width=0, height=0];
+  start3 [label="", shape=none, width=0, height=0];
+  2 [label="q2"];
+  3 [label="q3"];
+  4 [label="q4", shape=doublecircle];
+  5 [label="q5"];
+  6 [label="q6"];
+  7 [label="q7", shape=doublecircle];
+  8 [label="q8"];
+  9 [label="q9"];
+  10 [label="q10"];
+  11 [label="q11", shape=doublecircle];
+
+  start1-> 2;
+  start2-> 5;
+  start3-> 8;
+
+  2 -> 3 [label="1"];
+  3 -> 3 [label="0"];
+  3 -> 4 [label="&#955;"];
+
+  5 -> 6 [label="&#955;"];
+  5 -> 5 [label="1"];
+  6 -> 7 [label="0"];
+
+  8 -> 9 [label="1"];
+  8 -> 10 [label="&#955;"];
+  9 -> 10 [label="0"];
+  10 -> 8 [label="&#955;"];
+  10 -> 11 [label="2"];
+}

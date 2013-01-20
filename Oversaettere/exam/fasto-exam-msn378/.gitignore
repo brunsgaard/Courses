@@ -1,0 +1,11 @@
+*.bak
+*.ui
+*.uo
+*~
+*.asm
+Lexer.sml
+Parser.output
+Parser.sig
+Parser.sml
+BIN/*
+*-testresult

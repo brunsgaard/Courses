@@ -1,0 +1,4 @@
+fun int main() = let arr0 = write(concat({True, False},{False, True})) in
+                 let arr1 = write(concat({'a', 'b'},{'c','d'})) in
+                 let arr2 = write(concat({1,2},{3,4})) in
+                 length(arr0) + length(arr1) + length(arr2)

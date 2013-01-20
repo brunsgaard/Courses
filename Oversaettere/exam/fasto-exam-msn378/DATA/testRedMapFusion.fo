@@ -1,0 +1,11 @@
+fun int main() = 
+    let charr = "abcdefgh"                    in
+    let iarr  = map(ord, charr)               in
+    let q     = write("Should be 903 is: ")   in
+    let redo1  = if(charr[2] = 'd') 
+                 then let ne = ord(charr[4])  in
+                          reduce(op *, ne, iarr) 
+                 else let ne = ord(charr[2])  in
+                          reduce(op +, ne, iarr) 
+    in write(redo1)
+

@@ -1,0 +1,1 @@
+fun [int] main() = concat({1,2},{'c'})
