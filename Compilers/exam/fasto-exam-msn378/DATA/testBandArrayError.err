@@ -1,0 +1,2 @@
+Type error: Cannot unify types Type [ int  ]  (at line 1, column 24) and Type int  (at line 1, column 19)
+Line 1, column 19.

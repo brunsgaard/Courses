@@ -1,0 +1,2 @@
+Type error: Cannot unify types Type bool  (at line 1, column 18) and Type int  (at line 1, column 23)
+Line 1, column 23.

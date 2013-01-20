@@ -1,0 +1,1 @@
+fun int main() = write(reduce(op band, 1, {1, 3, 9}))
